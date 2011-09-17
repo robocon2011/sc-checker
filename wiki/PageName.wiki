@@ -1,0 +1,20 @@
+#summary Testeintrag für Projekt-Wiki
+
+= Introduction =
+
+Das ist ein Testeintrag für das SC-Checker Repository in Google Code
+
+=Heading1=
+SC-Checker Projekt WS2011/12
+
+===Heading3===
+Versionsverwaltung
+
+= Details =
+Versionsverwaltung über *_ SVN _*.
+
+===Heading3===
+SVN-Client
+
+= Details =
+Benutzter SVN-Client: *Tortoise-SVN*
