@@ -4,9 +4,6 @@
 
 Das ist ein Testeintrag für das SC-Checker Repository in Google Code
 
-=Heading1=
-
-
 ===Versionsverwaltung===
 Versionsverwaltung über *_ SVN _*.
 
