@@ -14,6 +14,7 @@ struct ea_interrupt_gen_if
 {
   virtual void notify() = 0;
   virtual void notify(sc_time t) = 0;
+	virtual void clear() = 0;
 };
 
 #endif

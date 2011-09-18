@@ -18,5 +18,5 @@ interrupt::interrupt(sc_module_name nm)
   stim_i = new stim("stim_i");
   resp_i = new resp("resp_i");
   stim_i->irq_op(*irq);
-  resp_i->irq_ip(*irq);
+  resp_i->irq_ip(irq->m_signal);
 } //end interrupt::interrupt

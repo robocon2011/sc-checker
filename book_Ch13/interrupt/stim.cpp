@@ -14,7 +14,9 @@ void stim::stim_thread(void)
   {
     cout << "INFO: " << name() << " Sending event at " << sc_time_stamp() << endl;
     irq_op->notify(SC_ZERO_TIME);
-    wait(5,SC_NS);
+		wait(5,SC_NS);
+		irq_op->clear();
+		wait(SC_ZERO_TIME);
   }//endfor
   
 }//end stim::stim_thread
