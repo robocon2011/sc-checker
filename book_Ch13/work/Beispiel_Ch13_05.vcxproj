@@ -11,19 +11,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pcix\ea_pcix_trans.cpp" />
-    <ClCompile Include="pcix\main.cpp" />
-    <ClCompile Include="pcix\pcix.cpp" />
+    <ClInclude Include="hier_chan\cpu2pca.h" />
+    <ClInclude Include="hier_chan\CPU_if.h" />
+    <ClInclude Include="hier_chan\ea_heartbeat.h" />
+    <ClInclude Include="hier_chan\ea_heartbeat_if.h" />
+    <ClInclude Include="hier_chan\hier_chan.h" />
+    <ClInclude Include="hier_chan\mem_arch.h" />
+    <ClInclude Include="hier_chan\mem_bsyn.h" />
+    <ClInclude Include="hier_chan\testbench.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pcix\ea_pcix_trans.h" />
-    <ClInclude Include="pcix\pcix.h" />
+    <ClCompile Include="hier_chan\cpu2pca.cpp" />
+    <ClCompile Include="hier_chan\ea_heartbeat.cpp" />
+    <ClCompile Include="hier_chan\main.cpp" />
+    <ClCompile Include="hier_chan\mem_bsyn.cpp" />
+    <ClCompile Include="hier_chan\testbench.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{57A8C130-E716-4B3A-A09C-91409616C101}</ProjectGuid>
+    <ProjectGuid>{E8C7A9A9-C0FB-42ED-85BE-26665E9A6FFE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SystemC_Template</RootNamespace>
-    <ProjectName>Beispiel_Ch13_02</ProjectName>
+    <ProjectName>Beispiel_Ch13_05</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

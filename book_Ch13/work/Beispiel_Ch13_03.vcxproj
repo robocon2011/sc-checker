@@ -11,19 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pcix\ea_pcix_trans.cpp" />
-    <ClCompile Include="pcix\main.cpp" />
-    <ClCompile Include="pcix\pcix.cpp" />
+    <ClCompile Include="heartbeat\ea_heartbeat.cpp" />
+    <ClCompile Include="heartbeat\heartbeat.cpp" />
+    <ClCompile Include="heartbeat\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pcix\ea_pcix_trans.h" />
-    <ClInclude Include="pcix\pcix.h" />
+    <ClInclude Include="heartbeat\ea_heartbeat.h" />
+    <ClInclude Include="heartbeat\ea_heartbeat_if.h" />
+    <ClInclude Include="heartbeat\heartbeat.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{57A8C130-E716-4B3A-A09C-91409616C101}</ProjectGuid>
+    <ProjectGuid>{00A6A2CF-E117-44E5-9AA7-02AE227444E3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SystemC_Template</RootNamespace>
-    <ProjectName>Beispiel_Ch13_02</ProjectName>
+    <ProjectName>Beispiel_Ch13_03</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

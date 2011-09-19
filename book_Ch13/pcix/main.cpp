@@ -23,7 +23,7 @@ int sc_main(int argc, char* argv[])
   
   cout << "INFO: Simulating "<< simulation_name << endl;
   sc_start();
-  if (not sc_end_of_simulation_invoked()) sc_stop(); //< invoke end_of_simulation
+  if (! sc_end_of_simulation_invoked()) sc_stop(); //< invoke end_of_simulation
   
   cout << "INFO: Post-processing "<< simulation_name << endl;
   cout << "INFO: Simulation " << simulation_name

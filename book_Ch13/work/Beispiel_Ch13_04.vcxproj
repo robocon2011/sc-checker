@@ -11,19 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="adapt\adapt.cpp" />
+    <ClCompile Include="adapt\main.cpp" />
+    <ClCompile Include="adapt\resp.cpp" />
+    <ClCompile Include="adapt\resp_rtl.cpp" />
+    <ClCompile Include="adapt\stim.cpp" />
     <ClCompile Include="pcix\ea_pcix_trans.cpp" />
     <ClCompile Include="pcix\main.cpp" />
     <ClCompile Include="pcix\pcix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="adapt\adapt.h" />
+    <ClInclude Include="adapt\ea_interrupt_evt_if.h" />
+    <ClInclude Include="adapt\ea_interrupt_gen_if.h" />
+    <ClInclude Include="adapt\interrupt2sigbool.h" />
+    <ClInclude Include="adapt\resp.h" />
+    <ClInclude Include="adapt\resp_rtl.h" />
+    <ClInclude Include="adapt\stim.h" />
     <ClInclude Include="pcix\ea_pcix_trans.h" />
     <ClInclude Include="pcix\pcix.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{57A8C130-E716-4B3A-A09C-91409616C101}</ProjectGuid>
+    <ProjectGuid>{A03D4A3F-30F0-4C74-8624-AA77BF0C265E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SystemC_Template</RootNamespace>
-    <ProjectName>Beispiel_Ch13_02</ProjectName>
+    <ProjectName>Beispiel_Ch13_04</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
