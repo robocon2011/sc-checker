@@ -11,3 +11,8 @@ void ea_heartbeat::heartbeat_method(void)
 {
   m_heartbeat.notify(m_period);
 }//end ea_heartbeat::heartbeat_method()
+
+void ea_heartbeat::offset_thread(void) 
+{
+  m_heartbeat.notify(m_delay);
+}//end ea_heartbeat::heartbeat_method()
