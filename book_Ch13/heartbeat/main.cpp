@@ -22,13 +22,13 @@ int sc_main(int argc, char* argv[])
   //sc_set_time_resolution(1,SC_PS);
   sc_set_default_time_unit(100,SC_PS);
   sc_time timeout(2,SC_NS);
-  ea_heartbeat clock("clock");
+  ea_heartbeat clock("clock", sc_time(100,SC_PS), sc_time(10,SC_PS));
   heartbeat heartbeat_i("heartbeat_i");
   heartbeat_i.clock(clock);
   
   cout << "INFO: Simulating "<< simulation_name << endl;
   sc_start(timeout);
-  if (not sc_end_of_simulation_invoked()) sc_stop(); //< invoke end_of_simulation
+  if (! sc_end_of_simulation_invoked()) sc_stop(); //< invoke end_of_simulation
   
   cout << "INFO: Post-processing "<< simulation_name << endl;
   cout << "INFO: Simulation " << simulation_name

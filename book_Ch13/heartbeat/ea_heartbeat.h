@@ -22,47 +22,71 @@ struct ea_heartbeat
   explicit ea_heartbeat() 
   : sc_channel(sc_gen_unique_name("ea_heartbeat"))
   , m_period(sc_get_default_time_unit()) 
-  {
+	, m_delay (SC_ZERO_TIME)
+	{
     cout << "INFO: " << name() << "defaulting to " << sc_get_default_time_unit() << endl;
+		SC_THREAD(offset_thread);
     SC_METHOD(heartbeat_method);
       sensitive << m_heartbeat;
+		dont_initialize();
   }
   
   explicit ea_heartbeat(sc_module_name nm) 
   : sc_channel(nm)
   , m_period(sc_get_default_time_unit()) 
-  {
+	, m_delay (SC_ZERO_TIME)
+	{
     cout << "INFO: " << name() << "defaulting to " << sc_get_default_time_unit() << endl;
+		SC_THREAD(offset_thread);
     SC_METHOD(heartbeat_method);
       sensitive << m_heartbeat;
+		dont_initialize();
   }
   
-  explicit ea_heartbeat(sc_time _period) 
+  explicit ea_heartbeat(sc_time _period, sc_time _delay) 
   : sc_channel(sc_gen_unique_name("ea_heartbeat"))
   , m_period(_period) 
-  {
+	, m_delay (_delay)
+	{
+		SC_THREAD(offset_thread);
     SC_METHOD(heartbeat_method);
       sensitive << m_heartbeat;
+		dont_initialize();
   }
   
   explicit ea_heartbeat(sc_module_name nm, sc_time _period) 
   : sc_channel(nm)
   , m_period(_period) 
+	, m_delay (SC_ZERO_TIME)
   {
+		SC_THREAD(offset_thread);
     SC_METHOD(heartbeat_method);
       sensitive << m_heartbeat;
+		dont_initialize();
   }
   
+	 explicit ea_heartbeat(sc_module_name nm, sc_time _period, sc_time _delay) 
+  : sc_channel(nm)
+  , m_period(_period)
+	, m_delay(_delay)
+  {
+		SC_THREAD(offset_thread);
+    SC_METHOD(heartbeat_method);
+      sensitive << m_heartbeat;
+		dont_initialize();
+  }
   // User methods
   const sc_event& default_event() const { return m_heartbeat; }
   const sc_event& posedge_event() const { return m_heartbeat; }
   
   // Processes
   void heartbeat_method();
+	void offset_thread();
   
 private:
   sc_event m_heartbeat;
   sc_time  m_period;
+	sc_time m_delay;
   // Copy constructor so compiler won't create one
   ea_heartbeat( const ea_heartbeat& );
 };
