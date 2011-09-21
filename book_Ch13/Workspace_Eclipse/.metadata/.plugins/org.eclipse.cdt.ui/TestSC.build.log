@@ -1,0 +1,13 @@
+
+**** Build of configuration Debug for project TestSC ****
+
+make all 
+cygwin warning:
+  MS-DOS style path detected: C:/FH/SystemC/systemc-2.2.0/include/systemc.h
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/systemc-2.2.0/include/systemc.h
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+make: Nothing to be done for `all'.
+
+**** Build Finished ****

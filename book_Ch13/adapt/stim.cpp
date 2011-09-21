@@ -17,3 +17,4 @@ void stim::stim_thread(void)
     wait(5,SC_NS);
   }//endfor
 }//end stim::stim_thread
+

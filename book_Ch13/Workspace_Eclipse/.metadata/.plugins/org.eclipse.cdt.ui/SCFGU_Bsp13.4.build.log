@@ -1,0 +1,8 @@
+
+**** Clean-only build of configuration Debug for project SCFGU_Bsp13.4 ****
+
+make clean 
+rm -rf  ./adapt.o ./main.o ./resp.o ./resp_rtl.o ./stim.o  ./adapt.d ./main.d ./resp.d ./resp_rtl.d ./stim.d  SCFGU_Bsp13.4.exe
+ 
+
+**** Build Finished ****

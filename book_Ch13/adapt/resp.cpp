@@ -11,3 +11,4 @@ void resp::resp_method(void)
 {
   cout << "INFO: " << name() << " Received event at " << sc_time_stamp() << endl;
 }//end resp::resp_method
+

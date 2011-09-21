@@ -46,7 +46,7 @@ struct interrupt2sigbool
       return RCAST<const sc_signal_bool_deval&>( *iface );
   }
   
-  sc_reset* is_reset() const { }
+  sc_reset* is_reset() const { return (sc_reset*) 0;}
 
 protected:
     // every update is a change

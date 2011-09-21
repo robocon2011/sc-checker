@@ -17,7 +17,7 @@ const char* simulation_name = "adapt";
 
 int sc_main(int argc, char* argv[]) 
 {
-  cout << "INFO: Elaborating "<< simulation_name << endl;
+  cout << "INFO: Elaboratiototing "<< simulation_name << endl;
   //sc_set_time_resolution(1,SC_PS);
   //sc_set_default_time_unit(1,SC_NS);
   adapt adapt_i("adapt_i");
