@@ -37,7 +37,7 @@ struct interrupt2sigbool
   
   // was there a value changed event?
   //bool event() const { return ( simcontext()->delta_count() == m_delta + 1 ); }
-  bool event() const { return ( sc_delta_count() == m_delta + 1 ); }
+  bool event() const { cout << "event(): sc_delta_count=" << sc_delta_count() << " m_delta=" << m_delta << endl; return ( sc_delta_count() == m_delta + 1 ); }
   bool posedge() const { return event(); }
   bool negedge() const { return event(); }
   const sc_signal_bool_deval& delayed() const 
@@ -65,5 +65,6 @@ private:
   // Copy constructor so compiler won't create one
   interrupt2sigbool( const interrupt2sigbool& );
 };
+
 
 #endif

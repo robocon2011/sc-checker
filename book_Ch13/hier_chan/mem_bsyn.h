@@ -18,7 +18,7 @@ SC_MODULE(mem_bsyn)
   SC_HAS_PROCESS(mem_bsyn);
   explicit mem_bsyn(sc_module_name nm,
                unsigned long ba, unsigned sz) 
-  : sc_channel(nm), m_base(ba), m_size(sz), FLOAT("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
+  : sc_channel(nm), m_base(ba), m_size(sz) , FLOAT("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
   {
     m_mem = new long[m_size];
     SC_THREAD(mem_thread);
@@ -32,10 +32,10 @@ SC_MODULE(mem_bsyn)
   sc_signal<bool> err; // for debug
   
 private:
-  const sc_signal_rv<32> FLOAT;
   // Local data
   unsigned long m_base;
-  unsigned      m_size;
+  unsigned int  m_size;
+  const sc_signal_rv<32> FLOAT;
   long*         m_mem;
   // Disabled methods
   mem_bsyn(const mem_bsyn&);

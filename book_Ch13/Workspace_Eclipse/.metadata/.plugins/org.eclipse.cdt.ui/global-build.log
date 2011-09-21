@@ -1,8 +1,70 @@
 
-**** Clean-only build of configuration Debug for project SCFGU_Bsp13.4 ****
+**** Build of configuration Debug for project SCFGU_Bsp13.5 ****
 
-make clean 
-rm -rf  ./adapt.o ./main.o ./resp.o ./resp_rtl.o ./stim.o  ./adapt.d ./main.d ./resp.d ./resp_rtl.d ./stim.d  SCFGU_Bsp13.4.exe
+make all 
+cygwin warning:
+  MS-DOS style path detected: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+make: Nothing to be done for `all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project SCFGU_Bsp13.5 ****
+
+make all 
+cygwin warning:
+  MS-DOS style path detected: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+Building file: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/main.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/main.cpp"
+Finished building: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/main.cpp
+ 
+Building file: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"mem_bsyn.d" -MT"mem_bsyn.d" -o "mem_bsyn.o" "C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp"
+C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp: In member function `void mem_bsyn::mem_thread()':
+C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp:10: Warnung: Variable »reading« wird nicht verwendet
+C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp:11: Warnung: Variable »m_rw« wird nicht verwendet
+Finished building: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp
+ 
+Building file: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"testbench.d" -MT"testbench.d" -o "testbench.o" "C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp"
+Finished building: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+ 
+Building target: SCFGU_Bsp13.5.exe
+Invoking: Cygwin C++ Linker
+g++ -L"C:\FH\SystemC\systemc-2.2.0\lib-cygwin" -L"C:\FH\SystemC\scv-1.0p2-sysc2.2\lib-cygwin" -o "SCFGU_Bsp13.5.exe"  ./cpu2pca.o ./ea_heartbeat.o ./main.o ./mem_bsyn.o ./testbench.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
+Finished building target: SCFGU_Bsp13.5.exe
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project SCFGU_Bsp13.5 ****
+
+make all 
+cygwin warning:
+  MS-DOS style path detected: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/testbench.cpp
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+Building file: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"mem_bsyn.d" -MT"mem_bsyn.d" -o "mem_bsyn.o" "C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp"
+Finished building: C:/FH/SystemC/rep_sc-checker/book_Ch13/hier_chan/mem_bsyn.cpp
+ 
+Building target: SCFGU_Bsp13.5.exe
+Invoking: Cygwin C++ Linker
+g++ -L"C:\FH\SystemC\systemc-2.2.0\lib-cygwin" -L"C:\FH\SystemC\scv-1.0p2-sysc2.2\lib-cygwin" -o "SCFGU_Bsp13.5.exe"  ./cpu2pca.o ./ea_heartbeat.o ./main.o ./mem_bsyn.o ./testbench.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
+Finished building target: SCFGU_Bsp13.5.exe
  
 
 **** Build Finished ****

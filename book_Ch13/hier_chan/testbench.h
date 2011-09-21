@@ -30,8 +30,8 @@ SC_MODULE(testbench)
   void test_thread();
   
 private:
-  unsigned long m_max_addr;
   unsigned long m_min_addr;
+  unsigned long m_max_addr;
   unsigned      m_tests;
 };
 

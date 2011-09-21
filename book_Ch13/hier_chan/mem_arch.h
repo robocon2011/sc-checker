@@ -47,3 +47,4 @@ private:
   mem_arch(const mem_arch&); // Disable
 };
 #endif
+

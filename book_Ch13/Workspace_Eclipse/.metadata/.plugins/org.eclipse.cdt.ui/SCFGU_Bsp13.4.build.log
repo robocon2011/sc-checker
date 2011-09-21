@@ -1,8 +1,13 @@
 
-**** Clean-only build of configuration Debug for project SCFGU_Bsp13.4 ****
+**** Build of configuration Debug for project SCFGU_Bsp13.4 ****
 
-make clean 
-rm -rf  ./adapt.o ./main.o ./resp.o ./resp_rtl.o ./stim.o  ./adapt.d ./main.d ./resp.d ./resp_rtl.d ./stim.d  SCFGU_Bsp13.4.exe
- 
+make all 
+cygwin warning:
+  MS-DOS style path detected: C:/FH/SystemC/rep_sc-checker/book_Ch13/adapt/stim.cpp
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/rep_sc-checker/book_Ch13/adapt/stim.cpp
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+make: Nothing to be done for `all'.
 
 **** Build Finished ****

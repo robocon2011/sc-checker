@@ -19,3 +19,4 @@ struct ea_heartbeat_if: public sc_interface
 };
 
 #endif
+

@@ -64,8 +64,8 @@ SC_MODULE(hier_chan)
   : testbench_arch_i("testbench_arch_i",3100,4100,100)
   , mem_arch_i("mem_arch_i",3000,1000)
   , testbench_bsyn_i("testbench_bsyn_i",5100,6100,100)
-  , cpu2pca_i("cpu2pca_i")
   , mem_bsyn_i("mem_bsyn_i",5000,1000)
+  , cpu2pca_i("cpu2pca_i")
   , clock("clock",sc_time(2,SC_NS))
   {
     SC_METHOD(done_method);

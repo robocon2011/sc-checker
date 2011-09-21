@@ -7,8 +7,8 @@
 
 void mem_bsyn::mem_thread() 
 {
-  bool                   reading = false;
-  bool                   m_rw;
+  //bool                   reading = false;
+  //bool                   m_rw;
   unsigned long          addr;
   // Reset errors & float the data bus
   err.write(false);

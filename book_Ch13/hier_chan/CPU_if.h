@@ -11,3 +11,4 @@ struct CPU_if: public sc_interface
 };
 
 #endif
+
