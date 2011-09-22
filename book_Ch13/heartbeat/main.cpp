@@ -22,7 +22,8 @@ int sc_main(int argc, char* argv[])
   //sc_set_time_resolution(1,SC_PS);
   sc_set_default_time_unit(100,SC_PS);
   sc_time timeout(2,SC_NS);
-  ea_heartbeat clock("clock", sc_time(100,SC_PS), sc_time(10,SC_PS));
+  //ea_heartbeat clock("clock", sc_time(100,SC_PS), sc_time(10,SC_PS));
+  ea_heartbeat clock("clock");
   heartbeat heartbeat_i("heartbeat_i");
   heartbeat_i.clock(clock);
   
