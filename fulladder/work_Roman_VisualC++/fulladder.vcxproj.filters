@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="..\fulladder.h">
+      <Filter>Headerfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testbench.h">
+      <Filter>Headerfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testvalues.h">
+      <Filter>Headerfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testvalues_ext.h">
+      <Filter>Headerfiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\testvalues_constraint.h">
+      <Filter>Headerfiles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headerfiles">
+      <UniqueIdentifier>{27b00f88-9745-4909-86cf-2df2b5e30c1e}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resourcefiles">
+      <UniqueIdentifier>{2da3e30d-6dbc-497e-af9f-ffcf6144637f}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Sourcefiles">
+      <UniqueIdentifier>{84a144fc-7827-4f84-a55b-cbbdbd1b522c}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\fulladder.cpp">
+      <Filter>Sourcefiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>Sourcefiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\testbench.cpp">
+      <Filter>Sourcefiles</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
