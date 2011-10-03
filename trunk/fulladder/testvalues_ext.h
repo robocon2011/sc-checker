@@ -6,8 +6,8 @@
 SCV_EXTENSIONS(testvalues)
 {
 public:
-	scv_extensions<sc_uint<8>> value_A;
-	scv_extensions<sc_uint<8>> value_B;
+	scv_extensions< sc_uint<8> > value_A;
+	scv_extensions< sc_uint<8> > value_B;
 	SCV_EXTENSIONS_CTOR(testvalues)
 	{
 		SCV_FIELD(value_A);

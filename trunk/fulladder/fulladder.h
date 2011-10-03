@@ -17,9 +17,9 @@
 
 SC_MODULE(fulladder)
 {
-	sc_port<sc_signal_in_if<sc_uint<8>> > pi_A;
-	sc_port<sc_signal_in_if<sc_uint<8>> > pi_B;
-	sc_port<sc_signal_inout_if<sc_uint<8>> > po_C;
+	sc_port< sc_signal_in_if < sc_uint<8> > > pi_A;
+	sc_port< sc_signal_in_if < sc_uint<8> > > pi_B;
+	sc_port< sc_signal_inout_if < sc_uint<8> > > po_C;
 	sc_port<sc_signal_inout_if<bool> > po_carry;
 
 	void fulladder_method ();

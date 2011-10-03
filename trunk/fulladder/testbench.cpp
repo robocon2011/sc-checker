@@ -35,13 +35,16 @@ void testbench::testbench_thread ()
 	bool output_carry;
 	int i;	
 
+	constrValues.valueDistribution.add(valueRange(0, 100), 50);
+	constrValues.valueDistribution.add(valueRange(200, 255), 10);
+
 	for( i=0; i<20; i++ )
 	{
 		//cin >> input_A;
 		//cin >> input_B;
 		
-		if (i==8) pTest->disable_randomization();
-		if (i==15) 
+		if (i==8) pTest.pTest->disable_randomization();
+		if (i==10)
 		{
 			constrValues.pTest->value_A.set_mode(constrValues.valueDistribution);
 			constrValues.pTest->value_B.set_mode(constrValues.valueDistribution);
@@ -53,12 +56,12 @@ void testbench::testbench_thread ()
 
 		if (i<10)
 		{
-			if (i<5) pTest->next();
-			else if (i<8)	pTest->value_A.next();
-			else if (i<10)	pTest->next();
+			if (i<5) pTest.pTest->next();
+			else if (i<8)	pTest.pTest->value_A.next();
+			else if (i<10)	pTest.pTest->next();
 
-			input_A = pTest->value_A;
-			input_B = pTest->value_B;		
+			input_A = pTest.pTest->value_A;
+			input_B = pTest.pTest->value_B;
 		}
 		else
 		{
@@ -78,7 +81,8 @@ void testbench::testbench_thread ()
 		output_C = pi_C->read();
 		output_carry = pi_carry->read();
 
-		if (i<10) pTest->print();
+		cout << endl << i << endl;
+		if (i<10) pTest.pTest->print();
 		else constrValues.pTest->print();
 		
 		cout << "result = " << output_C << ", carry_bit=" << output_carry << endl;
