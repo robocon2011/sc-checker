@@ -17,8 +17,6 @@ struct testvalues_constraint
 		SCV_CONSTRAINT ( pTest->value_A() < 127 );
 		SCV_CONSTRAINT ( pTest->value_B() > 250 );
 
-		valueDistribution.add(valueRange(0, 100), 50);
-		valueDistribution.add(valueRange(200, 255), 50);
 	}
 
 };

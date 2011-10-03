@@ -16,9 +16,9 @@
 int sc_main (int argc, char *argv[])
 {
 	// channels
-	sc_signal<sc_uint<8>> sig_A;
-	sc_signal<sc_uint<8>> sig_B;
-	sc_signal<sc_uint<8>> sig_C;
+	sc_signal< sc_uint<8> > sig_A;
+	sc_signal< sc_uint<8> > sig_B;
+	sc_signal< sc_uint<8> > sig_C;
 	sc_signal<bool> sig_carry;
 	// variables
 
