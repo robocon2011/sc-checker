@@ -82,6 +82,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>main.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/main.cpp</locationURI>
+		</link>
+		<link>
 			<name>uart_16550.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/simsoc-0.7.1.tar/simsoc-0.7.1/libsimsoc/components/uart_16550.cpp</locationURI>
