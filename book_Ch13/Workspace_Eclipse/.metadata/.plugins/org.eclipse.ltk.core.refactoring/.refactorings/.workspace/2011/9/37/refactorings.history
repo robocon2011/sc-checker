@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Delete 3 resources" deleteContents="false" description="Delete 3 resources" element1="/SCFGU_Bsp13/main.cpp" element2="/SCFGU_Bsp13/resolved_ex.cpp" element3="/SCFGU_Bsp13/resolved_ex.h" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="3" stamp="1316029492437"/>&#x0A;<refactoring comment="Delete resource &apos;SCFGU_Bsp13/SystemC&apos;" deleteContents="false" description="Delete resource &apos;SCFGU_Bsp13/SystemC&apos;" element1="/SCFGU_Bsp13/SystemC" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1316029610031"/>
-</session>

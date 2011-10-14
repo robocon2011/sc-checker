@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;SCFGU_Bsp05/time_flies.cpp&apos; to &apos;comb_engine.cpp&apos;" description="Rename resource &apos;time_flies.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="time_flies.cpp" name="comb_engine.cpp" stamp="1314722038421" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;SCFGU_Bsp05/time_flies.h&apos; to &apos;comb_engine.h&apos;" description="Rename resource &apos;time_flies.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="time_flies.h" name="comb_engine.h" stamp="1314722051984" updateReferences="true"/>
-</session>

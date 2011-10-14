@@ -1,8 +1,0 @@
-
-**** Clean-only build of configuration Debug for project SCFGU_Bsp05 ****
-
-make clean 
-rm -rf  ./comb_engine.o ./main.o  ./comb_engine.d ./main.d  SCFGU_Bsp05.exe
- 
-
-**** Build Finished ****
