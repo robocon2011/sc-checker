@@ -1,0 +1,7 @@
+
+**** Build of configuration Debug for project fulladder_rtl ****
+
+make all 
+fulladder_main.d:1: *** multiple target patterns.  Stop.
+
+**** Build Finished ****

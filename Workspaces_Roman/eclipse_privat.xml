@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+<language name="Assembly Source File">
+
+</language>
+<language name="C++ Source File">
+<includepath>C:/cygwin/usr/local/scv_debug/include</includepath>
+<includepath>C:/cygwin/usr/local/systemc_debug/include</includepath>
+<includepath>C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include</includepath>
+<includepath>C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++</includepath>
+<includepath>C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/i686-pc-cygwin</includepath>
+<includepath>C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward</includepath>
+<includepath>C:/cygwin/usr/i686-pc-cygwin</includepath>
+<includepath>C:/cygwin/usr/include</includepath>
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+</section>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+<language name="Assembly Source File">
+
+</language>
+<language name="C++ Source File">
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+</section>
+</cdtprojectproperties>
