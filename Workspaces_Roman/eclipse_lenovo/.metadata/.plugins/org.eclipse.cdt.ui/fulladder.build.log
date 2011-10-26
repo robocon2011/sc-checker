@@ -1,27 +1,8 @@
 
-**** Build of configuration Debug for project fulladder ****
+**** Clean-only build of configuration Debug for project fulladder ****
 
-make all 
-Building file: ../fulladder.cpp
-Invoking: Cygwin C++ Compiler
-g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc/include -IC:/work/TLM-2009-07-15/include -IC:/work/TLM-2009-07-15/include/tlm/tlm_1 -IC:/work/TLM-2009-07-15/include/tlm/tlm_utils -IC:/work/TLM-2009-07-15/include/tlm/tlm_h -IC:/work/simsoc/simsoc-0.7.1/libsimsoc -IC:/work/simsoc/simsoc-0.7.1 -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++ -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/i686-pc-cygwin -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward -IC:/cygwin/usr/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"fulladder.d" -MT"fulladder.d" -o "fulladder.o" "../fulladder.cpp"
-cygwin warning:
-  MS-DOS style path detected: C:\work\rep_sc-checker\Workspaces_Roman\eclipse_lenovo\fulladder\Debug
-  Preferred POSIX equivalent is: /cygdrive/c/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder/Debug
-  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
-  Consult the user's guide for more details about POSIX paths:
-    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
-Finished building: ../fulladder.cpp
+make clean 
+rm -rf  ./fulladder.o ./main.o ./testbench.o  ./fulladder.d ./main.d ./testbench.d  fulladder.exe
  
-Building file: ../main.cpp
-Invoking: Cygwin C++ Compiler
-g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc/include -IC:/work/TLM-2009-07-15/include -IC:/work/TLM-2009-07-15/include/tlm/tlm_1 -IC:/work/TLM-2009-07-15/include/tlm/tlm_utils -IC:/work/TLM-2009-07-15/include/tlm/tlm_h -IC:/work/simsoc/simsoc-0.7.1/libsimsoc -IC:/work/simsoc/simsoc-0.7.1 -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++ -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/i686-pc-cygwin -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward -IC:/cygwin/usr/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.cpp"
-In file included from ../testvalues_constraint.h:5,
-                 from ../testbench.h:17,
-                 from ../main.cpp:14:
-../scc_constraints.h: In function `void scc_set_constraints(scv_smart_ptr<testvalues>)':
-../scc_constraints.h:18: error: `eh' undeclared (first use this function)
-../scc_constraints.h:18: error: (Each undeclared identifier is reported only once for each function it appears in.)
-make: *** [main.o] Error 1
 
 **** Build Finished ****

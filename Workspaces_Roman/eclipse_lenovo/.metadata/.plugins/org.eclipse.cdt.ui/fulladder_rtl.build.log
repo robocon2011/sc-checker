@@ -2,6 +2,56 @@
 **** Build of configuration Debug for project fulladder_rtl ****
 
 make all 
-fulladder_main.d:1: *** multiple target patterns.  Stop.
+Building file: ../fulladder_main.cpp
+Invoking: Cygwin C++ Compiler
+g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc_debug/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"fulladder_main.d" -MT"fulladder_main.d" -o "fulladder_main.o" "../fulladder_main.cpp"
+cygwin warning:
+  MS-DOS style path detected: C:\work\rep_sc-checker\Workspaces_Roman\eclipse_lenovo\fulladder_rtl\Debug
+  Preferred POSIX equivalent is: /cygdrive/c/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder_rtl/Debug
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+../fulladder_main.cpp:15:27: fulladder_rtl.h: No such file or directory
+../fulladder_main.cpp:24: error: ISO C++ forbids declaration of `sc_out' with no type
+../fulladder_main.cpp:24: error: expected `;' before '<' token
+../fulladder_main.cpp:25: error: ISO C++ forbids declaration of `sc_out' with no type
+../fulladder_main.cpp:25: error: expected `;' before '<' token
+../fulladder_main.cpp:26: error: ISO C++ forbids declaration of `sc_out' with no type
+../fulladder_main.cpp:26: error: expected `;' before '<' token
+../fulladder_main.cpp: In member function `void tb_fulladder_cascade::stim_fulladder_cascade()':
+../fulladder_main.cpp:29: error: `BITWIDTH' undeclared (first use this function)
+../fulladder_main.cpp:29: error: (Each undeclared identifier is reported only once for each function it appears in.)
+../fulladder_main.cpp:30: error: `a_o' undeclared (first use this function)
+../fulladder_main.cpp:30: error: `SC_LOGIC_0' undeclared (first use this function)
+../fulladder_main.cpp:31: error: `b_o' undeclared (first use this function)
+../fulladder_main.cpp:33: error: `cy_o' undeclared (first use this function)
+../fulladder_main.cpp:35: error: `SC_NS' undeclared (first use this function)
+../fulladder_main.cpp:38: error: `SC_LOGIC_1' undeclared (first use this function)
+../fulladder_main.cpp: In function `int sc_main(int, char**)':
+../fulladder_main.cpp:95: error: `sc_trace_file' undeclared (first use this function)
+../fulladder_main.cpp:95: error: `Tf' undeclared (first use this function)
+../fulladder_main.cpp:96: error: `sc_create_vcd_trace_file' undeclared (first use this function)
+../fulladder_main.cpp:97: error: `vcd_trace_file' undeclared (first use this function)
+../fulladder_main.cpp:97: error: expected primary-expression before ')' token
+../fulladder_main.cpp:97: error: expected `)' before "Tf"
+../fulladder_main.cpp:100: error: `sc_signal' undeclared (first use this function)
+../fulladder_main.cpp:100: error: `sc_logic' undeclared (first use this function)
+../fulladder_main.cpp:100: error: `s_cy' undeclared (first use this function)
+../fulladder_main.cpp:100: error: `s_cyout' undeclared (first use this function)
+../fulladder_main.cpp:101: error: `s_a' undeclared (first use this function)
+../fulladder_main.cpp:101: error: `BITWIDTH' undeclared (first use this function)
+../fulladder_main.cpp:101: error: `s_b' undeclared (first use this function)
+../fulladder_main.cpp:101: error: `s_sumout' undeclared (first use this function)
+../fulladder_main.cpp:106: error: `sc_trace' undeclared (first use this function)
+../fulladder_main.cpp:117: error: `fulladder_cascade' undeclared (first use this function)
+../fulladder_main.cpp:117: error: expected `;' before "i_fulladder"
+../fulladder_main.cpp:122: error: `i_fulladder' undeclared (first use this function)
+../fulladder_main.cpp:125: error: 'struct tb_fulladder_cascade' has no member named 'a_o'
+../fulladder_main.cpp:126: error: 'struct tb_fulladder_cascade' has no member named 'b_o'
+../fulladder_main.cpp:133: error: 'struct tb_fulladder_cascade' has no member named 'cy_o'
+../fulladder_main.cpp:136: error: `SC_NS' undeclared (first use this function)
+../fulladder_main.cpp:136: error: `sc_start' undeclared (first use this function)
+../fulladder_main.cpp:138: error: `sc_close_vcd_trace_file' undeclared (first use this function)
+make: *** [fulladder_main.o] Error 1
 
 **** Build Finished ****

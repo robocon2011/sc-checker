@@ -80,4 +80,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>fulladder_rtl.h</name>
+			<type>1</type>
+			<location>C:/work/rep_sc-checker/work/dut/fulladder/fulladder_rtl.h</location>
+		</link>
+	</linkedResources>
 </projectDescription>

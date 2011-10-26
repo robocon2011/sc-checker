@@ -1,5 +1,5 @@
 $date
-     Oct 18, 2011       19:13:49
+     Oct 26, 2011       17:28:16
 $end
 
 $version
@@ -11,11 +11,104 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire    1  aaa  in_a       $end
-$var wire    1  aab  in_b       $end
-$var wire    1  aac  in_cy       $end
-$var wire    1  aad  out_sum       $end
-$var wire    1  aae  out_cy       $end
+$var wire    1  aaa  in_a_0       $end
+$var wire    1  aab  in_b_0       $end
+$var wire    1  aac  out_sum__0       $end
+$var wire    1  aad  in_a_1       $end
+$var wire    1  aae  in_b_1       $end
+$var wire    1  aaf  out_sum__1       $end
+$var wire    1  aag  in_a_2       $end
+$var wire    1  aah  in_b_2       $end
+$var wire    1  aai  out_sum__2       $end
+$var wire    1  aaj  in_a_3       $end
+$var wire    1  aak  in_b_3       $end
+$var wire    1  aal  out_sum__3       $end
+$var wire    1  aam  in_a_4       $end
+$var wire    1  aan  in_b_4       $end
+$var wire    1  aao  out_sum__4       $end
+$var wire    1  aap  in_a_5       $end
+$var wire    1  aaq  in_b_5       $end
+$var wire    1  aar  out_sum__5       $end
+$var wire    1  aas  in_a_6       $end
+$var wire    1  aat  in_b_6       $end
+$var wire    1  aau  out_sum__6       $end
+$var wire    1  aav  in_a_7       $end
+$var wire    1  aaw  in_b_7       $end
+$var wire    1  aax  out_sum__7       $end
+$var wire    1  aay  in_a_8       $end
+$var wire    1  aaz  in_b_8       $end
+$var wire    1  aba  out_sum__8       $end
+$var wire    1  abb  in_a_9       $end
+$var wire    1  abc  in_b_9       $end
+$var wire    1  abd  out_sum__9       $end
+$var wire    1  abe  in_a_10       $end
+$var wire    1  abf  in_b_10       $end
+$var wire    1  abg  out_sum__10       $end
+$var wire    1  abh  in_a_11       $end
+$var wire    1  abi  in_b_11       $end
+$var wire    1  abj  out_sum__11       $end
+$var wire    1  abk  in_a_12       $end
+$var wire    1  abl  in_b_12       $end
+$var wire    1  abm  out_sum__12       $end
+$var wire    1  abn  in_a_13       $end
+$var wire    1  abo  in_b_13       $end
+$var wire    1  abp  out_sum__13       $end
+$var wire    1  abq  in_a_14       $end
+$var wire    1  abr  in_b_14       $end
+$var wire    1  abs  out_sum__14       $end
+$var wire    1  abt  in_a_15       $end
+$var wire    1  abu  in_b_15       $end
+$var wire    1  abv  out_sum__15       $end
+$var wire    1  abw  in_a_16       $end
+$var wire    1  abx  in_b_16       $end
+$var wire    1  aby  out_sum__16       $end
+$var wire    1  abz  in_a_17       $end
+$var wire    1  aca  in_b_17       $end
+$var wire    1  acb  out_sum__17       $end
+$var wire    1  acc  in_a_18       $end
+$var wire    1  acd  in_b_18       $end
+$var wire    1  ace  out_sum__18       $end
+$var wire    1  acf  in_a_19       $end
+$var wire    1  acg  in_b_19       $end
+$var wire    1  ach  out_sum__19       $end
+$var wire    1  aci  in_a_20       $end
+$var wire    1  acj  in_b_20       $end
+$var wire    1  ack  out_sum__20       $end
+$var wire    1  acl  in_a_21       $end
+$var wire    1  acm  in_b_21       $end
+$var wire    1  acn  out_sum__21       $end
+$var wire    1  aco  in_a_22       $end
+$var wire    1  acp  in_b_22       $end
+$var wire    1  acq  out_sum__22       $end
+$var wire    1  acr  in_a_23       $end
+$var wire    1  acs  in_b_23       $end
+$var wire    1  act  out_sum__23       $end
+$var wire    1  acu  in_a_24       $end
+$var wire    1  acv  in_b_24       $end
+$var wire    1  acw  out_sum__24       $end
+$var wire    1  acx  in_a_25       $end
+$var wire    1  acy  in_b_25       $end
+$var wire    1  acz  out_sum__25       $end
+$var wire    1  ada  in_a_26       $end
+$var wire    1  adb  in_b_26       $end
+$var wire    1  adc  out_sum__26       $end
+$var wire    1  add  in_a_27       $end
+$var wire    1  ade  in_b_27       $end
+$var wire    1  adf  out_sum__27       $end
+$var wire    1  adg  in_a_28       $end
+$var wire    1  adh  in_b_28       $end
+$var wire    1  adi  out_sum__28       $end
+$var wire    1  adj  in_a_29       $end
+$var wire    1  adk  in_b_29       $end
+$var wire    1  adl  out_sum__29       $end
+$var wire    1  adm  in_a_30       $end
+$var wire    1  adn  in_b_30       $end
+$var wire    1  ado  out_sum__30       $end
+$var wire    1  adp  in_a_31       $end
+$var wire    1  adq  in_b_31       $end
+$var wire    1  adr  out_sum__31       $end
+$var wire    1  ads  in_cy       $end
+$var wire    1  adt  out_cy       $end
 $upscope $end
 $enddefinitions  $end
 
@@ -29,16 +122,234 @@ $dumpvars
 0aac
 0aad
 0aae
+0aaf
+0aag
+0aah
+0aai
+0aaj
+0aak
+0aal
+0aam
+0aan
+0aao
+0aap
+0aaq
+0aar
+0aas
+0aat
+0aau
+0aav
+0aaw
+0aax
+0aay
+0aaz
+0aba
+0abb
+0abc
+0abd
+0abe
+0abf
+0abg
+0abh
+0abi
+0abj
+0abk
+0abl
+0abm
+0abn
+0abo
+0abp
+0abq
+0abr
+0abs
+0abt
+0abu
+0abv
+0abw
+0abx
+0aby
+0abz
+0aca
+0acb
+0acc
+0acd
+0ace
+0acf
+0acg
+0ach
+0aci
+0acj
+0ack
+0acl
+0acm
+0acn
+0aco
+0acp
+0acq
+0acr
+0acs
+0act
+0acu
+0acv
+0acw
+0acx
+0acy
+0acz
+0ada
+0adb
+0adc
+0add
+0ade
+0adf
+0adg
+0adh
+0adi
+0adj
+0adk
+0adl
+0adm
+0adn
+0ado
+0adp
+0adq
+0adr
+0ads
+0adt
 $end
 
 #100
 1aaa
-1aab
-1aac
 1aad
-1aae
+1aag
+1aaj
+1aam
+1aap
+1aas
+1aav
+1aay
+1abb
+1abe
+1abh
+1abk
+1abn
+1abq
+1abt
+1abw
+1abz
+1acc
+1acf
+1aci
+1acl
+1aco
+1acr
+1acu
+1acx
+1ada
+1add
+1adg
+1adj
+1adm
+1adp
+1ads
+1adt
 
 #200
-0aac
+0aaa
+1aab
+1aac
 0aad
+1aae
+1aaf
+0aag
+1aah
+1aai
+0aaj
+1aak
+1aal
+0aam
+1aan
+1aao
+0aap
+1aaq
+1aar
+0aas
+1aat
+1aau
+0aav
+1aaw
+1aax
+0aay
+1aaz
+1aba
+0abb
+1abc
+1abd
+0abe
+1abf
+1abg
+0abh
+1abi
+1abj
+0abk
+1abl
+1abm
+0abn
+1abo
+1abp
+0abq
+1abr
+1abs
+0abt
+1abu
+1abv
+0abw
+1abx
+1aby
+0abz
+1aca
+1acb
+0acc
+1acd
+1ace
+0acf
+1acg
+1ach
+0aci
+1acj
+1ack
+0acl
+1acm
+1acn
+0aco
+1acp
+1acq
+0acr
+1acs
+1act
+0acu
+1acv
+1acw
+0acx
+1acy
+1acz
+0ada
+1adb
+1adc
+0add
+1ade
+1adf
+0adg
+1adh
+1adi
+0adj
+1adk
+1adl
+0adm
+1adn
+1ado
+0adp
+1adq
+1adr
+0ads
+0adt
 

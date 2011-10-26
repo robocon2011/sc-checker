@@ -13,9 +13,6 @@ struct testvalues_constraint
 	scv_smart_ptr<testvalues> pTest;
 	scv_bag<valueRange> valueDistribution;
 
-	scc_set_constraints(pTest); // TODO: Keine Funktion aufrufen, weil nur struct definiert wird (dynmisches Constraint Macro überhaupt möglich?
-
-
 	SCV_CONSTRAINT_CTOR(testvalues_constraint)
 	{
 //
