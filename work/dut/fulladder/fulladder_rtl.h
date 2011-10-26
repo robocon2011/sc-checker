@@ -15,7 +15,7 @@
 #include <string>
 #include <stdio.h>
 
-
+// define for fulladder cascade bitwidth
 #define BITWIDTH 32
 
 
