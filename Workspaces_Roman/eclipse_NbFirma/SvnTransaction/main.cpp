@@ -239,8 +239,11 @@ int sc_main (int argc , char *argv[])
    scv_tr_db db("my_db");
    scv_tr_db::set_default_db(&db);
 
+   sc_time period = sc_time(20,SC_MS);
+   sc_time start = sc_time(0,SC_MS);
+
    // create signals
-   sc_clock clk("clk",20,0.5,0,true);
+   sc_clock clk("clk",period,0.5,start,true);
    sc_signal< bool > rw;
    sc_signal< bool > addr_req;
    sc_signal< bool > addr_ack;
@@ -273,7 +276,7 @@ int sc_main (int argc , char *argv[])
    duv.bus_data(bus_data);
 
    // run the simulation
-   sc_start(1000000);
+   sc_start(1000000, SC_MS);
 
    return 0;
 }

@@ -11,118 +11,45 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <systemc.h>
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Describe a gate-level like model of a half adder.
-SC_MODULE(halfadder) {
-  sc_in<sc_logic>  a_i;
-  sc_in<sc_logic>  b_i;
-  sc_out<sc_logic> sum_o;
-  sc_out<sc_logic> cy_o;
-
-  void proc_halfadder();
-
-  SC_CTOR(halfadder) {
-    SC_METHOD(proc_halfadder);
-    sensitive << a_i << b_i;
-  }
-
-};
-
-void halfadder::proc_halfadder() {
-  sum_o = a_i ^ b_i;
-  cy_o  = a_i & b_i;
-}
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Describe a gate-level like model of an or gate.
-SC_MODULE(orgate) {
-  sc_in<sc_logic>  a_i;
-  sc_in<sc_logic>  b_i;
-  sc_out<sc_logic> or_o;
-
-  void proc_orgate();
-
-  SC_CTOR(orgate) {
-    SC_METHOD(proc_orgate);
-    sensitive << a_i << b_i;
-  }
-
-};
-
-void orgate::proc_orgate() {
-  or_o = a_i | b_i;
-}
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Describe a gate-level like model of a full adder by instantiating two half
-// adders and an or gate submodule.
-SC_MODULE(fulladder) {
-  sc_in<sc_logic>  a_i;
-  sc_in<sc_logic>  b_i;
-  sc_in<sc_logic>  cy_i;
-  sc_out<sc_logic> sum_o;
-  sc_out<sc_logic> cy_o;
-
-  halfadder i_halfadder1;
-  halfadder i_halfadder2;
-  orgate    i_orgate;
-
-  sc_signal<sc_logic> s_sum1, s_cy1, s_cy2;
-
-  SC_CTOR(fulladder) : 
-    i_halfadder1("i_halfadder1"),
-    i_halfadder2("i_halfadder2"),
-    i_orgate("i_orgate")
-  {
-    // hook up half adder one.
-    i_halfadder1.a_i(a_i);
-    i_halfadder1.b_i(b_i);
-    i_halfadder1.sum_o(s_sum1);
-    i_halfadder1.cy_o(s_cy1);
-    // hook up half adder two.
-    i_halfadder2.a_i(s_sum1);
-    i_halfadder2.b_i(cy_i);
-    i_halfadder2.sum_o(sum_o);
-    i_halfadder2.cy_o(s_cy2);
-    // hook up the or gate.
-    i_orgate.a_i(s_cy1);
-    i_orgate.b_i(s_cy2);
-    i_orgate.or_o(cy_o);
-  }
-
-};
-///////////////////////////////////////////////////////////////////////////////
+#include <systemc>
+#include "dut/fulladder/fulladder_rtl.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Describe a testbench for the full adder design example.
-SC_MODULE(tb_fulladder) {
+SC_MODULE(tb_fulladder_cascade) {
 
-  sc_out<sc_logic>  a_o;
-  sc_out<sc_logic>  b_o;
-  sc_out<sc_logic>  cy_o;
+	int i;
 
-  void stim_fulladder() {
-    a_o  = SC_LOGIC_0;
-    b_o  = SC_LOGIC_0;
-    cy_o = SC_LOGIC_0;
-    wait(100, SC_NS);
-    a_o  = SC_LOGIC_1;
-    b_o  = SC_LOGIC_1;
-    cy_o = SC_LOGIC_1;
-    wait(100, SC_NS);
-  };
+	sc_out< sc_logic >  a_o[BITWIDTH];
+	sc_out< sc_logic >  b_o[BITWIDTH];
+	sc_out< sc_logic >  cy_o;
 
-  SC_CTOR(tb_fulladder) {
-    SC_THREAD(stim_fulladder);
-  }
+	void stim_fulladder_cascade() {
+		for (i=0; i<(BITWIDTH); i++){
+			a_o[i]->write(SC_LOGIC_0);
+			b_o[i]->write(SC_LOGIC_0);
+		}
+		cy_o->write(SC_LOGIC_0);
+
+		wait(100, SC_NS);
+
+		for (i=0; i<(BITWIDTH); i++){
+			a_o[i]->write(SC_LOGIC_1);
+			b_o[i]->write(SC_LOGIC_0);
+		}
+		cy_o->write(SC_LOGIC_1);
+		wait(100, SC_NS);
+		for (i=0; i<(BITWIDTH); i++){
+			a_o[i]->write(SC_LOGIC_0);
+			b_o[i]->write(SC_LOGIC_1);
+		}
+		cy_o->write(SC_LOGIC_0);
+	};
+
+	SC_CTOR(tb_fulladder_cascade) {
+		SC_THREAD(stim_fulladder_cascade);
+	}
 
 };
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,41 +88,55 @@ SC_MODULE_EXPORT(fulladder_top);
 
 int sc_main(int argc, char* argv[]) {
 
-  // set up trace file
-  sc_trace_file* Tf;
-  Tf = sc_create_vcd_trace_file("fulladder_traces");
-  ((vcd_trace_file*)Tf)->sc_set_vcd_time_unit(-9);
+	int i;
+	char name[64];
 
-  // declare interconnecting signals
-  sc_signal<sc_logic> s_a, s_b, s_cy, s_sumout, s_cyout;
+	// set up trace file
+	sc_trace_file* Tf;
+	Tf = sc_create_vcd_trace_file("fulladder_traces");
+	((vcd_trace_file*)Tf)->sc_set_vcd_time_unit(-9);
 
-  // trace signals to vcd file
-  sc_trace(Tf, s_a,  "in_a");
-  sc_trace(Tf, s_b,  "in_b");
-  sc_trace(Tf, s_cy, "in_cy");
-  sc_trace(Tf, s_sumout, "out_sum");
-  sc_trace(Tf, s_cyout, "out_cy");
+	// declare interconnecting signals
+	sc_signal<sc_logic> s_cy, s_cyout;
+	sc_signal< sc_logic > s_a[BITWIDTH], s_b[BITWIDTH], s_sumout[BITWIDTH];
 
-  // create instances of fulladder and tb_fulladder
-  fulladder i_fulladder("i_fulladder");
-  tb_fulladder i_tb_fulladder("i_tb_fulladder");
+	// trace signals to vcd file
+	for (i=0; i<(BITWIDTH); i++){
+		sprintf(name, "in_a_%d",i);
+		sc_trace(Tf, s_a[i],  name);
+		sprintf(name, "in_b_%d",i);
+		sc_trace(Tf, s_b[i],  name);
+		sprintf(name, "out_sum__%d",i);
+		sc_trace(Tf, s_sumout[i], name);
+	}
 
-  // connect the fulladder design
-  i_fulladder.a_i(s_a);
-  i_fulladder.b_i(s_b);
-  i_fulladder.cy_i(s_cy);
-  i_fulladder.sum_o(s_sumout);
-  i_fulladder.cy_o(s_cyout);
-  // and the fulladder testbench
-  i_tb_fulladder.a_o(s_a);
-  i_tb_fulladder.b_o(s_b);
-  i_tb_fulladder.cy_o(s_cy);
+	sc_trace(Tf, s_cy, "in_cy");
+	sc_trace(Tf, s_cyout, "out_cy");
 
-  // invoke the simulator
-  sc_start(300,SC_NS ) ;
-  // close trace file
-  sc_close_vcd_trace_file(Tf);
-  return 0;
+	// create instances of fulladder and tb_fulladder
+	fulladder_cascade i_fulladder("i_fulladder");
+	tb_fulladder_cascade i_tb_fulladder("i_tb_fulladder");
+
+	// connect the fulladder design
+	for (i=0; i<(BITWIDTH); i++){
+		i_fulladder.a_in[i](s_a[i]);
+		i_fulladder.b_in[i](s_b[i]);
+		i_fulladder.sum_out[i](s_sumout[i]);
+		i_tb_fulladder.a_o[i](s_a[i]);
+		i_tb_fulladder.b_o[i](s_b[i]);
+	}
+
+	i_fulladder.cy_in(s_cy);
+	i_fulladder.cy_out(s_cyout);
+
+	// and the fulladder testbench
+	i_tb_fulladder.cy_o(s_cy);
+
+	// invoke the simulator
+	sc_start(300,SC_NS ) ;
+	// close trace file
+	sc_close_vcd_trace_file(Tf);
+	return 0;
 }
 
 #endif
