@@ -34,18 +34,24 @@ public:
 class pipelined_bus_ports : public sc_module {
 public:
    sc_in< bool > clk;
-   sc_inout< bool > rw;
-   sc_inout< bool > addr_req;
-   sc_inout< bool > addr_ack;
-   sc_inout< sc_uint<8> > bus_addr;
-   sc_inout< bool > data_rdy;
-   sc_inout< sc_uint<8> > bus_data;
+   //sc_inout< bool > rw;
+   sc_inout< sc_logic > rw;
+   //sc_inout< bool > addr_req;
+   sc_inout< sc_logic > addr_req;
+   //sc_inout< bool > addr_ack;
+   sc_inout< sc_logic > addr_ack;
+   //sc_inout< sc_uint<8> > bus_addr;
+   sc_inout< sc_lv<8> > bus_addr;
+   //sc_inout< bool > data_rdy;
+   sc_inout< sc_logic > data_rdy;
+   //sc_inout< sc_uint<8> > bus_data;
+   sc_inout< sc_lv<8> > lbus_data;
 
    SC_CTOR(pipelined_bus_ports)
      : clk("clk"), rw("rw"),
        addr_req("addr_req"),
        addr_ack("addr_ack"), bus_addr("bus_addr"),
-       data_rdy("data_rdy"), bus_data("bus_data") {}
+       data_rdy("data_rdy"), lbus_data("bus_data") {rw.initialize(SC_LOGIC_0);}
 };
 
 class rw_pipelined_transactor
@@ -82,16 +88,18 @@ public:
 
 rw_task_if::data_t rw_pipelined_transactor::read(const rw_task_if::addr_t* 
 addr) {
+	data_t data;
+
    addr_phase.lock();
    scv_tr_handle h = read_gen.begin_transaction(*addr);
 
    scv_tr_handle h1 = addr_gen.begin_transaction(*addr,"addr_phase",h);
    wait(clk->posedge_event());
    bus_addr = *addr;
-   addr_req = 1;
+   addr_req = SC_LOGIC_1;
    wait(addr_ack->posedge_event());
    wait(clk->negedge_event());
-   addr_req = 0;
+   addr_req = SC_LOGIC_0;
    wait(addr_ack->negedge_event());
    addr_gen.end_transaction(h1);
    addr_phase.unlock();
@@ -99,7 +107,8 @@ addr) {
    data_phase.lock();
    scv_tr_handle h2 = data_gen.begin_transaction("data_phase",h);
    wait(data_rdy->posedge_event());
-   data_t data = bus_data.read();
+   data = lbus_data.read();
+
    wait(data_rdy->negedge_event());
    data_gen.end_transaction(h2);
    read_gen.end_transaction(h,data);
@@ -168,7 +177,8 @@ inline void test::main() {
 
 class design : public pipelined_bus_ports {
    list< sc_uint<8> > outstandingAddresses;
-   list< bool > outstandingType;
+   //list< bool > outstandingType;
+   list< sc_logic > outstandingType;
    sc_uint<8>  memory[ram_size];
 
 public:
@@ -184,20 +194,22 @@ public:
 
 inline void design::addr_phase() {
    while (1) {
-     while (addr_req.read() != 1) {
+     while (addr_req.read() != SC_LOGIC_1) {
        wait(addr_req->value_changed_event());
      }
-     sc_uint<8> _addr = bus_addr.read();
-     bool _rw = rw.read();
+     //sc_uint<8> _addr = bus_addr.read();
+     sc_lv<8> _addr = bus_addr.read();
+     //bool _rw = rw.read();
+     sc_logic _rw = rw.read();
 
      int cycle = rand() % 10 + 1;
      while (cycle-- > 0) {
        wait(clk->posedge_event());
      }
 
-     addr_ack = 1;
+     addr_ack = SC_LOGIC_1;
      wait(clk->posedge_event());
-     addr_ack = 0;
+     addr_ack = SC_LOGIC_0;
 
      outstandingAddresses.push_back(_addr);
      outstandingType.push_back(_rw);
@@ -215,13 +227,17 @@ inline void design::data_phase() {
      while (cycle-- > 0) {
        wait(clk->posedge_event());
      }
-     if (outstandingType.front() == 0) {
+
+     sc_logic debugLog = outstandingType.front();
+     cout << "debugLog = " << debugLog << endl;
+
+     if (debugLog == SC_LOGIC_0) {
        cout << "reading memory address " << outstandingAddresses.front()
             << " with value " << memory[outstandingAddresses.front()] << endl;
-       bus_data = memory[outstandingAddresses.front()];
-       data_rdy = 1;
+       lbus_data.write(memory[outstandingAddresses.front()]);
+       data_rdy = SC_LOGIC_1;
        wait(clk->posedge_event());
-       data_rdy = 0;
+       data_rdy = SC_LOGIC_0;
 
      } else {
        cout << "not implemented yet" << endl;
@@ -244,12 +260,19 @@ int sc_main (int argc , char *argv[])
 
    // create signals
    sc_clock clk("clk",period,0.5,start,true);
-   sc_signal< bool > rw;
-   sc_signal< bool > addr_req;
-   sc_signal< bool > addr_ack;
-   sc_signal< sc_uint<8> > bus_addr;
-   sc_signal< bool > data_rdy;
-   sc_signal< sc_uint<8> > bus_data;
+
+   //sc_signal< bool > rw;
+   sc_signal_resolved rw;
+   //sc_signal< bool > addr_req;
+   sc_signal_resolved addr_req;
+   //sc_signal< bool > addr_ack;
+   sc_signal_resolved addr_ack;
+   //sc_signal< sc_uint<8> > bus_addr;
+   sc_signal_rv< 8 > bus_addr;
+   //sc_signal< bool > data_rdy;
+   sc_signal_resolved data_rdy;
+   //sc_signal< sc_uint<8> > bus_data;
+   sc_signal_rv< 8 > lbus_data;
 
    // create modules/channels
    test t("t");
@@ -265,7 +288,7 @@ int sc_main (int argc , char *argv[])
    tr.addr_ack(addr_ack);
    tr.bus_addr(bus_addr);
    tr.data_rdy(data_rdy);
-   tr.bus_data(bus_data);
+   tr.lbus_data(lbus_data);
 
    duv.clk(clk);
    duv.rw(rw);
@@ -273,7 +296,7 @@ int sc_main (int argc , char *argv[])
    duv.addr_ack(addr_ack);
    duv.bus_addr(bus_addr);
    duv.data_rdy(data_rdy);
-   duv.bus_data(bus_data);
+   duv.lbus_data(lbus_data);
 
    // run the simulation
    sc_start(1000000, SC_MS);
