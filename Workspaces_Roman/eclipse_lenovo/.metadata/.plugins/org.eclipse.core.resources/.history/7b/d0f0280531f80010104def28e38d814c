@@ -1,0 +1,30 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CPP_SRCS += \
+../fulladder.cpp \
+../main.cpp \
+../testbench.cpp 
+
+OBJS += \
+./fulladder.o \
+./main.o \
+./testbench.o 
+
+CPP_DEPS += \
+./fulladder.d \
+./main.d \
+./testbench.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+%.o: ../%.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: Cygwin C++ Compiler'
+	g++ -IC:/cygwin/usr/local/systemc_debug/include -IC:/cygwin/usr/local/scv_debug/include -IC:/work/TLM-2009-07-15/include -IC:/work/TLM-2009-07-15/include/tlm/tlm_1 -IC:/work/TLM-2009-07-15/include/tlm/tlm_utils -IC:/work/TLM-2009-07-15/include/tlm/tlm_h -IC:/work/simsoc/simsoc-0.7.1/libsimsoc -IC:/work/simsoc/simsoc-0.7.1 -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++ -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/i686-pc-cygwin -IC:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward -IC:/cygwin/usr/i686-pc-cygwin -IC:/cygwin/usr/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

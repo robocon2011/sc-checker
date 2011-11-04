@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;fulladder/scc_constraints&apos; to &apos;scc_constraints.h&apos;" description="Rename resource &apos;scc_constraints&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="scc_constraints" name="scc_constraints.h" stamp="1318856148155" updateReferences="true"/>
+</session>
