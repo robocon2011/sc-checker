@@ -2,6 +2,17 @@
 **** Build of configuration Debug for project fulladder_rtl ****
 
 make all 
+Building file: ../stimulator/stimulator.cpp
+Invoking: Cygwin C++ Compiler
+g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc_debug/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"stimulator/stimulator.d" -MT"stimulator/stimulator.d" -o "stimulator/stimulator.o" "../stimulator/stimulator.cpp"
+cygwin warning:
+  MS-DOS style path detected: C:\work\rep_sc-checker\Workspaces_Roman\eclipse_lenovo\fulladder_rtl\Debug
+  Preferred POSIX equivalent is: /cygdrive/c/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder_rtl/Debug
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+Finished building: ../stimulator/stimulator.cpp
+ 
 Building file: ../fulladder_main.cpp
 Invoking: Cygwin C++ Compiler
 g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc_debug/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"fulladder_main.d" -MT"fulladder_main.d" -o "fulladder_main.o" "../fulladder_main.cpp"
@@ -9,7 +20,7 @@ Finished building: ../fulladder_main.cpp
  
 Building target: fulladder_rtl.exe
 Invoking: Cygwin C++ Linker
-g++ -LC:/cygwin/usr/local/scv_debug/lib-cygwin -LC:/cygwin/usr/local/systemc_debug/lib-cygwin -o "fulladder_rtl.exe"  ./fulladder_main.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
+g++ -LC:/cygwin/usr/local/scv_debug/lib-cygwin -LC:/cygwin/usr/local/systemc_debug/lib-cygwin -o "fulladder_rtl.exe"  ./stimulator/stimulator.o  ./fulladder_main.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
 Finished building target: fulladder_rtl.exe
  
 

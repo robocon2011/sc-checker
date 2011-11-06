@@ -1,40 +1,67 @@
 
-**** Clean-only build of configuration Debug for project fulladder_rtl ****
-
-make clean 
-rm -rf  ./fulladder_main.o  ./fulladder_main.d  fulladder_rtl.exe
- 
-
-**** Build Finished ****
-
-**** Build of configuration Debug for project fulladder_rtl ****
+**** Build of configuration Debug for project stimulator ****
 
 make all 
-Building file: ../fulladder_main.cpp
+Building file: ../stimulator/stimulator.cpp
 Invoking: Cygwin C++ Compiler
-g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc_debug/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"fulladder_main.d" -MT"fulladder_main.d" -o "fulladder_main.o" "../fulladder_main.cpp"
-Finished building: ../fulladder_main.cpp
- 
-Building target: fulladder_rtl.exe
-Invoking: Cygwin C++ Linker
-g++ -LC:/cygwin/usr/local/scv_debug/lib-cygwin -LC:/cygwin/usr/local/systemc_debug/lib-cygwin -o "fulladder_rtl.exe"  ./fulladder_main.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
-Finished building target: fulladder_rtl.exe
- 
-
-**** Build Finished ****
-
-**** Build of configuration Debug for project fulladder_rtl ****
-
-make all 
-Building file: ../fulladder_main.cpp
-Invoking: Cygwin C++ Compiler
-g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc_debug/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"fulladder_main.d" -MT"fulladder_main.d" -o "fulladder_main.o" "../fulladder_main.cpp"
-Finished building: ../fulladder_main.cpp
- 
-Building target: fulladder_rtl.exe
-Invoking: Cygwin C++ Linker
-g++ -LC:/cygwin/usr/local/scv_debug/lib-cygwin -LC:/cygwin/usr/local/systemc_debug/lib-cygwin -o "fulladder_rtl.exe"  ./fulladder_main.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
-Finished building target: fulladder_rtl.exe
- 
+g++ -IC:/cygwin/usr/local/scv_debug/include -IC:/cygwin/usr/local/systemc_debug/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"stimulator/stimulator.d" -MT"stimulator/stimulator.d" -o "stimulator/stimulator.o" "../stimulator/stimulator.cpp"
+cygwin warning:
+  MS-DOS style path detected: C:\work\rep_sc-checker\Workspaces_Roman\eclipse_lenovo\stimulator\Debug
+  Preferred POSIX equivalent is: /cygdrive/c/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/stimulator/Debug
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+In file included from ../stimulator/stimulator.cpp:10:
+../stimulator/stimulator.h: In constructor `stimulator::stimulator()':
+../stimulator/stimulator.h:47: error: no matching function for call to `stimulator_m::stimulator_m()'
+../stimulator/stimulator.h:21: note: candidates are: stimulator_m::stimulator_m(const stimulator_m&)
+../stimulator/stimulator.h:27: note:                 stimulator_m::stimulator_m(sc_core::sc_module_name)
+../stimulator/stimulator.cpp: In constructor `stimulator_m::stimulator_m(sc_core::sc_module_name)':
+../stimulator/stimulator.cpp:18: error: no match for 'operator>>' in '((sc_core::sc_module*)this)->sc_core::sc_module::sensitive >> ((stimulator_m*)this)->stimulator_m::nextSample'
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/misc/sc_concatref.h:552: note: candidates are: std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_concatref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/misc/sc_concatref.h:535: note:                 const sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_concatref&, long int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/misc/sc_concatref.h:530: note:                 const sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_concatref&, unsigned int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/misc/sc_concatref.h:524: note:                 const sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_concatref&, long unsigned int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/misc/sc_concatref.h:518: note:                 const sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_concatref&, sc_dt::int64)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/misc/sc_concatref.h:513: note:                 const sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_concatref&, sc_dt::uint64)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_int_base.h:1358: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_int_base&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_int_base.h:1201: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_int_subref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_int_base.h:987: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_int_bitref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_uint_base.h:1329: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_uint_base&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_uint_base.h:1172: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_uint_subref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_uint_base.h:961: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_uint_bitref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:2360: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_signed&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:2311: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_signed_subref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:2224: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_signed_bitref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1888: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, const sc_dt::sc_uint_base&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1887: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, const sc_dt::sc_int_base&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1874: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, unsigned int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1872: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1870: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, long unsigned int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1869: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, long int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1868: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, sc_dt::uint64)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1867: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, sc_dt::int64)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1866: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, const sc_dt::sc_signed&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:2166: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_unsigned&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:2118: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_unsigned_subref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:2033: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_unsigned_bitref&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1661: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, const sc_dt::sc_int_base&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1660: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, const sc_dt::sc_uint_base&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1647: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, unsigned int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1645: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1643: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, long unsigned int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1642: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, long int)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1641: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, sc_dt::uint64)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1640: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, sc_dt::int64)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_unsigned.h:1639: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, const sc_dt::sc_unsigned&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1864: note:                 sc_dt::sc_signed sc_dt::operator>>(const sc_dt::sc_signed&, const sc_dt::sc_unsigned&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/int/sc_signed.h:1863: note:                 sc_dt::sc_unsigned sc_dt::operator>>(const sc_dt::sc_unsigned&, const sc_dt::sc_signed&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/bit/sc_logic.h:590: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_logic&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/datatypes/bit/sc_bit.h:768: note:                 std::istream& sc_dt::operator>>(std::istream&, sc_dt::sc_bit&)
+C:/cygwin/usr/local/systemc_debug/include/sysc/utils/sc_string.h:153: note:                 sc_dt::systemc_istream& sc_dt::operator>>(sc_dt::systemc_istream&, sc_dt::sc_string_old&)
+../stimulator/stimulator.cpp: In member function `void stimulator::create_stimulator_module(sc_core::sc_module_name)':
+../stimulator/stimulator.cpp:23: error: no match for call to `(stimulator_m) (sc_core::sc_module_name&)'
+C:/cygwin/usr/local/systemc_debug/include/sysc/kernel/sc_module.h:455: note: candidates are: void sc_core::sc_module::operator()(const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&, const sc_core::sc_bind_proxy&)
+make: *** [stimulator/stimulator.o] Error 1
 
 **** Build Finished ****

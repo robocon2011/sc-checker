@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="34" version="2.0">
+<workbench progressCount="33" version="2.0">
 <workbenchAdvisor/>
-<window height="768" maximized="true" width="1024" x="0" y="0">
+<window height="900" maximized="true" width="686" x="-1242" y="-297">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -19,7 +19,7 @@
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="190" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.eclipse.cdt.ui.editor.CEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.cdt.ui.editor.CEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
@@ -28,10 +28,66 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="9"/>
+<part id="3"/>
+<part id="10"/>
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
+<part id="7"/>
+<part id="8"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator.cpp" partName="stimulator.cpp" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/stimulator/stimulator/stimulator.cpp" title="stimulator.cpp" tooltip="stimulator/stimulator/stimulator.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/stimulator/stimulator/stimulator.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="519" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_rtl.h" partName="fulladder_rtl.h" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder_rtl/dut/fulladder/fulladder_rtl.h" title="fulladder_rtl.h" tooltip="fulladder_rtl/dut/fulladder/fulladder_rtl.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/fulladder_rtl/dut/fulladder/fulladder_rtl.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="555" selectionTopPixel="1586"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="sc_module.h" partName="sc_module.h" title="sc_module.h" tooltip="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" path="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h" project="fulladder_rtl"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="17812" selectionTopPixel="6915"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator_config.h" partName="stimulator_config.h" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/stimulator/stimulator/stimulator_config.h" title="stimulator_config.h" tooltip="stimulator/stimulator/stimulator_config.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/stimulator/stimulator/stimulator_config.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="319" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_rtl.h" partName="fulladder_rtl.h" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/stimulator/dut/fulladder/fulladder_rtl.h" title="fulladder_rtl.h" tooltip="stimulator/dut/fulladder/fulladder_rtl.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/stimulator/dut/fulladder/fulladder_rtl.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="619" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="testbench.cpp" partName="testbench.cpp" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder/testbench.cpp" title="testbench.cpp" tooltip="fulladder/testbench.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/fulladder/testbench.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="670" selectionTopPixel="90"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="testbench.h" partName="testbench.h" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder/testbench.h" title="testbench.h" tooltip="fulladder/testbench.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/fulladder/testbench.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder.cpp" partName="fulladder.cpp" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder/fulladder.cpp" title="fulladder.cpp" tooltip="fulladder/fulladder.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/fulladder/fulladder.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="492" selectionTopPixel="90"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_main.cpp" partName="fulladder_main.cpp" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/fulladder_rtl/fulladder_main.cpp" title="fulladder_main.cpp" tooltip="fulladder_rtl/fulladder_main.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/fulladder_rtl/fulladder_main.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="41" selectionOffset="495" selectionTopPixel="1440"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="develop_main.cpp" partName="develop_main.cpp" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/stimulator/develop_main.cpp" title="develop_main.cpp" tooltip="stimulator/develop_main.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/stimulator/develop_main.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="339" selectionTopPixel="0"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator.h" partName="stimulator.h" path="C:/work/rep_sc-checker/Workspaces_Roman/eclipse_lenovo/stimulator/stimulator/stimulator.h" title="stimulator.h" tooltip="stimulator/stimulator/stimulator.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/stimulator/stimulator/stimulator.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="356" selectionTopPixel="10"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.debug.ui.MemoryView" partName="Memory">
@@ -73,7 +129,9 @@
 <view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
 <viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.cdt.ui.cview.groupincludes="false" org.eclipse.cdt.ui.cview.groupmacros="false" org.eclipse.cdt.ui.editor.CUChildren="true" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
 </view>
-<view id="org.eclipse.ui.views.PropertySheet" partName="Properties"/>
+<view id="org.eclipse.ui.views.PropertySheet" partName="Properties">
+<viewState/>
+</view>
 <view id="org.eclipse.cdt.make.ui.views.MakeView" partName="Make Target">
 <viewState/>
 </view>
@@ -81,6 +139,7 @@
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
 <category IMemento.internal.id="Warnings (1 item)"/>
+<category IMemento.internal.id="Errors"/>
 </expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="127" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
@@ -115,7 +174,7 @@
 <viewState disassembly.syncActiveContext="true" disassembly.trackExpression="false"/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.ui.views.ContentOutline" activePerspective="org.eclipse.cdt.ui.CPerspective">
+<perspectives activePart="org.eclipse.cdt.ui.editor.CEditor" activePerspective="org.eclipse.cdt.ui.CPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.cdt.internal.ui.CPerspectiveFactory" id="org.eclipse.cdt.ui.CPerspective" label="C/C++"/>
 <alwaysOnActionSet id="org.eclipse.mylyn.context.ui.actionSet"/>
@@ -227,7 +286,7 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="topRight" ratio="0.69067794" ratioLeft="978" ratioRight="438" relationship="2" relative="org.eclipse.ui.editorss">
+<info folder="true" part="topRight" ratio="0.8791704" ratioLeft="975" ratioRight="134" relationship="2" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.cdt.make.ui.views.MakeView" label="Make Target"/>
@@ -344,7 +403,168 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/stimulator/stimulator/stimulator.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/stimulator/develop_main.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/fulladder_rtl/fulladder_main.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/stimulator/stimulator/stimulator_config.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/stimulator/stimulator/stimulator.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/fulladder/fulladder.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/stimulator/stimulator/stimulator.h"/>
+<editor factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h" project="fulladder_rtl"/>
+</editors>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="290" y="24"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="389" y="19"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="415" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="413" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="0">
+<position info="not_deleted" x="800" y="15"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="413" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="0">
+<position info="not_deleted" x="1007" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="290" y="24"/>
+</item>
+<item historyLabel="fulladder.cpp" index="5">
+<position info="not_deleted" x="492" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="184" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="383" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="317" y="0"/>
+</item>
+<item historyLabel="fulladder_main.cpp" index="2">
+<position info="not_deleted" x="495" y="41"/>
+</item>
+<item historyLabel="fulladder.cpp" index="5">
+<position info="not_deleted" x="492" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="317" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="317" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="586" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="317" y="0"/>
+</item>
+<item historyLabel="develop_main.cpp" index="1">
+<position info="not_deleted" x="396" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="586" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="317" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="587" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="558" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="938" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="862" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="735" y="0"/>
+</item>
+<item historyLabel="develop_main.cpp" index="1">
+<position info="not_deleted" x="396" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="735" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="401" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="401" y="0"/>
+</item>
+<item historyLabel="sc_module.h" index="7">
+<position info="not_deleted" x="17812" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="401" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="1314" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="401" y="0"/>
+</item>
+<item historyLabel="develop_main.cpp" index="1">
+<position info="not_deleted" x="339" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="1306" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="401" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="1306" y="0"/>
+</item>
+<item historyLabel="stimulator.cpp" index="4">
+<position info="not_deleted" x="519" y="0"/>
+</item>
+<item historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="1306" y="0"/>
+</item>
+<item historyLabel="stimulator_config.h" index="3">
+<position info="not_deleted" x="319" y="0"/>
+</item>
+<item active="true" historyLabel="stimulator.h" index="6">
+<position info="not_deleted" x="1306" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -362,11 +582,41 @@
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator.cpp" tooltip="stimulator/stimulator/stimulator.cpp">
-<persistable path="/stimulator/stimulator/stimulator.cpp"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator.h" tooltip="stimulator/stimulator/stimulator.h">
 <persistable path="/stimulator/stimulator/stimulator.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="develop_main.cpp" tooltip="stimulator/develop_main.cpp">
+<persistable path="/stimulator/develop_main.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_main.cpp" tooltip="fulladder_rtl/fulladder_main.cpp">
+<persistable path="/fulladder_rtl/fulladder_main.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_main.cpp" tooltip="stimulator/fulladder_main.cpp">
+<persistable path="/stimulator/fulladder_main.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder.cpp" tooltip="fulladder/fulladder.cpp">
+<persistable path="/fulladder/fulladder.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="testbench.h" tooltip="fulladder/testbench.h">
+<persistable path="/fulladder/testbench.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="testbench.cpp" tooltip="fulladder/testbench.cpp">
+<persistable path="/fulladder/testbench.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_rtl.h" tooltip="stimulator/dut/fulladder/fulladder_rtl.h">
+<persistable path="/stimulator/dut/fulladder/fulladder_rtl.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator_config.h" tooltip="stimulator/stimulator/stimulator_config.h">
+<persistable path="/stimulator/stimulator/stimulator_config.h"/>
+</file>
+<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="sc_module.h" tooltip="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h">
+<persistable path="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h" project="fulladder_rtl"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_rtl.h" tooltip="fulladder_rtl/dut/fulladder/fulladder_rtl.h">
+<persistable path="/fulladder_rtl/dut/fulladder/fulladder_rtl.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stimulator.cpp" tooltip="stimulator/stimulator/stimulator.cpp">
+<persistable path="/stimulator/stimulator/stimulator.cpp"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="hello.cpp" tooltip="hello/src/hello.cpp">
 <persistable path="/hello/src/hello.cpp"/>
@@ -376,36 +626,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="work/main.cpp">
 <persistable path="/work/main.cpp"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_rtl.h" tooltip="fulladder_rtl/dut/fulladder/fulladder_rtl.h">
-<persistable path="/fulladder_rtl/dut/fulladder/fulladder_rtl.h"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_rtl.h" tooltip="fulladder_rtl/fulladder_rtl.h">
-<persistable path="/fulladder_rtl/fulladder_rtl.h"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="sc_module.h" tooltip="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h">
-<persistable path="C:\cygwin\usr\local\systemc_debug\include\sysc\kernel\sc_module.h" project="fulladder_rtl"/>
-</file>
-<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="sc_port.cpp" tooltip="C:\work\SystemC 2.2.0\systemc-2.2.0\src\sysc\communication\sc_port.cpp">
-<persistable uri="file:/C:/work/SystemC%202.2.0/systemc-2.2.0/src/sysc/communication/sc_port.cpp"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="fulladder/main.cpp">
-<persistable path="/fulladder/main.cpp"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="sc_signal_ports.h" tooltip="C:\cygwin\usr\local\systemc_debug\include\sysc\communication\sc_signal_ports.h">
-<persistable path="C:\cygwin\usr\local\systemc_debug\include\sysc\communication\sc_signal_ports.h" project="fulladder_rtl"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="sc_logic.h" tooltip="C:\cygwin\usr\local\systemc_debug\include\sysc\datatypes\bit\sc_logic.h">
-<persistable path="C:\cygwin\usr\local\systemc_debug\include\sysc\datatypes\bit\sc_logic.h" project="fulladder_rtl"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="string" tooltip="C:\cygwin\lib\gcc\i686-pc-cygwin\3.4.4\include\c++\string">
-<persistable path="C:\cygwin\lib\gcc\i686-pc-cygwin\3.4.4\include\c++\string" project="fulladder_rtl"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="string.h" tooltip="C:\cygwin\usr\include\string.h">
-<persistable path="C:\cygwin\usr\include\string.h" project="fulladder_rtl"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="fulladder_main.cpp" tooltip="fulladder_rtl/fulladder_main.cpp">
-<persistable path="/fulladder_rtl/fulladder_main.cpp"/>
 </file>
 </mruList>
 </workbench>
