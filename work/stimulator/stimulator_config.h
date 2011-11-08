@@ -11,9 +11,11 @@
 #include <systemc>
 using namespace sc_core;
 using namespace sc_dt;
+#include <scv.h>
+
+#define BITWIDTH 32
 
 #include "stimulator.h"
-#include "../dut/fulladder/fulladder_rtl.h"
 
 struct dutInput_t
 {
@@ -21,7 +23,15 @@ struct dutInput_t
 	sc_uint<BITWIDTH> input_B;
 };
 
-
+SCV_EXTENSIONS(dutInput_t) {
+public:
+	scv_extensions < sc_uint<BITWIDTH> > input_A;
+	scv_extensions < sc_uint<BITWIDTH> > input_B;
+	SCV_EXTENSIONS_CTOR(dutInput_t) {
+		SCV_FIELD (input_A);
+		SCV_FIELD (input_B);
+	}
+};
 
 
 #endif /* STIMULATOR_CONFIG_H_ */

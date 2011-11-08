@@ -36,11 +36,28 @@ SC_MODULE (stimulator_m)
 	stimulator_m (sc_module_name nm);
 
 	void stimulator_method (void);
+
+};
+
+struct dutInput_constraint_t
+	: public scv_constraint_base
+{
+	scv_smart_ptr<dutInput_t> pInput;
+
+	// TODO:  SCV_CONSTRAINT macro durch selbst geschriebenen Konstruktur ersetzen,
+	//		  dem constraint-Werte übergeben werden können
+	SCV_CONSTRAINT_CTOR(dutInput_constraint_t)
+	{
+		SCV_CONSTRAINT (pInput->input_A() < 100);
+		SCV_CONSTRAINT (pInput->input_B() > 12000);
+	}
 };
 
 
 class testsequence_c {
 public:
+	dutInput_constraint_t testvalues;
+
 	testsequence_c () {}
 
 private:
@@ -53,9 +70,13 @@ private:
 
 class stimulator {
 public:
-	stimulator() {}
+	stimulator(sc_module_name name): numOfTestsequences(0), i_stimulator(name)
+	{
+		create_testsequences ( );
+	}
+
 	int create_testsequences ( testsequence_c* testsequences);
-	void create_stimulator_module (sc_module_name name);
+	int create_testsequences ( );
 
 private:
 	int numOfTestsequences;

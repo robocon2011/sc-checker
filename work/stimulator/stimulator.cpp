@@ -10,24 +10,20 @@
 #include "stimulator.h"
 
 SC_HAS_PROCESS(stimulator_m);
-stimulator_m::stimulator_m(sc_module_name nm):
-		sc_module (nm)
+stimulator_m::stimulator_m(sc_module_name nm)
+	: sc_module (nm)
 {
 
 	SC_METHOD (stimulator_method)
-			sensitive >> nextSample;
-}
-
-void stimulator::create_stimulator_module(sc_module_name name)
-{
-	i_stimulator(name);
-
+			sensitive << nextSample;
 }
 
 
 int stimulator::create_testsequences(testsequence_c *testsequences)
 {
-	// IMPLEMENT_ME
+	testsequences = new testsequence_c();
+
+
 	return 0;
 }
 
