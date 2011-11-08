@@ -15,11 +15,9 @@
 
 int sc_main (int argc, char *argv[])
 {
-	stimulator stimulator;
+	fulladder_cascade i_fulladder("i_fulladder");
+	stimulator stimulator("i_stimulator");
 
-	stimulator();
-
-	stimulator.create_stimulator_module("i_stimulator");
 
 
 	return 0;

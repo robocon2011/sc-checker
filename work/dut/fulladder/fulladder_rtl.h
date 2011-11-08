@@ -14,8 +14,10 @@
 #include <string>
 #include <stdio.h>
 
-// define for fulladder cascade bitwidth
+// define for fulladder cascade bitwidth in case of not being defined globally for project
+#ifndef BITWIDTH
 #define BITWIDTH 32
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //
