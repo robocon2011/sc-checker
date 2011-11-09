@@ -16,7 +16,8 @@
 int sc_main (int argc, char *argv[])
 {
 	fulladder_cascade i_fulladder("i_fulladder");
-	stimulator stimulator("i_stimulator");
+	stimulator_m i_stimulator("i_stimulator");
+
 
 
 
