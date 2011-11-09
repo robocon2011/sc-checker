@@ -5,13 +5,6 @@
  *      Author: sollboer
  */
 
-/*
- * Problems:
- * 06.11.2011:
- * - Modul innerhalb der Klasse stimulator kann bei Konstruktor nicht erzeugt werden,
- * - sensitive Operator von SC_METHOD wird nicht erkannt
- * - indirekter Konstruktor für stimulator_m durch create_stimulator_module hat noch Fehler
- */
 
 
 #ifndef STIMULATOR_H_
@@ -25,19 +18,6 @@ using namespace sc_core;
 
 enum eConstraint {eCONSTR, eDIST};
 typedef eConstraint constraint_t;
-
-SC_MODULE (stimulator_m)
-{
-	// TODO: selbst definiertes Port für dutInput_t schreiben!
-	sc_inout < sc_uint<BITWIDTH> > input_A;
-	sc_inout < sc_uint<BITWIDTH> > input_B;
-	sc_in < bool > nextSample;
-
-	stimulator_m (sc_module_name nm);
-
-	void stimulator_method (void);
-
-};
 
 struct dutInput_constraint_t
 	: public scv_constraint_base
@@ -53,12 +33,14 @@ struct dutInput_constraint_t
 	}
 };
 
-
 class testsequence_c {
 public:
 	dutInput_constraint_t testvalues;
+	unsigned int no_of_testcases;
 
-	testsequence_c () {}
+	testsequence_c (constraint_t arg_kindOfConstr, unsigned int arg_noOfTc)
+	:testvalues("testvalues"), no_of_testcases(arg_noOfTc)
+	{}
 
 private:
 	constraint_t kindOfConstraint;
@@ -67,22 +49,25 @@ private:
 
 };
 
-
-class stimulator {
+SC_MODULE (stimulator_m)
+{
 public:
-	stimulator(sc_module_name name): numOfTestsequences(0), i_stimulator(name)
-	{
-		create_testsequences ( );
-	}
+	// TODO: selbst definiertes Port für dutInput_t schreiben!
+	sc_inout < sc_uint<BITWIDTH> > input_A;
+	sc_inout < sc_uint<BITWIDTH> > input_B;
+	sc_in < bool > nextSample;
+	scv_smart_ptr <dutInput_t> stim_value;
 
-	int create_testsequences ( testsequence_c* testsequences);
+	stimulator_m (sc_module_name nm);
+
+//	int create_testsequences ( testsequence_c* testsequences);
 	int create_testsequences ( );
+	void stimulator_method (void);
 
 private:
 	int numOfTestsequences;
-	testsequence_c* testsequences;
-	stimulator_m i_stimulator;
-
+	list <testsequence_c> testsequences;
+	//testsequence_c* testsequences;
 };
 
 #endif /* STIMULATOR_H_ */
