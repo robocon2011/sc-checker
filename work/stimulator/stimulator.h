@@ -22,12 +22,15 @@ typedef eConstraint constraint_t;
 struct dutInput_constraint_t
 	: public scv_constraint_base
 {
+public:
+	scv_expression *expr;
 	scv_smart_ptr<dutInput_t> pInput;
 
 	// TODO:  SCV_CONSTRAINT macro durch selbst geschriebenen Konstruktur ersetzen,
 	//		  dem constraint-Werte übergeben werden können
 	SCV_CONSTRAINT_CTOR(dutInput_constraint_t)
 	{
+		// eh() &= get_expression(pInput)
 		SCV_CONSTRAINT (pInput->input_A() < 100);
 		SCV_CONSTRAINT (pInput->input_B() > 12000);
 	}

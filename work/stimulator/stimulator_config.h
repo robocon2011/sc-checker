@@ -33,5 +33,12 @@ public:
 	}
 };
 
+struct {
+	string stimulated_object;
+	string constraint_operator;
+
+	// Datentyp von dutInput_t
+
+};
 
 #endif /* STIMULATOR_CONFIG_H_ */
