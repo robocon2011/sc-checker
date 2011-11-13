@@ -7,7 +7,7 @@
 
 #include <systemc>
 #include <scv.h>
-#include "stimulator.h"
+#include "stimulator_config.h"
 
 SC_HAS_PROCESS(stimulator_m);
 stimulator_m::stimulator_m(sc_module_name nm)
@@ -15,30 +15,49 @@ stimulator_m::stimulator_m(sc_module_name nm)
 {
 	create_testsequences ( );
 
-	SC_METHOD (stimulator_method)
-			sensitive << nextSample;
+	SC_THREAD (stimulator_thread);
 }
 
 
-int stimulator_m::create_testsequences()
+void stimulator_m::create_testsequences()
 {
-	testsequence_c test_seq(eCONSTR, 10);
+	project_testsequences pT(&testsequences);
 
-	testsequences.push_back(test_seq);
+	numOfTestsequences = testsequences.total_entries;
 
-	return 0;
 }
 
-void stimulator_m::stimulator_method()
+void stimulator_m::stimulator_thread()
 {
-	list <testsequence_c>::iterator it;
+	testseq_collectionentry_c *p_help;
 	unsigned int cnt_testcases;
 
-	for (it = testsequences.begin(); it != testsequences.end(); it++)
+	p_help = testsequences.p_priorEntry;
+
+	while (p_help->p_priorEntry != 0)
 	{
-		for (cnt_testcases=0; cnt_testcases < it->no_of_testcases;cnt_testcases++)
-		{
-			it->testvalues.next();
-		}
+		p_help = p_help->p_priorEntry;
 	}
+
+	while (p_help != NULL)
+	{
+
+		for (cnt_testcases = 0; cnt_testcases < p_help->p_Sequence->no_of_testcases; cnt_testcases++)
+		{
+			wait(nextSample.value_changed_event());
+
+			p_help->p_Sequence->p_testvalues->next();
+			wait(SC_ZERO_TIME);
+			write_values(p_help->p_Sequence->p_testvalues);
+		}
+
+		p_help = p_help->p_lastEntry;
+	}
+
+	testsequences_finished.write(true);
 }
+
+
+
+
+

@@ -5,72 +5,73 @@
  *      Author: sollboer
  */
 
-
-
 #ifndef STIMULATOR_H_
 #define STIMULATOR_H_
 
 #include <systemc>
 using namespace sc_core;
-
 #include "scv.h"
-#include "stimulator_config.h"
 
-enum eConstraint {eCONSTR, eDIST};
-typedef eConstraint constraint_t;
+class dutInput_constraint_base_t;
 
-struct dutInput_constraint_t
-	: public scv_constraint_base
+class testsequence_general_c
 {
 public:
-	scv_expression *expr;
-	scv_smart_ptr<dutInput_t> pInput;
+	unsigned int no_of_testcases;
+	dutInput_constraint_base_t *p_testvalues;
 
-	// TODO:  SCV_CONSTRAINT macro durch selbst geschriebenen Konstruktur ersetzen,
-	//		  dem constraint-Werte übergeben werden können
-	SCV_CONSTRAINT_CTOR(dutInput_constraint_t)
+	testsequence_general_c() {}
+};
+
+class testseq_collectionentry_c
+{
+public:
+	unsigned int total_entries;
+	testsequence_general_c		*p_Sequence;
+	testseq_collectionentry_c	*p_priorEntry;
+	testseq_collectionentry_c	*p_lastEntry;
+
+	testseq_collectionentry_c()
+	:total_entries(0), p_Sequence(NULL), p_priorEntry(NULL), p_lastEntry(NULL)
+	{}
+
+	void add_Entry (testsequence_general_c *_p_Sequence)
 	{
-		// eh() &= get_expression(pInput)
-		SCV_CONSTRAINT (pInput->input_A() < 100);
-		SCV_CONSTRAINT (pInput->input_B() > 12000);
+		testseq_collectionentry_c	*newEntry;
+
+		newEntry = new testseq_collectionentry_c;
+
+		if (this->p_lastEntry != NULL)
+		{
+			newEntry->p_priorEntry = this->p_lastEntry;
+			this->p_lastEntry->p_lastEntry = newEntry;
+		}
+		else
+		{
+			newEntry->p_priorEntry = NULL;
+		}
+
+		newEntry->p_Sequence = _p_Sequence;
+
+		this->p_lastEntry = newEntry;
+		this->p_priorEntry = newEntry;
 	}
 };
 
-class testsequence_c {
-public:
-	dutInput_constraint_t testvalues;
-	unsigned int no_of_testcases;
-
-	testsequence_c (constraint_t arg_kindOfConstr, unsigned int arg_noOfTc)
-	:testvalues("testvalues"), no_of_testcases(arg_noOfTc)
-	{}
-
-private:
-	constraint_t kindOfConstraint;
-	struct dutInput_t* lowerLimits;
-	struct dutInput_t* upperLimits;
-
-};
-
-SC_MODULE (stimulator_m)
+template < class T >
+class testsequence_specialized_c : public testsequence_general_c
 {
 public:
-	// TODO: selbst definiertes Port für dutInput_t schreiben!
-	sc_inout < sc_uint<BITWIDTH> > input_A;
-	sc_inout < sc_uint<BITWIDTH> > input_B;
-	sc_in < bool > nextSample;
-	scv_smart_ptr <dutInput_t> stim_value;
+	T testvalues;
 
-	stimulator_m (sc_module_name nm);
-
-//	int create_testsequences ( testsequence_c* testsequences);
-	int create_testsequences ( );
-	void stimulator_method (void);
-
-private:
-	int numOfTestsequences;
-	list <testsequence_c> testsequences;
-	//testsequence_c* testsequences;
+	testsequence_specialized_c (testseq_collectionentry_c *p_collection ,unsigned int _no_of_testcases)
+	:testvalues("testvalues")
+	{
+		p_collection->add_Entry(this);
+		this->no_of_testcases = _no_of_testcases;
+		p_testvalues = &testvalues;
+	}
 };
+
 
 #endif /* STIMULATOR_H_ */
