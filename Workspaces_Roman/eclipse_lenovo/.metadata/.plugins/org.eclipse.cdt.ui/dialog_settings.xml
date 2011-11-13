@@ -13,8 +13,10 @@
 		<item value="false" key="showFolders"/>
 		<item value="false" key="systemFilter"/>
 	</section>
+	<section name="PDOMSearchPage">
+	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
-		<item value="703" key="size.width"/>
+		<item value="714" key="size.width"/>
 		<item value="234" key="size.height"/>
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
