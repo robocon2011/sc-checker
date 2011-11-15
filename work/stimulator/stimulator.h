@@ -1,8 +1,17 @@
 /*
- * stimulator.h
+ * 	Filename:	stimulator.h
  *
- *  Created on: 02.11.2011
- *      Author: sollboer
+ *  Created on:	2011/11/13
+ *
+ *  Author: 	Roman SOLLBOECK
+ *
+ *  Project:	SystemC Checker
+ *  Submodule:	Stimulator
+ *
+ *  purpose:	header file for generic data of stimulator module
+ *
+ *  History:	2011/11/13: first executable version implemented
+ *
  */
 
 #ifndef STIMULATOR_H_
@@ -12,66 +21,92 @@
 using namespace sc_core;
 #include "scv.h"
 
-class dutInput_constraint_base_t;
 
+/*
+ * 	structname:		dutInput_t
+ *	purpose:		forward declaration of user-specific source data
+ *					see stimlator_config.h
+ */
+struct dutInput_t;
+
+/*
+ *	classname:	dutInput_constraint_base_t
+ *	purpose:	base constraint class for further constraint class definitions
+ *
+ */
+class dutInput_constraint_base_t
+	: public scv_constraint_base
+{
+public:
+	scv_smart_ptr<dutInput_t> pInput;
+};
+
+
+/*
+ *	classname:	testsequence_general_c
+ *	purpose:	general class for project testsequences
+ *				class is specialized by user-defined contraint classes
+ *
+ */
 class testsequence_general_c
 {
 public:
 	unsigned int no_of_testcases;
 	dutInput_constraint_base_t *p_testvalues;
 
+	/*	dummy constructor */
 	testsequence_general_c() {}
 };
 
+/*
+ *	classname:	testseq_collectionentry_c
+ *	purpose:	list object for each user-defined testsequence
+ *				objects are doubly linked
+ *
+ */
 class testseq_collectionentry_c
 {
 public:
-	unsigned int total_entries;
 	testsequence_general_c		*p_Sequence;
 	testseq_collectionentry_c	*p_priorEntry;
 	testseq_collectionentry_c	*p_lastEntry;
 
+	/*	Constructor	*/
 	testseq_collectionentry_c()
-	:total_entries(0), p_Sequence(NULL), p_priorEntry(NULL), p_lastEntry(NULL)
+	: p_Sequence(NULL), p_priorEntry(NULL), p_lastEntry(NULL), total_entries(0)
 	{}
 
-	void add_Entry (testsequence_general_c *_p_Sequence)
-	{
-		testseq_collectionentry_c	*newEntry;
+	/*	function declarations */
+	void add_Entry (testsequence_general_c *_p_Sequence);
+	unsigned int get_total_entries();
 
-		newEntry = new testseq_collectionentry_c;
+private:
+	/*	internal memory for linked entries, only used by root-object	*/
+	unsigned int total_entries;
 
-		if (this->p_lastEntry != NULL)
-		{
-			newEntry->p_priorEntry = this->p_lastEntry;
-			this->p_lastEntry->p_lastEntry = newEntry;
-		}
-		else
-		{
-			newEntry->p_priorEntry = NULL;
-		}
-
-		newEntry->p_Sequence = _p_Sequence;
-
-		this->p_lastEntry = newEntry;
-		this->p_priorEntry = newEntry;
-	}
 };
 
+/*
+ *	classname:	testsequence_specialized_c
+ *	purpose:	specialized class of general testsequence class
+ *				templated by user-defined constraint classes
+ *
+ */
 template < class T >
 class testsequence_specialized_c : public testsequence_general_c
 {
 public:
+	/*	T...user-defined type of constraint class */
 	T testvalues;
 
-	testsequence_specialized_c (testseq_collectionentry_c *p_collection ,unsigned int _no_of_testcases)
-	:testvalues("testvalues")
-	{
-		p_collection->add_Entry(this);
-		this->no_of_testcases = _no_of_testcases;
-		p_testvalues = &testvalues;
-	}
+	/*	Constructor	declaration	*/
+	testsequence_specialized_c (testseq_collectionentry_c *p_collection ,unsigned int _no_of_testcases);
 };
 
 
 #endif /* STIMULATOR_H_ */
+
+/*///////////////////////////////////////////////////////////////////////////////////////
+ * stimulator.h
+ */
+

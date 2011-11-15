@@ -10,7 +10,7 @@
  *
  *  purpose:	generic function bodies for stimulator module
  *
- *  History:	2011(11/13: first executable version implemented
+ *  History:	2011/11/13: first executable version implemented
  *
  */
 
@@ -58,7 +58,7 @@ void stimulator_m::create_testsequences()
 	project_testsequences pT(&testsequences);
 
 	/* extract total number of created sequences	*/
-	numOfTestsequences = testsequences.total_entries;
+	numOfTestsequences = testsequences.get_total_entries();
 
 }
 /*	create_testsequences	*/
@@ -117,7 +117,81 @@ void stimulator_m::stimulator_thread()
 }
 /*	stimulator_thread	*/
 
+/*
+ * **************************************************************
+ *
+ * functionname:	add_Entry
+ * purpose:			links a new list element between root element
+ * 					and prior instantiated testsequence list elements
+ * parameters:		pointer to testsequences element
+ * returnvalue:		none
+ *
+ * **************************************************************
+ */
+void testseq_collectionentry_c::add_Entry (testsequence_general_c *_p_Sequence)
+{
+	testseq_collectionentry_c	*newEntry;
 
+	/*	dynamic allocation of new list element */
+	newEntry = new testseq_collectionentry_c;
+
+	/*	 update list with new element	*/
+	if (this->p_lastEntry != NULL)
+	{
+		newEntry->p_priorEntry = this->p_lastEntry;
+		this->p_lastEntry->p_lastEntry = newEntry;
+	}
+	else
+	{
+		newEntry->p_priorEntry = NULL;
+	}
+	this->p_lastEntry = newEntry;
+	this->p_priorEntry = newEntry;
+
+	/*	attach passed testsequence to new element	*/
+	newEntry->p_Sequence = _p_Sequence;
+}
+
+/*
+ * **************************************************************
+ *
+ * functionname:	get_total_entries
+ * purpose:			Getter-function for obtaining the total entries of root element
+ * parameters:		none
+ * returnvalue:		number of total entries
+ *
+ * **************************************************************
+ */
+unsigned int testseq_collectionentry_c::get_total_entries()
+{
+	return total_entries;
+}
+
+/*
+ * **************************************************************
+ *
+ * functionname:	testsequence_specialized_c
+ * purpose:			Constructor for user-defined testsequence object
+ * parameters:		p_collection.......Pointer to root element of list of testsequences
+ * 					_no_of_testcases...specified number of random values to be generated
+ * returnvalue:		none
+ *
+ * **************************************************************
+ */
+template <class T>
+testsequence_specialized_c <T> ::testsequence_specialized_c (testseq_collectionentry_c *p_collection ,unsigned int _no_of_testcases)
+:testvalues("testvalues")
+{
+	/*	append testsequences to root element of list of testsequences
+	 * 	and set number of testsequences	*/
+	p_collection->add_Entry(this);
+	this->no_of_testcases = _no_of_testcases;
+
+	/*	apply handle of user-defined type of constraint class
+	 * 	to member of generic testsequence class
+	 */
+	p_testvalues = &testvalues;
+}
 
 /*///////////////////////////////////////////////////////////////////////////////////////
  * stimulator.cpp

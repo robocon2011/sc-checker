@@ -11,7 +11,7 @@
  *  purpose:	user-specific configuration for stimulator module
  *  			config file for fulladder
  *
- *  History:	2011(11/13: first executable version implemented
+ *  History:	2011/11/13: first executable version implemented
  *
  */
 
@@ -39,7 +39,9 @@ void _scv_pop_constraint();	/*	patch	*/
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
- *	declare structure of user-specific source data
+ *	structname:		dutInput_t
+ *	purpose:		declares structure of user-specific source data
+ *					needs to be adapted to DUT
  */
 struct dutInput_t
 {
@@ -49,7 +51,10 @@ struct dutInput_t
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
- *	redefine user-specific source data for creating SCV-internal extensions interface
+ *	classname:	scv_extensions <dutInput_t>
+ *	purpose:	SCV extension class specialized by user-specific source data
+ *				for creating SCV-internal extensions interface
+ *				needs to be adapted to dutInput_t
  */
 SCV_EXTENSIONS(dutInput_t) {
 public:
@@ -61,20 +66,20 @@ public:
 	}
 };
 
-/*	-> DO NOT MODIFY <-
- * base constraint class for further constraint class definitions
+/*
+ *	classname:	dutInput_constraint_base_t
+ *	purpose:	forward declaration of base constraint class
+ *				see stimulator.h
  */
-class dutInput_constraint_base_t
-	: public scv_constraint_base
-{
-public:
-	scv_smart_ptr<dutInput_t> pInput;
-};
+class dutInput_constraint_base_t;
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
- *	specialize base constraint class according SCV-guidelines
- *	no limit for user-specific amount of specialized classes
+ *	classname:	[user-defined constraint classes]
+ *	purpose:	specialized base constraint class according SCV-guidelines
+ *				no limit for user-specific amount of specialized classes
+ *				testsequences are templated by these classes
+ *
  *	Important:	use SCV_CONSTRAINT_CTOR,
  *				specialize from dutInput_constraint_base_t,
  *				redeclaration of scv_smart_ptr not necessary
@@ -87,6 +92,7 @@ public:
 	{
 		SCV_CONSTRAINT (pInput->input_A() < 100);
 		SCV_CONSTRAINT (pInput->input_B() < 100);
+		SCV_CONSTRAINT ( ( pInput->input_A() + pInput->input_B() ) == 193);
 	}
 };
 
@@ -112,8 +118,13 @@ class dutInput_constraint_t_03
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
- *	declare class consisting of user-specific test sequences
- *	testsequences are processed in the order of instantiation
+ *	classname:	project_testsequences
+ *	purpose:	class consisting of user-specific test sequences
+ *				one class inside stimulator module, which holds
+ *				all testsequences
+ *				testsequences are processed in the order of instantiation
+ *				new testsequences are added the same as the samples
+ *				using user-defined constraint classes
  */
 class project_testsequences
 {
@@ -125,8 +136,8 @@ public:
 	 */
 	project_testsequences(testseq_collectionentry_c *p_testsequences)
 	{
-		/*			|	templated class for testsequence 						|	pointer to collection		|	specific number of
-		 * 			|	user-defined constraint-classes							|	of testsequences (only one)	|	testcases (randoms)	*/
+		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
+		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				3));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_02 > 	(p_testsequences, 				3));
@@ -140,24 +151,41 @@ public:
 	void addSequence(void * dummy) {}
 };
 
-
+/*	<ENTER BELOW>	------------------------------------------------
+ *
+ *	structname:	stimulator_m
+ *	purpose:	Stimulator SystemC Module for propagation of
+ *				constraint randomized values to DUT
+ *				needs partly to be adapted to DUT
+ *
+ */
 SC_MODULE (stimulator_m)
 {
 public:
+	/*	user defined ports for DUT - connected to Driver-module	*/
 	// TODO: selbst definiertes Port für dutInput_t schreiben!
 	sc_inout < sc_uint<BITWIDTH> > input_A;
 	sc_inout < sc_uint<BITWIDTH> > input_B;
-	sc_in < bool > nextSample;
-	sc_inout < bool > testsequences_finished;
+	/*	helper variables for port assignment	*/
 	sc_uint<BITWIDTH> s_input_A;
 	sc_uint<BITWIDTH> s_input_B;
 	//scv_smart_ptr <dutInput_t> stim_value;
 
+	/*	-> DO NOT MODIFY <-
+	 * 	control signal ports for stimulator */
+	sc_in < bool > nextSample;
+	sc_inout < bool > testsequences_finished;
+
+	/*	Constructor declaration	*/
 	stimulator_m (sc_module_name nm);
 
+	/*	module function declarations	*/
 	void create_testsequences ( );
-	void stimulator_thread (void);
 
+	/*	<ENTER BELOW> --------------------------------------------------
+	 * 	user-defined function for assigning the created values to
+	 * 	the module ports
+	 */
 	void stimulator_m::write_values(dutInput_constraint_base_t *p_values)
 	{
 		s_input_A = p_values->pInput->input_A;
@@ -167,11 +195,20 @@ public:
 		input_B.write(s_input_B);
 	}
 
+	/*	SystemC module thread for stimulator	*/
+	void stimulator_thread (void);
+
+
 private:
+	/*	extracted number of testsequences	*/
 	unsigned int numOfTestsequences;
+	/*	modules root element for list of testsequences	*/
 	testseq_collectionentry_c testsequences;
 };
 
-
 #endif /* STIMULATOR_CONFIG_H_ */
+
+/*///////////////////////////////////////////////////////////////////////////////////////
+ * stimulator_config.h
+ */
 
