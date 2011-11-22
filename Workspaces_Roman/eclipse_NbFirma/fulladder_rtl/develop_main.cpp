@@ -8,10 +8,7 @@
 #include <systemc>
 #include <scv.h>
 #include "stimulator/stimulator_config.h"
-#include "dut/fulladder/fulladder_rtl.h"
-
-#define _DEBUG
-
+//#include "dut/fulladder/fulladder_rtl.h"
 
 SC_MODULE (tb_stimulator)
 {
@@ -46,11 +43,47 @@ public:
 	}
 };
 
+/*	DEBUG	*/
+SC_MODULE (m_DEBUG)
+{
+	scv_smart_ptr <sc_uint < 32 > > testDebug;
+	scv_bag < sc_uint <32> > testBag;
+
+	SC_CTOR(m_DEBUG)
+	{
+		testBag.add(10,20);
+		testBag.add(500, 20);
+		testBag.add(44444, 60);
+
+		testDebug->set_mode(testBag);
+
+		SC_THREAD(myThread);
+	}
+
+	void myThread ()
+	{
+		wait(3, SC_SEC);
+
+		for (int i = 0; i < 20; i++)
+		{
+			testDebug->next();
+			testDebug.print();
+		}
+	}
+
+};
+/*	DEBUG	*/
+
 int sc_main (int argc, char *argv[])
 {
 	//fulladder_cascade i_fulladder("i_fulladder");
+
 	stimulator_m i_stimulator("i_stimulator");
 	tb_stimulator i_tb_stimulator("i_tb_stimulator");
+
+	/* DEBUG */
+	m_DEBUG i_DEBUG ("i_DEBUG");
+	/* DEBUG */
 
 	sc_signal <sc_uint<BITWIDTH> > signal_A;
 	sc_signal <sc_uint<BITWIDTH> > signal_B;
