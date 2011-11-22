@@ -1,6 +1,8 @@
 /*
  * 	Filename:	stimulator.h
  *
+ * 	Version:	---
+ *
  *  Created on:	2011/11/13
  *
  *  Author: 	Roman SOLLBOECK
@@ -34,8 +36,8 @@ struct dutInput_t;
  *	purpose:	base constraint class for further constraint class definitions
  *
  */
-class dutInput_constraint_base_t
-	: public scv_constraint_base
+class dutInput_constraint_base_t :
+	public scv_constraint_base
 {
 public:
 	scv_smart_ptr<dutInput_t> pInput;

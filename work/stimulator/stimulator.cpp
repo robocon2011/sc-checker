@@ -1,6 +1,8 @@
 /*
  * 	Filename:	stimulator.cpp
  *
+ * 	Version:	---
+ *
  *  Created on:	2011/11/13
  *
  *  Author: 	Roman SOLLBOECK
@@ -11,6 +13,8 @@
  *  purpose:	generic function bodies for stimulator module
  *
  *  History:	2011/11/13: first executable version implemented
+ *  			2011/11/20: stimulator thread - cout for next sequence added,
+ *  						wait(zero) statement after write_values added
  *
  */
 
@@ -95,6 +99,8 @@ void stimulator_m::stimulator_thread()
 	while (p_help != NULL)
 	{
 
+		cout << endl << this->name() << ": start of next testsequence" << endl;
+
 		for (cnt_testcases = 0; cnt_testcases < p_help->p_Sequence->no_of_testcases; cnt_testcases++)
 		{
 			/*	block loop until transition of boolean control signal	*/
@@ -106,6 +112,8 @@ void stimulator_m::stimulator_thread()
 			wait(SC_ZERO_TIME);
 			/*	write generated values to module ports indirectly by user-defined callback function*/
 			write_values(p_help->p_Sequence->p_testvalues);
+			/*	wait statement for internal SystemC update-process	*/
+			wait(SC_ZERO_TIME);
 		}
 
 		/*	load pointer with next testsequence instance	*/

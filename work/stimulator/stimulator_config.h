@@ -1,6 +1,8 @@
 /*
  * 	Filename:	stimulator_config.h
  *
+ * 	Version:	---
+ *
  *  Created on:	2011/11/13
  *
  *  Author: 	Roman SOLLBOECK
@@ -12,7 +14,7 @@
  *  			config file for fulladder
  *
  *  History:	2011/11/13: first executable version implemented
- *
+ *				2011/11/20:	Additional constraint classes created
  */
 
 #ifndef STIMULATOR_CONFIG_H_
@@ -116,6 +118,71 @@ class dutInput_constraint_t_03
 	}
 };
 
+class dutInput_constraint_t_04
+	: public dutInput_constraint_base_t
+{
+	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_04)
+	{
+		pInput->input_A.keep_only(500, 1000);
+		pInput->input_A.keep_out(550, 950);
+		pInput->input_B.keep_only(0, 500);
+		pInput->input_B.keep_out(50, 450);
+	}
+};
+
+class dutInput_constraint_t_05
+	: public dutInput_constraint_base_t
+{
+public:
+	list < sc_uint <BITWIDTH> > legal_values;
+
+	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_05)
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			legal_values.push_back(i*1000);
+		}
+		pInput->input_A.keep_only(legal_values);
+		pInput->input_B.keep_only(legal_values);
+	}
+};
+
+class dutInput_constraint_t_06
+	: public dutInput_constraint_base_t
+{
+public:
+	scv_bag < sc_uint<BITWIDTH> > distribution_input_A;
+	scv_bag < sc_uint<BITWIDTH> > distribution_input_B;
+	scv_smart_ptr < sc_uint<BITWIDTH> > helpA;
+	scv_smart_ptr < sc_uint<BITWIDTH> > helpB;
+
+	//SCV_CONSTRAINT_CTOR(dutInput_constraint_t_06)
+	dutInput_constraint_t_06(char *arg)
+	{
+		distribution_input_A.push(10000, 20);
+		distribution_input_A.push(100000, 20);
+		distribution_input_A.push(1000000, 60);
+		distribution_input_B.push(10000, 20);
+		distribution_input_B.push(100000, 20);
+		distribution_input_B.push(1000000, 60);
+
+		pInput->input_A.disable_randomization();	//set_mode(distribution_input_A);
+		pInput->input_B.disable_randomization();	//set_mode(distribution_input_B);
+
+		helpA->set_mode(distribution_input_A);
+		helpB->set_mode(distribution_input_B);
+	}
+
+	void next ()
+	{
+		helpA->next();
+		helpB->next();
+
+		pInput->input_A.write(*(helpA->get_instance()));
+		pInput->input_B.write(*(helpB->get_instance()));
+	}
+};
+
 /*	<ENTER BELOW>	------------------------------------------------
  *
  *	classname:	project_testsequences
@@ -140,9 +207,15 @@ public:
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				3));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_02 > 	(p_testsequences, 				3));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_02 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_03 > 	(p_testsequences, 				5));
+		/*			|															|								|						*/
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_04 > 	(p_testsequences, 				5));
+		/*			|															|								|						*/
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_05 > 	(p_testsequences, 				5));
+		/*			|															|								|						*/
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_06 > 	(p_testsequences, 				20));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}
