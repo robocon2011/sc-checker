@@ -28,11 +28,14 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug.854431541" name="Cygwin C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.exe.debug">
 								<option id="gnu.cpp.compiler.cygwin.exe.debug.option.optimization.level.1541357581" name="Optimization Level" superClass="gnu.cpp.compiler.cygwin.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.cygwin.exe.debug.option.debugging.level.2059612843" name="Debug Level" superClass="gnu.cpp.compiler.cygwin.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.include.paths.1098830954" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="C:/FH/SystemC/systemc-2.2.0/include"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1098830954" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="C:/FH/SystemC/scv-1.0p2-sysc2.2/include"/>
+									<listOptionValue builtIn="false" value="C:/FH/SystemC/systemc-2.2.0/include"/>
 									<listOptionValue builtIn="false" value="C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include"/>
+									<listOptionValue builtIn="false" value="C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++"/>
+									<listOptionValue builtIn="false" value="C:/cygwin/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward"/>
 									<listOptionValue builtIn="false" value="C:/cygwin/usr/include"/>
+									<listOptionValue builtIn="false" value="C:/cygwin/usr/i686-pc-cygwin"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin.63581163" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin"/>
 							</tool>
@@ -43,11 +46,11 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug.1271410883" name="Cygwin C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.cygwin.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug.457576021" name="Cygwin C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.cygwin.exe.debug">
-								<option id="gnu.cpp.link.option.paths.752361074" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+								<option id="gnu.cpp.link.option.paths.752361074" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="C:/FH/SystemC/systemc-2.2.0/lib-cygwin"/>
 									<listOptionValue builtIn="false" value="C:/FH/SystemC/scv-1.0p2-sysc2.2/lib-cygwin"/>
 								</option>
-								<option id="gnu.cpp.link.option.libs.885566665" superClass="gnu.cpp.link.option.libs" valueType="libs">
+								<option id="gnu.cpp.link.option.libs.885566665" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="scv"/>
 									<listOptionValue builtIn="false" value="obj"/>
 									<listOptionValue builtIn="false" value="cudd"/>
@@ -131,4 +134,5 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 </cproject>
