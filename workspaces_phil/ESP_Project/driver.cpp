@@ -18,7 +18,7 @@ rw_sw2rtl_task_if::read_t pipelined_driver_sw2rtl::read(){
   read_t data;
 
   scv_tr_handle h = read_gen.begin_transaction();
-  data.a_i= pi_A.read();
+  data.a_i = pi_A.read();
   data.b_i = pi_B.read();
   read_gen.end_transaction(h);
 
@@ -30,32 +30,25 @@ rw_sw2rtl_task_if::read_t pipelined_driver_sw2rtl::read(){
 void pipelined_driver_sw2rtl::write(const write_t* p_req){
   int i;
 
-  cout << "write process: \n"<<endl;
+  cout << "\nwrite process: \n"<<endl;
 
   scv_tr_handle h = write_gen.begin_transaction();
 
   for(i=0; i< INSTANCES_FULLADDER; i++){
-  po_A[i].write(p_req->sign_a[i]);
-  po_B[i].write(p_req->sign_b[i]);
+    po_A[i].write(p_req->sign_a[i]);
+    po_B[i].write(p_req->sign_b[i]);
   }
   write_gen.end_transaction(h);
-
-  /* print out results */
-  for(i=0; i< INSTANCES_FULLADDER; i++){
-      cout << "Signal A " << i << ": " << po_A[i] << endl;
-  }
-  for(i=0; i< INSTANCES_FULLADDER; i++){
-      cout << "Signal B " << i << ": " << po_B[i] << endl;
-  }
-
 }
 
-void driver_sw2rtl::driver_thread(){
+void driver_sw2rtl::driversw2rtl_thread(){
   int size_a, size_b, size, i;
 
   bitset<INSTANCES_FULLADDER> b_set[2];
 
   rw_sw2rtl_task_if::write_t data_w;
+  rw_sw2rtl_task_if::write_t* data_ptr;
+
 
   /* read data in */
   rw_sw2rtl_task_if::read_t data_r = port_driver->read();
@@ -69,17 +62,38 @@ void driver_sw2rtl::driver_thread(){
   /* translate to bit stream */
   for(i=0; i<size;i++){
       if(data_r.a_i&(1<<i)){
-          data_w.sign_a[i] = 1;
+          data_w.sign_a[i] = '1';
           b_set[0].set(i);
       }
-      if(data_r.b_i&(1<<i)){
-          data_w.sign_a[i] = 1;
-          b_set[1].set(i);
+      else{
+          data_w.sign_a[i] = 'Z';
+          b_set[0].reset(i);
       }
+      if(data_r.b_i&(1<<i)){
+          data_w.sign_b[i] = '1';
+          b_set[1].set(i);
+      }else{
+          data_w.sign_b[i] = '0';
+          b_set[1].reset(i);
+      }
+
   }
 
+  /* print out results */
+  cout << "Bitset 1: " << b_set[0] << endl;
+  cout << "Bitset 2: " << b_set[1] << endl;
+
+  /*for(i=0; i< INSTANCES_FULLADDER; i++){
+      cout << "Output A " << i << ": " << data_w.sign_a[i] << endl;
+  }
+  for(i=0; i< INSTANCES_FULLADDER; i++){
+      cout << "Output B " << i << ": " << data_w.sign_b[i] << endl;
+  }*/
+  //*data = data_w;
   /* write data to channel */
-  port_driver->write(&data_w);
+  data_ptr = &data_w;
+
+  port_driver->write(data_ptr);
 }
 
 

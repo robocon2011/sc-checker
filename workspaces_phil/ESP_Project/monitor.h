@@ -12,17 +12,8 @@
 #define MONITOR_
 
 #include "config.h"
-
-SC_MODULE(monitor)
-{
-  /* port declarations */
-  sc_out <int> po_A;
-  sc_out <int> po_B;
-  sc_inout <sc_logic> pi_A[INSTANCES_FULLADDER];
-  sc_inout<sc_logic> pi_B[INSTANCES_FULLADDER];
-
-  monitor(sc_module_name nm);
-};
+#include <systemc.h>
+#include <scv.h>
 
 /* rtl to software interface */
 class rw_rtl2sw_task_if : virtual public sc_interface{
@@ -39,14 +30,42 @@ public:
   virtual void write(const write_t*) = 0;
 };
 
-class monitor_rtl2sw{
+
+SC_MODULE(monitor)
+{
+public:
+
+  /* port declarations */
+  sc_inout <int> po_mon_A;
+  sc_inout <int> po_mon_B;
+  sc_in <sc_logic> pi_mon_A[INSTANCES_FULLADDER];
+  sc_in <sc_logic> pi_mon_B[INSTANCES_FULLADDER];
+
+  SC_CTOR(monitor)
+  : po_mon_A("po_mon_A"),
+    po_mon_B("po_mon_B")/*,
+    po_mon_A("po_mon_A"),
+    po_mon_B[INSTANCES_FULLADDER]("po_mon_B") */
+    {}
+};
+
+SC_MODULE(monitor_rtl2sw)
+{
+public:
+
   sc_port<rw_rtl2sw_task_if> monitor_driver;
+
+  SC_HAS_PROCESS(monitor_rtl2sw);
+  monitor_rtl2sw (sc_module_name nm){
+    SC_METHOD(monitor_thread)
+        sensitive << monitor_driver;
+  }
 
   void monitor_thread();
 };
 
 /* prepare transaction recording, software to rtl */
-class pipelined_driver_rtl2sw
+class pipelined_monitor_rtl2sw
   : public rw_rtl2sw_task_if,
     public monitor {
 
@@ -56,8 +75,9 @@ class pipelined_driver_rtl2sw
     scv_tr_generator<sc_logic[INSTANCES_FULLADDER]> read_gen;
     scv_tr_generator<int> write_gen;
 
+
 public:
-    pipelined_driver_rtl2sw (sc_module_name nm) :
+    pipelined_monitor_rtl2sw (sc_module_name nm) :
       monitor(nm),
 
       pipelined_stream("pipelined_stream", "driver"),

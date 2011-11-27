@@ -12,11 +12,13 @@
 #define DATABASE_
 
 #include "config.h"
+#include <scv.h>
+#include <systemc.h>
 
 #include <iostream>
 #include <string>
 
-using namespace std;
+//using namespace std;
 
 SC_MODULE(database)
 {
