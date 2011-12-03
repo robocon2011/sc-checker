@@ -13,6 +13,8 @@
  *  purpose:	header file for generic data of stimulator module
  *
  *  History:	2011/11/13: first executable version implemented
+ *  			2011/12/03:	testsequence_id added to class testsequence_general_c
+ *  						timeout added to dutInput_constraint_base_t
  *
  */
 
@@ -41,6 +43,7 @@ class dutInput_constraint_base_t :
 {
 public:
 	scv_smart_ptr<dutInput_t> pInput;
+	sc_time timeout;
 };
 
 
@@ -54,6 +57,7 @@ class testsequence_general_c
 {
 public:
 	unsigned int no_of_testcases;
+	unsigned int testsequence_id;
 	dutInput_constraint_base_t *p_testvalues;
 
 	/*	dummy constructor */

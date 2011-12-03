@@ -15,6 +15,8 @@
  *  History:	2011/11/13: first executable version implemented
  *  			2011/11/20: stimulator thread - cout for next sequence added,
  *  						wait(zero) statement after write_values added
+ *  			2011/12/03: stimulator_thread modified for new control signals
+ *  						assignment of testsequence_id added
  *
  */
 
@@ -103,15 +105,21 @@ void stimulator_m::stimulator_thread()
 
 		for (cnt_testcases = 0; cnt_testcases < p_help->p_Sequence->no_of_testcases; cnt_testcases++)
 		{
-			/*	block loop until transition of boolean control signal	*/
-			wait(nextSample.value_changed_event());
+			/*	block loop until positive transition of boolean control signal	*/
+			wait(next_sample_to_reference.posedge_event());
 
 			/*	call SCV random generator function next() from currently loaded testsequence*/
 			p_help->p_Sequence->p_testvalues->next();
 			/*	wait statement for internal SystemC update-process	*/
 			wait(SC_ZERO_TIME);
-			/*	write generated values to module ports indirectly by user-defined callback function*/
-			write_values(p_help->p_Sequence->p_testvalues);
+			/*	write generated values to ports for reference model indirectly by user-defined callback function*/
+			write_values_to_reference(p_help->p_Sequence->p_testvalues, cnt_testcases, p_help->p_Sequence->testsequence_id);
+
+			/*	block process until positive transition of control signal	*/
+			wait(next_sample_to_dut.posedge_event());
+
+			/*	write generated values to DUT ports indirectly by user-defined callback function*/
+			write_values_to_dut(p_help->p_Sequence->p_testvalues);
 			/*	wait statement for internal SystemC update-process	*/
 			wait(SC_ZERO_TIME);
 		}
@@ -142,6 +150,8 @@ void testseq_collectionentry_c::add_Entry (testsequence_general_c *_p_Sequence)
 
 	/*	dynamic allocation of new list element */
 	newEntry = new testseq_collectionentry_c;
+
+	this->total_entries++;
 
 	/*	 update list with new element	*/
 	if (this->p_lastEntry != NULL)
@@ -191,9 +201,10 @@ testsequence_specialized_c <T> ::testsequence_specialized_c (testseq_collectione
 :testvalues("testvalues")
 {
 	/*	append testsequences to root element of list of testsequences
-	 * 	and set number of testsequences	*/
+	 * 	and set number of testsequences	and assign testsequence_id*/
 	p_collection->add_Entry(this);
 	this->no_of_testcases = _no_of_testcases;
+	this->testsequence_id = p_collection->get_total_entries();
 
 	/*	apply handle of user-defined type of constraint class
 	 * 	to member of generic testsequence class

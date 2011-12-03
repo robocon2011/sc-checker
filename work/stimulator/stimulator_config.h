@@ -15,6 +15,10 @@
  *
  *  History:	2011/11/13: first executable version implemented
  *				2011/11/20:	Additional constraint classes created
+ *				2011/12/03: carry bit added to all related modules,
+ *							control signals next_sample_to_reference, next_sample_to_dut added
+ *							functions write_values_to_reference, write_values_to_dut added
+ *							ports for timeout, testsequence_id and testcase_id added to stimulator_m
  */
 
 #ifndef STIMULATOR_CONFIG_H_
@@ -49,6 +53,7 @@ struct dutInput_t
 {
 	sc_uint<BITWIDTH> input_A;
 	sc_uint<BITWIDTH> input_B;
+	bool carry_in;
 };
 
 /*	<ENTER BELOW>	------------------------------------------------
@@ -62,9 +67,11 @@ SCV_EXTENSIONS(dutInput_t) {
 public:
 	scv_extensions < sc_uint<BITWIDTH> > input_A;
 	scv_extensions < sc_uint<BITWIDTH> > input_B;
+	scv_extensions < bool > carry_in;
 	SCV_EXTENSIONS_CTOR(dutInput_t) {
 		SCV_FIELD (input_A);
 		SCV_FIELD (input_B);
+		SCV_FIELD (carry_in);
 	}
 };
 
@@ -95,6 +102,10 @@ public:
 		SCV_CONSTRAINT (pInput->input_A() < 100);
 		SCV_CONSTRAINT (pInput->input_B() < 100);
 		SCV_CONSTRAINT ( ( pInput->input_A() + pInput->input_B() ) == 193);
+		pInput->carry_in.disable_randomization();
+		pInput->carry_in.write(false);
+
+		timeout = (10, SC_NS);
 	}
 };
 
@@ -105,6 +116,10 @@ class dutInput_constraint_t_02
 	{
 		SCV_CONSTRAINT (pInput->input_A() > 100000);
 		SCV_CONSTRAINT (pInput->input_B() > 100000);
+		pInput->carry_in.disable_randomization();
+		pInput->carry_in.write(false);
+
+		timeout = (10, SC_NS);
 	}
 };
 
@@ -115,6 +130,10 @@ class dutInput_constraint_t_03
 	{
 		SCV_CONSTRAINT (pInput->input_B() < 50000);
 		pInput->input_A.disable_randomization();
+		pInput->carry_in.disable_randomization();
+		pInput->carry_in.write(false);
+
+		timeout = (10, SC_NS);
 	}
 };
 
@@ -127,6 +146,10 @@ class dutInput_constraint_t_04
 		pInput->input_A.keep_out(550, 950);
 		pInput->input_B.keep_only(0, 500);
 		pInput->input_B.keep_out(50, 450);
+		pInput->carry_in.disable_randomization();
+		pInput->carry_in.write(false);
+
+		timeout = (10, SC_NS);
 	}
 };
 
@@ -144,6 +167,10 @@ public:
 		}
 		pInput->input_A.keep_only(legal_values);
 		pInput->input_B.keep_only(legal_values);
+		pInput->carry_in.disable_randomization();
+		pInput->carry_in.write(false);
+
+		timeout = (10, SC_NS);
 	}
 };
 
@@ -168,9 +195,13 @@ public:
 
 		pInput->input_A.disable_randomization();	//set_mode(distribution_input_A);
 		pInput->input_B.disable_randomization();	//set_mode(distribution_input_B);
+		pInput->carry_in.disable_randomization();
+		pInput->carry_in.write(false);
 
 		helpA->set_mode(distribution_input_A);
 		helpB->set_mode(distribution_input_B);
+
+		timeout = (10, SC_NS);
 	}
 
 	void next ()
@@ -237,16 +268,27 @@ SC_MODULE (stimulator_m)
 public:
 	/*	user defined ports for DUT - connected to Driver-module	*/
 	// TODO: selbst definiertes Port für dutInput_t schreiben!
+	sc_inout < sc_uint<BITWIDTH> > input_A_reference;
+	sc_inout < sc_uint<BITWIDTH> > input_B_reference;
+	sc_inout < bool > carry_in_reference;
+	sc_inout < sc_time > timeout;
+	sc_inout < unsigned int > testsequence_id;
+	sc_inout < unsigned int > testcase_id;
+
 	sc_inout < sc_uint<BITWIDTH> > input_A;
 	sc_inout < sc_uint<BITWIDTH> > input_B;
+	sc_inout < bool > carry_in;
+
 	/*	helper variables for port assignment	*/
 	sc_uint<BITWIDTH> s_input_A;
 	sc_uint<BITWIDTH> s_input_B;
+	bool s_carry_in;
 	//scv_smart_ptr <dutInput_t> stim_value;
 
 	/*	-> DO NOT MODIFY <-
 	 * 	control signal ports for stimulator */
-	sc_in < bool > nextSample;
+	sc_in < bool > next_sample_to_reference;
+	sc_in < bool > next_sample_to_dut;
 	sc_inout < bool > testsequences_finished;
 
 	/*	Constructor declaration	*/
@@ -257,16 +299,39 @@ public:
 
 	/*	<ENTER BELOW> --------------------------------------------------
 	 * 	user-defined function for assigning the created values to
-	 * 	the module ports
+	 * 	the module ports of dut
 	 */
-	void stimulator_m::write_values(dutInput_constraint_base_t *p_values)
+	void stimulator_m::write_values_to_dut(dutInput_constraint_base_t *p_values)
 	{
 		s_input_A = p_values->pInput->input_A;
 		s_input_B = p_values->pInput->input_B;
+		s_carry_in = p_values->pInput->carry_in;
+
 
 		input_A.write(s_input_A);
 		input_B.write(s_input_B);
+		carry_in.write(s_carry_in);
 	}
+
+	/*	<ENTER BELOW> --------------------------------------------------
+	 * 	user-defined function for assigning the created values to
+	 * 	the module ports of reference model
+	 */
+	void write_values_to_reference(dutInput_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
+	{
+		s_input_A = p_values->pInput->input_A;
+		s_input_B = p_values->pInput->input_B;
+		s_carry_in = p_values->pInput->carry_in;
+
+
+		input_A_reference.write(s_input_A);
+		input_B_reference.write(s_input_B);
+		carry_in_reference.write(s_carry_in);
+		timeout.write(p_values->timeout);
+		testcase_id.write(_cnt_testcases);
+		testsequence_id.write(_testsequence_id);
+	}
+
 
 	/*	SystemC module thread for stimulator	*/
 	void stimulator_thread (void);
