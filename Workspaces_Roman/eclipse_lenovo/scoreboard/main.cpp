@@ -3,8 +3,10 @@
 
 #include "scv.h"
 
+
 // hack to fake a true fifo_mutex
 #define fifo_mutex sc_mutex
+
 
 const unsigned ram_size = 256;
 
