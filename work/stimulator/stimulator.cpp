@@ -107,6 +107,7 @@ void stimulator_m::stimulator_thread()
 		{
 			/*	block loop until positive transition of boolean control signal	*/
 			wait(next_sample_to_reference.posedge_event());
+			cout << this->name() << ": " << next_sample_to_reference << endl;
 
 			/*	call SCV random generator function next() from currently loaded testsequence*/
 			p_help->p_Sequence->p_testvalues->next();
@@ -114,6 +115,9 @@ void stimulator_m::stimulator_thread()
 			wait(SC_ZERO_TIME);
 			/*	write generated values to ports for reference model indirectly by user-defined callback function*/
 			write_values_to_reference(p_help->p_Sequence->p_testvalues, cnt_testcases, p_help->p_Sequence->testsequence_id);
+			cout << this->name() << ": " << p_help->p_Sequence->p_testvalues->pInput->input_A << ", "
+										<< p_help->p_Sequence->p_testvalues->pInput->input_B
+										<< endl;
 
 			/*	block process until positive transition of control signal	*/
 			wait(next_sample_to_dut.posedge_event());
@@ -121,6 +125,9 @@ void stimulator_m::stimulator_thread()
 			/*	write generated values to DUT ports indirectly by user-defined callback function*/
 			write_values_to_dut(p_help->p_Sequence->p_testvalues);
 			/*	wait statement for internal SystemC update-process	*/
+			cout << this->name() << ": " << p_help->p_Sequence->p_testvalues->pInput->input_A << ", "
+										<< p_help->p_Sequence->p_testvalues->pInput->input_B
+										<< endl;
 			wait(SC_ZERO_TIME);
 		}
 
@@ -203,8 +210,8 @@ testsequence_specialized_c <T> ::testsequence_specialized_c (testseq_collectione
 	/*	append testsequences to root element of list of testsequences
 	 * 	and set number of testsequences	and assign testsequence_id*/
 	p_collection->add_Entry(this);
-	this->no_of_testcases = _no_of_testcases;
-	this->testsequence_id = p_collection->get_total_entries();
+	no_of_testcases = _no_of_testcases;
+	testsequence_id = p_collection->get_total_entries();
 
 	/*	apply handle of user-defined type of constraint class
 	 * 	to member of generic testsequence class

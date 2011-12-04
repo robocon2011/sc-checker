@@ -101,11 +101,11 @@ public:
 	{
 		SCV_CONSTRAINT (pInput->input_A() < 100);
 		SCV_CONSTRAINT (pInput->input_B() < 100);
-		SCV_CONSTRAINT ( ( pInput->input_A() + pInput->input_B() ) == 193);
+		//SCV_CONSTRAINT ( ( pInput->input_A() + pInput->input_B() ) == 193);
 		pInput->carry_in.disable_randomization();
 		pInput->carry_in.write(false);
 
-		timeout = (10, SC_NS);
+		timeout = sc_time(10, SC_NS);
 	}
 };
 
@@ -119,7 +119,7 @@ class dutInput_constraint_t_02
 		pInput->carry_in.disable_randomization();
 		pInput->carry_in.write(false);
 
-		timeout = (10, SC_NS);
+		timeout = sc_time(10, SC_NS);
 	}
 };
 
@@ -133,7 +133,7 @@ class dutInput_constraint_t_03
 		pInput->carry_in.disable_randomization();
 		pInput->carry_in.write(false);
 
-		timeout = (10, SC_NS);
+		timeout = sc_time(10, SC_NS);
 	}
 };
 
@@ -149,7 +149,7 @@ class dutInput_constraint_t_04
 		pInput->carry_in.disable_randomization();
 		pInput->carry_in.write(false);
 
-		timeout = (10, SC_NS);
+		timeout = sc_time(10, SC_NS);
 	}
 };
 
@@ -170,7 +170,7 @@ public:
 		pInput->carry_in.disable_randomization();
 		pInput->carry_in.write(false);
 
-		timeout = (10, SC_NS);
+		timeout = sc_time(10, SC_NS);
 	}
 };
 
@@ -201,7 +201,7 @@ public:
 		helpA->set_mode(distribution_input_A);
 		helpB->set_mode(distribution_input_B);
 
-		timeout = (10, SC_NS);
+		timeout = sc_time(10, SC_NS);
 	}
 
 	void next ()
@@ -271,7 +271,7 @@ public:
 	sc_inout < sc_uint<BITWIDTH> > input_A_reference;
 	sc_inout < sc_uint<BITWIDTH> > input_B_reference;
 	sc_inout < bool > carry_in_reference;
-	sc_inout < sc_time > timeout;
+	sc_inout < double > timeout;
 	sc_inout < unsigned int > testsequence_id;
 	sc_inout < unsigned int > testcase_id;
 
@@ -327,7 +327,7 @@ public:
 		input_A_reference.write(s_input_A);
 		input_B_reference.write(s_input_B);
 		carry_in_reference.write(s_carry_in);
-		timeout.write(p_values->timeout);
+		timeout.write( p_values->timeout.to_seconds() );
 		testcase_id.write(_cnt_testcases);
 		testsequence_id.write(_testsequence_id);
 	}

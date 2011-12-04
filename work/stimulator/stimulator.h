@@ -56,9 +56,9 @@ public:
 class testsequence_general_c
 {
 public:
+	dutInput_constraint_base_t *p_testvalues;
 	unsigned int no_of_testcases;
 	unsigned int testsequence_id;
-	dutInput_constraint_base_t *p_testvalues;
 
 	/*	dummy constructor */
 	testsequence_general_c() {}
