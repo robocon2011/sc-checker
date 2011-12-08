@@ -12,52 +12,41 @@
 #include "driver.h"
 
 void driver::driver_method(){
-  int size_a, size_b, size, i;
-  packet_fulladdr packet;
-  bitset<INSTANCES_FULLADDER> b_set[2];
-  sc_logic asdf;
+  int i=0;
 
+  packet_fulladdr_lv packet;
+
+  sc_lv <BITWIDTH> temp;
   cout << "Driver method" << endl;
 
   packet.sw_a = port_in[0]->read();
   packet.sw_b = port_in[1]->read();
-
-  /* calculate the size of the inputs (bit length) */
-  size_a = CHAR_BIT*sizeof(packet.sw_a);
-  size_b = CHAR_BIT*sizeof(packet.sw_b);
-
-  size = ((size_a > size_b) ? size_a : size_b);
+  packet.sw_cy = cy_in->read();
 
   /* translate to bit stream */
-  for(i=0; i<INSTANCES_FULLADDER;i++){
-      if(packet.sw_a&(1<<i)){
-          packet.rtl_a[i] = '1';
-          b_set[0].set(i);
-      }
-      else{
-          packet.rtl_a[i] = '0';
-          b_set[0].reset(i);
-      }
-      if(packet.sw_b&(1<<i)){
-          packet.rtl_b[i] = '1';
-          b_set[1].set(i);
-      }else{
-          packet.rtl_b[i] = '0';
-          b_set[1].reset(i);
-      }
+  for(i=0; i<BITWIDTH;i++){
+        if(packet.sw_a&(1<<i)){
+            packet.rtl_a[i] = '1';
+        }
+        else{
+            packet.rtl_a[i] = '0';
+        }
+        if(packet.sw_b&(1<<i)){
+            packet.rtl_b[i] = '1';
+        }else{
+            packet.rtl_b[i] = '0';
+        }
+    }
+  temp = static_cast<sc_lv<BITWIDTH> > (port_in[0]->read());
 
-      asdf = packet.rtl_a[i];
-      cout << "asdf " << i << " : " << asdf << endl;
-
-      port_out_a[i]->write(packet.rtl_a[i]);
-      port_out_b[i]->write(packet.rtl_b[1]);
-  }
+  port_out_a->write(static_cast<sc_lv<BITWIDTH> > (port_in[0]->read()));
+  port_out_b->write(packet.rtl_b);
+  cy_out->write(packet.rtl_cy);
+  packet.rtl_cy = packet.sw_cy;
 
   cout << "packet driver: " << packet << endl;
-  cout << "bitset A: " << b_set[0] << endl;
-  cout << "bitset B: " << b_set[1] << "\n" << endl;
 
-  rtl2sw_trans_driver_fifo.write(packet);
+  //rtl2sw_trans_driver_fifo.write(packet);
   rtl2sw_trans_driver.write(packet);
 }
 

@@ -14,35 +14,42 @@
 
 void monitor::monitor_method(){
   int i=0;
-  packet_fulladdr packet;
-  bitset<INSTANCES_FULLADDER> b_set[2];
+  packet_fulladdr_lv packet_temp;
+  bitset<BITWIDTH> b_set[1];
 
-  cout << "Monitor method dude: " << endl;
+  for(i=0; i<BITWIDTH;i++){
+    packet_temp.rtl_a[i] = port_in_a->read().bit(i);
 
-  for(i=0; i<INSTANCES_FULLADDER;i++){
-      packet.rtl_a[i] = port_in_a[i]->read();
-      packet.rtl_b[i] = port_in_b[i]->read();
-
-      if(packet.rtl_a[i] == 1){
-          b_set[0].set(i);
-      }
-      else{
-          b_set[0].reset(i);
-      }
-
-      if(packet.rtl_b[i] == 1){
-          b_set[1].set(i);
-      }
-      else{
-          b_set[0].reset(i);
-      }
+    if(packet_temp.rtl_a[i] == 1){
+        b_set[0].set(i);
+    }
+    else{
+        b_set[0].reset(i);
+    }
   }
 
-  packet.sw_a = b_set[0].to_ulong();
-  packet.sw_b = b_set[1].to_ulong();
+  cout << "Monitor method: " << endl;
 
-  cout << "packet monitor: " << packet << endl;
+  packet_temp.rtl_cy = cy_in->read();
+  packet_temp.sw_a = b_set[0].to_ulong();
 
-  rtl2sw_trans_fifo.write(packet);
-  rtl2sw_trans_monitor.write(packet);
+  rtl2sw_trans_fifo.write(packet_temp);
+  rtl2sw_trans_monitor.write(packet_temp);
+}
+
+void monitor::monitor_thread(){
+  packet_fulladdr_lv packet_temp, packet_temp_old;
+
+  while(1){
+    packet_temp = rtl2sw_trans_fifo.read();
+
+    if(packet_temp == packet_temp_old){}
+    else
+    {
+      cout << "packet monitor: " << packet_temp << endl;
+      port_out->write(packet_temp.sw_a);
+      cy_out->write(0);
+      packet_temp = packet_temp_old;
+    }
+  }
 }
