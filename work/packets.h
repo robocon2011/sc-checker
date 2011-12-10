@@ -1,19 +1,16 @@
 #ifndef PACKETS_H
-#define PACKETS_
+#define PACKETS_H
 
-#include <systemc.h>
+#include <systemc>
 #include <scv.h>
-
 #include <string>
 using std::string;
 
-#ifndef BITWIDTH
-  #define BITWIDTH 32
-#endif
+#include "global.h"
 
 struct packet_fulladdr{
-  sc_uint<BITWIDTH> sw_a;
-  sc_uint<BITWIDTH> sw_b;
+  sc_uint <BITWIDTH> sw_a;
+  sc_uint <BITWIDTH> sw_b;
   bool sw_cy;
 
   sc_logic rtl_a[BITWIDTH];

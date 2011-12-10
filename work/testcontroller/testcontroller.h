@@ -1,5 +1,6 @@
+#ifndef TESTCONTROLLER_H
+#define TESTCONTROLLER_H
 
-#include "global.h"
 #include <systemc.h>
 #include <scv.h>
 
@@ -33,3 +34,5 @@ public:
                 }
         }
 };
+
+#endif

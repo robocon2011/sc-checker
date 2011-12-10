@@ -9,15 +9,9 @@
 /******************************************************************************/
 
 #ifndef DRIVER_H
-#define DRIVER_
+#define DRIVER_H
 
-#ifndef PACKETS_
-  #include "packets.h"
-#endif
-#ifndef SP_PORTS__
-  #include "sp_ports.h"
-#endif
-#include "global.h"
+#include "../global.h"
 
 /* driver method */
 SC_MODULE(driver)

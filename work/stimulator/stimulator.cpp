@@ -115,9 +115,6 @@ void stimulator_m::stimulator_thread()
 			wait(SC_ZERO_TIME);
 			/*	write generated values to ports for reference model indirectly by user-defined callback function*/
 			write_values_to_reference(p_help->p_Sequence->p_testvalues, cnt_testcases, p_help->p_Sequence->testsequence_id);
-			cout << this->name() << ": " << p_help->p_Sequence->p_testvalues->pInput->input_A << ", "
-										<< p_help->p_Sequence->p_testvalues->pInput->input_B
-										<< endl;
 
 			/*	block process until positive transition of control signal	*/
 			wait(next_sample_to_dut.posedge_event());
@@ -125,9 +122,6 @@ void stimulator_m::stimulator_thread()
 			/*	write generated values to DUT ports indirectly by user-defined callback function*/
 			write_values_to_dut(p_help->p_Sequence->p_testvalues);
 			/*	wait statement for internal SystemC update-process	*/
-			cout << this->name() << ": " << p_help->p_Sequence->p_testvalues->pInput->input_A << ", "
-										<< p_help->p_Sequence->p_testvalues->pInput->input_B
-										<< endl;
 			wait(SC_ZERO_TIME);
 		}
 

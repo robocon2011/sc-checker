@@ -1,8 +1,12 @@
 #ifndef SP_PORTS_H
-#define SP_PORTS_
-#ifndef PACKETS_
-  #include "packets.h"
-#endif
+#define SP_PORTS_H
+
+//#ifndef PACKETS_H
+//  #include "../packets/packets.h"
+//#endif
+
+#include <systemc>
+#include <scv.h>
 
 #include "global.h"
 

@@ -8,17 +8,12 @@
 #ifndef SCOREBOARD_CONFIG_H_
 #define SCOREBOARD_CONFIG_H_
 
-#include "global.h"
-
 #include <systemc>
 #include <scv.h>
 #include <fstream>
 #include <iostream>
 #include "scoreboard.h"
-
-#ifndef BITWIDTH
-  #define BITWIDTH 32
-#endif
+#include "../global.h"
 
 enum compareResult { eOK = 0, eMISMATCH, eTIMEOUT};
 

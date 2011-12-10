@@ -1,20 +1,26 @@
 
-#include "driver.h"
-#include "monitor.h"
-#include "stimulator_config.h"
-#include "scoreboard_config.h"
-#include "fulladder_rtl.h"
-#include "testcontroller.h"
-#include "reference_model.h"
+#define BITWIDTH 32
+
+
+#include "database/database.h"
+#include "driver/driver.h"
+#include "dut/fulladder/fulladder_rtl.h"
+#include "monitor/monitor.h"
+#include "reference_model/reference_model.h"
+#include "scoreboard/scoreboard_config.h"
+#include "stimulator/stimulator_config.h"
+#include "testcontroller/testcontroller.h"
 
 #include "global.h"
 
-#ifndef PACKETS_
-  #include "packets.h"
-#endif
-#ifndef SP_PORTS_
-  #include "sp_ports.h"
-#endif
+//#ifndef PACKETS_
+//  #include "packets/packets.h"
+//#endif
+//#ifndef SP_PORTS_
+//  #include "ports/sp_ports.h"
+//#endif
+
+
 
 int sc_main (int argc, char *argv[])
 {
@@ -82,14 +88,14 @@ int sc_main (int argc, char *argv[])
   i_testcontroller.testcase_finished(signal_testcase_finished);
   i_testcontroller.all_sequences_finished(signal_all_testsequences_finished);
 
-  i_stimulator.input_A_reference(signal_A_reference);
-  i_stimulator.input_B_reference(signal_B_reference);
+  i_stimulator.port_inputs_reference(signal_A_reference);
+  i_stimulator.port_inputs_reference(signal_B_reference);
   i_stimulator.carry_in_reference(signal_carry_in_reference);
   i_stimulator.timeout(signal_timeout);
   i_stimulator.testsequence_id(signal_testsequence_id);
   i_stimulator.testcase_id(signal_testcase_id);
-  i_stimulator.input_A(signal_A_dut);
-  i_stimulator.input_B(signal_B_dut);
+  i_stimulator.port_inputs(signal_A_dut);
+  i_stimulator.port_inputs(signal_B_dut);
   i_stimulator.carry_in(signal_carry_in_dut);
   i_stimulator.next_sample_to_reference(signal_next_sample_to_reference);
   i_stimulator.next_sample_to_dut(signal_next_sample_to_dut);

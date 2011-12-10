@@ -45,7 +45,7 @@ void monitor::monitor_debouncing_method(){
   if(packet_temp.sw_a == packet_temp_old.sw_a){
       cout << "packet monitor: " << packet_temp << endl;
       port_out->write(packet_temp.sw_a);
-      cy_out->write(0);
+      cy_out->write( cy_in.read()==1 ? true:false );
 
   }
   else{

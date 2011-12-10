@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 // define for fulladder cascade bitwidth in case of not being defined globally for project
-#include "global.h"
+//#include "../../global.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //

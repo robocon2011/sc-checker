@@ -9,11 +9,10 @@
 /******************************************************************************/
 
 
-#include "database.h"
-
 #include <scv.h>
 #include <systemc.h>
 
+#include "database.h"
 
 
 SC_HAS_PROCESS(database);

@@ -19,13 +19,14 @@
  *							control signals next_sample_to_reference, next_sample_to_dut added
  *							functions write_values_to_reference, write_values_to_dut added
  *							ports for timeout, testsequence_id and testcase_id added to stimulator_m
+ *  			2011/12/10:	global struct packet_fulladdr added, dutInput_t removed
+ *
  */
 
 #ifndef STIMULATOR_CONFIG_H_
 #define STIMULATOR_CONFIG_H_
 
 #include <systemc>
-#include "global.h"
 using namespace sc_core;
 using namespace sc_dt;
 #include <scv.h>
@@ -33,56 +34,23 @@ using namespace sc_dt;
  * 	http://www.systemc.org/Discussion_Forums/systemc-forum/archive/msg?list_name=systemc-forum&monthdir=201005&msg=msg00010.html
  */
 void _scv_pop_constraint();	/*	patch	*/
-
+#include "../global.h"
 #include "stimulator.h"
 
-/*	<ENTER BELOW>	------------------------------------------------
- *
- * 	define Bitwidth of fulladder design
- *
- */
 
-
-
-
-/*	<ENTER BELOW>	------------------------------------------------
- *
- *	structname:		dutInput_t
- *	purpose:		declares structure of user-specific source data
- *					needs to be adapted to DUT
- */
-struct dutInput_t
-{
-	sc_uint<BITWIDTH> input_A;
-	sc_uint<BITWIDTH> input_B;
-	bool carry_in;
-};
-
-/*	<ENTER BELOW>	------------------------------------------------
- *
- *	classname:	scv_extensions <dutInput_t>
- *	purpose:	SCV extension class specialized by user-specific source data
- *				for creating SCV-internal extensions interface
- *				needs to be adapted to dutInput_t
- */
-SCV_EXTENSIONS(dutInput_t) {
+SCV_EXTENSIONS(packet_fulladdr) {
 public:
-	scv_extensions < sc_uint<BITWIDTH> > input_A;
-	scv_extensions < sc_uint<BITWIDTH> > input_B;
-	scv_extensions < bool > carry_in;
-	SCV_EXTENSIONS_CTOR(dutInput_t) {
-		SCV_FIELD (input_A);
-		SCV_FIELD (input_B);
-		SCV_FIELD (carry_in);
+	scv_extensions < sc_uint<BITWIDTH> > sw_a;
+	scv_extensions < sc_uint<BITWIDTH> > sw_b;
+	scv_extensions < bool > sw_cy;
+	SCV_EXTENSIONS_CTOR(packet_fulladdr) {
+		SCV_FIELD (sw_a);
+		SCV_FIELD (sw_b);
+		SCV_FIELD (sw_cy);
 	}
 };
 
-/*
- *	classname:	dutInput_constraint_base_t
- *	purpose:	forward declaration of base constraint class
- *				see stimulator.h
- */
-class dutInput_constraint_base_t;
+class packet_fulladdr_constraint_base_t;
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
@@ -95,89 +63,90 @@ class dutInput_constraint_base_t;
  *				specialize from dutInput_constraint_base_t,
  *				redeclaration of scv_smart_ptr not necessary
  */
-class dutInput_constraint_t_01
-	: public dutInput_constraint_base_t
+class packet_fulladdr_constraint_t_01
+	: public packet_fulladdr_constraint_base_t
 {
 public:
-	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_01)
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_01)
 	{
-		SCV_CONSTRAINT (pInput->input_A() < 100);
-		SCV_CONSTRAINT (pInput->input_B() < 100);
+		SCV_CONSTRAINT (pInput->sw_a() < 100);
+		SCV_CONSTRAINT (pInput->sw_b() < 100);
 		//SCV_CONSTRAINT ( ( pInput->input_A() + pInput->input_B() ) == 193);
-		pInput->carry_in.disable_randomization();
-		pInput->carry_in.write(false);
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
 
 		timeout = sc_time(10, SC_NS);
 	}
 };
 
-class dutInput_constraint_t_02
-	: public dutInput_constraint_base_t
+
+class packet_fulladdr_constraint_t_02
+	: public packet_fulladdr_constraint_base_t
 {
-	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_02)
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_02)
 	{
-		SCV_CONSTRAINT (pInput->input_A() > 100000);
-		SCV_CONSTRAINT (pInput->input_B() > 100000);
-		pInput->carry_in.disable_randomization();
-		pInput->carry_in.write(false);
+		SCV_CONSTRAINT (pInput->sw_a() > 100000);
+		SCV_CONSTRAINT (pInput->sw_b() > 100000);
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
 
 		timeout = sc_time(10, SC_NS);
 	}
 };
 
-class dutInput_constraint_t_03
-	: public dutInput_constraint_base_t
+class packet_fulladdr_constraint_t_03
+	: public packet_fulladdr_constraint_base_t
 {
-	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_03)
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_03)
 	{
-		SCV_CONSTRAINT (pInput->input_B() < 50000);
-		pInput->input_A.disable_randomization();
-		pInput->carry_in.disable_randomization();
-		pInput->carry_in.write(false);
+		SCV_CONSTRAINT (pInput->sw_b() < 50000);
+		pInput->sw_a.disable_randomization();
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
 
 		timeout = sc_time(10, SC_NS);
 	}
 };
 
-class dutInput_constraint_t_04
-	: public dutInput_constraint_base_t
+class packet_fulladdr_constraint_t_04
+	: public packet_fulladdr_constraint_base_t
 {
-	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_04)
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_04)
 	{
-		pInput->input_A.keep_only(500, 1000);
-		pInput->input_A.keep_out(550, 950);
-		pInput->input_B.keep_only(0, 500);
-		pInput->input_B.keep_out(50, 450);
-		pInput->carry_in.disable_randomization();
-		pInput->carry_in.write(false);
+		pInput->sw_a.keep_only(500, 1000);
+		pInput->sw_b.keep_out(550, 950);
+		pInput->sw_b.keep_only(0, 500);
+		pInput->sw_b.keep_out(50, 450);
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
 
 		timeout = sc_time(10, SC_NS);
 	}
 };
 
-class dutInput_constraint_t_05
-	: public dutInput_constraint_base_t
+class packet_fulladdr_constraint_t_05
+	: public packet_fulladdr_constraint_base_t
 {
 public:
 	list < sc_uint <BITWIDTH> > legal_values;
 
-	SCV_CONSTRAINT_CTOR(dutInput_constraint_t_05)
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_05)
 	{
 		for (int i = 0; i < 100; i++)
 		{
 			legal_values.push_back(i*1000);
 		}
-		pInput->input_A.keep_only(legal_values);
-		pInput->input_B.keep_only(legal_values);
-		pInput->carry_in.disable_randomization();
-		pInput->carry_in.write(false);
+		pInput->sw_a.keep_only(legal_values);
+		pInput->sw_b.keep_only(legal_values);
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
 
 		timeout = sc_time(10, SC_NS);
 	}
 };
 
-class dutInput_constraint_t_06
-	: public dutInput_constraint_base_t
+class packet_fulladdr_constraint_t_06
+	: public packet_fulladdr_constraint_base_t
 {
 public:
 	scv_bag < sc_uint<BITWIDTH> > distribution_input_A;
@@ -186,7 +155,7 @@ public:
 	scv_smart_ptr < sc_uint<BITWIDTH> > helpB;
 
 	//SCV_CONSTRAINT_CTOR(dutInput_constraint_t_06)
-	dutInput_constraint_t_06(char *arg)
+	packet_fulladdr_constraint_t_06(char *arg)
 	{
 		distribution_input_A.push(10000, 20);
 		distribution_input_A.push(100000, 20);
@@ -195,10 +164,10 @@ public:
 		distribution_input_B.push(100000, 20);
 		distribution_input_B.push(1000000, 60);
 
-		pInput->input_A.disable_randomization();	//set_mode(distribution_input_A);
-		pInput->input_B.disable_randomization();	//set_mode(distribution_input_B);
-		pInput->carry_in.disable_randomization();
-		pInput->carry_in.write(false);
+		pInput->sw_a.disable_randomization();	//set_mode(distribution_input_A);
+		pInput->sw_b.disable_randomization();	//set_mode(distribution_input_B);
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
 
 		helpA->set_mode(distribution_input_A);
 		helpB->set_mode(distribution_input_B);
@@ -211,8 +180,8 @@ public:
 		helpA->next();
 		helpB->next();
 
-		pInput->input_A.write(*(helpA->get_instance()));
-		pInput->input_B.write(*(helpB->get_instance()));
+		pInput->sw_cy.write(*(helpA->get_instance()));
+		pInput->sw_cy.write(*(helpB->get_instance()));
 	}
 };
 
@@ -238,17 +207,17 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				10));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				10));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_02 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				100));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_03 > 	(p_testsequences, 				150));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				100));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_04 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				500));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_05 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				50));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_06 > 	(p_testsequences, 				1));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}
@@ -270,15 +239,14 @@ SC_MODULE (stimulator_m)
 public:
 	/*	user defined ports for DUT - connected to Driver-module	*/
 	// TODO: selbst definiertes Port für dutInput_t schreiben!
-	sc_inout < sc_uint<BITWIDTH> > input_A_reference;
-	sc_inout < sc_uint<BITWIDTH> > input_B_reference;
+	fulladr_port port_inputs_reference;
 	sc_inout < bool > carry_in_reference;
 	sc_inout < double > timeout;
 	sc_inout < unsigned int > testsequence_id;
 	sc_inout < unsigned int > testcase_id;
 
-	sc_inout < sc_uint<BITWIDTH> > input_A;
-	sc_inout < sc_uint<BITWIDTH> > input_B;
+
+	fulladr_port port_inputs;
 	sc_inout < bool > carry_in;
 
 	/*	helper variables for port assignment	*/
@@ -303,15 +271,15 @@ public:
 	 * 	user-defined function for assigning the created values to
 	 * 	the module ports of dut
 	 */
-	void write_values_to_dut(dutInput_constraint_base_t *p_values)
+
+	void write_values_to_dut(packet_fulladdr_constraint_base_t *p_values)
 	{
-		s_input_A = p_values->pInput->input_A;
-		s_input_B = p_values->pInput->input_B;
-		s_carry_in = p_values->pInput->carry_in;
+		s_input_A = p_values->pInput->sw_a;
+		s_input_B = p_values->pInput->sw_b;
+		s_carry_in = p_values->pInput->sw_cy;
 
-
-		input_A.write(s_input_A);
-		input_B.write(s_input_B);
+		port_inputs[0]->write(s_input_A);
+		port_inputs[1]->write(s_input_B);
 		carry_in.write(s_carry_in);
 	}
 
@@ -319,21 +287,21 @@ public:
 	 * 	user-defined function for assigning the created values to
 	 * 	the module ports of reference model
 	 */
-	void write_values_to_reference(dutInput_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
+
+	void write_values_to_reference(packet_fulladdr_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
 	{
-		s_input_A = p_values->pInput->input_A;
-		s_input_B = p_values->pInput->input_B;
-		s_carry_in = p_values->pInput->carry_in;
+		s_input_A = p_values->pInput->sw_a;
+		s_input_B = p_values->pInput->sw_b;
+		s_carry_in = p_values->pInput->sw_cy;
 
 
-		input_A_reference.write(s_input_A);
-		input_B_reference.write(s_input_B);
+		port_inputs_reference[0]->write(s_input_A);
+		port_inputs_reference[1]->write(s_input_B);
 		carry_in_reference.write(s_carry_in);
 		timeout.write( p_values->timeout.to_seconds() );
 		testcase_id.write(_cnt_testcases);
 		testsequence_id.write(_testsequence_id);
 	}
-
 
 	/*	SystemC module thread for stimulator	*/
 	void stimulator_thread (void);

@@ -9,15 +9,15 @@
 /******************************************************************************/
 
 #ifndef DATABASE_H
-#define DATABASE_
+#define DATABASE_H
 
-#include "config.h"
 #include <scv.h>
 #include <systemc.h>
 
 #include <iostream>
 #include <string>
 
+#include "../global.h"
 //using namespace std;
 
 SC_MODULE(database)

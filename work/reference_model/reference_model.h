@@ -1,8 +1,8 @@
 
-#include "global.h"
 
 #include <systemc.h>
 #include <scv.h>
+#include "../global.h"
 
 
 SC_MODULE (reference_model)

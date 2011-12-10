@@ -1,7 +1,7 @@
 #include <systemc.h>
-#include "packets.h"
 #include <iomanip>
 #include <string>
+#include "packets.h"
 
 using std::setw;
 using std::setfill;

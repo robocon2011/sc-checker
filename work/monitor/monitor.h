@@ -9,18 +9,11 @@
 /******************************************************************************/
 
 #ifndef MONITOR_H
-#define MONITOR_
+#define MONITOR_H
 
-#ifndef SP_PORTS_
-  #include "sp_ports.h"
-#endif
-#ifndef PACKETS_
-  #include "packets.h"
-#endif
+#include "../global.h"
 
-#include "global.h"
-
-SC_MODULE(monitor)
+SC_MODULE (monitor)
 {
 public:
 
