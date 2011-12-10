@@ -25,6 +25,7 @@
 #define STIMULATOR_CONFIG_H_
 
 #include <systemc>
+#include "global.h"
 using namespace sc_core;
 using namespace sc_dt;
 #include <scv.h>
@@ -40,7 +41,8 @@ void _scv_pop_constraint();	/*	patch	*/
  * 	define Bitwidth of fulladder design
  *
  */
-#define BITWIDTH 32
+
+
 
 
 /*	<ENTER BELOW>	------------------------------------------------
@@ -236,17 +238,17 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				3));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				10));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_02 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_03 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_03 > 	(p_testsequences, 				150));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_04 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_05 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_06 > 	(p_testsequences, 				20));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_06 > 	(p_testsequences, 				1));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}
@@ -301,7 +303,7 @@ public:
 	 * 	user-defined function for assigning the created values to
 	 * 	the module ports of dut
 	 */
-	void stimulator_m::write_values_to_dut(dutInput_constraint_base_t *p_values)
+	void write_values_to_dut(dutInput_constraint_base_t *p_values)
 	{
 		s_input_A = p_values->pInput->input_A;
 		s_input_B = p_values->pInput->input_B;

@@ -24,6 +24,7 @@
 #include <systemc>
 using namespace sc_core;
 #include "scv.h"
+#include "global.h"
 
 
 /*

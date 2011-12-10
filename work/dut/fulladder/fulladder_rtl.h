@@ -15,9 +15,7 @@
 #include <stdio.h>
 
 // define for fulladder cascade bitwidth in case of not being defined globally for project
-#ifndef BITWIDTH
-#define BITWIDTH 32
-#endif
+#include "global.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -38,8 +36,8 @@ SC_MODULE(halfadder) {
 };
 
 void halfadder::proc_halfadder() {
-	sum_o = a_i ^ b_i;
-	cy_o = a_i & b_i;
+	sum_o.write(a_i ^ b_i);
+	cy_o.write(a_i & b_i);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +59,7 @@ SC_MODULE(orgate) {
 };
 
 void orgate::proc_orgate() {
-	or_o = a_i | b_i;
+	or_o.write(a_i | b_i);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
