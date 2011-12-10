@@ -238,17 +238,17 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				3));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_01 > 	(p_testsequences, 				10));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_02 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_03 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_03 > 	(p_testsequences, 				150));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_04 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_05 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_06 > 	(p_testsequences, 				20));
+		addSequence	(new testsequence_specialized_c < dutInput_constraint_t_06 > 	(p_testsequences, 				1));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}

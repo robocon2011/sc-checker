@@ -25,14 +25,13 @@ SC_MODULE(monitor)
 public:
 
   /* port declarations */
-  fa_rtl_lv_single_port port_in_a;
+  fa_rtl_port port_in_a;
   sc_in<sc_logic> cy_in;
 
   sc_out<sc_uint <BITWIDTH> > port_out;
   sc_out<bool> cy_out;
 
-  sc_signal<packet_fulladdr_lv> rtl2sw_trans_monitor;
-  sc_fifo<packet_fulladdr_lv> rtl2sw_trans_fifo;
+  sc_signal<packet_fulladdr> rtl2sw_trans_monitor;
 
   SC_CTOR(monitor)
   {
@@ -40,13 +39,13 @@ public:
       sensitive << port_in_a.fa_value_changed_event();
       dont_initialize();
 
-    SC_THREAD(monitor_thread);
-      sensitive << rtl2sw_trans_monitor;
+    SC_METHOD(monitor_debouncing_method);
+      sensitive << rtl2sw_trans_monitor.value_changed_event();
       dont_initialize();
   }
 
   void monitor_method();
-  void monitor_thread();
+  void monitor_debouncing_method();
 };
 
 #endif

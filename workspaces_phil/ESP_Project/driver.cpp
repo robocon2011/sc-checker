@@ -14,9 +14,8 @@
 void driver::driver_method(){
   int i=0;
 
-  packet_fulladdr_lv packet;
+  packet_fulladdr packet;
 
-  sc_lv <BITWIDTH> temp;
   cout << "Driver method" << endl;
 
   packet.sw_a = port_in[0]->read();
@@ -25,29 +24,29 @@ void driver::driver_method(){
 
   /* translate to bit stream */
   for(i=0; i<BITWIDTH;i++){
-        if(packet.sw_a&(1<<i)){
+
+      if(packet.sw_a&(1<<i)){
             packet.rtl_a[i] = '1';
         }
         else{
             packet.rtl_a[i] = '0';
         }
+
         if(packet.sw_b&(1<<i)){
             packet.rtl_b[i] = '1';
         }else{
             packet.rtl_b[i] = '0';
         }
-    }
-  temp = static_cast<sc_lv<BITWIDTH> > (port_in[0]->read());
 
-  port_out_a->write(static_cast<sc_lv<BITWIDTH> > (port_in[0]->read()));
-  port_out_b->write(packet.rtl_b);
+        port_out_a[i]->write(packet.rtl_a[i]);
+        port_out_b[i]->write(packet.rtl_b[i]);
+    }
+
   cy_out->write(packet.rtl_cy);
   packet.rtl_cy = packet.sw_cy;
 
   cout << "packet driver: " << packet << endl;
 
-  //rtl2sw_trans_driver_fifo.write(packet);
-  rtl2sw_trans_driver.write(packet);
 }
 
 

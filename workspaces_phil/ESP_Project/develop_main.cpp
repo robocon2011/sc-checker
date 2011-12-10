@@ -4,6 +4,9 @@
 #include "stimulator_config.h"
 #include "scoreboard_config.h"
 #include "fulladder_rtl.h"
+#include "testcontroller.h"
+#include "reference_model.h"
+
 #include "global.h"
 
 #ifndef PACKETS_
@@ -13,100 +16,6 @@
   #include "sp_ports.h"
 #endif
 
-SC_MODULE (asdf)
-{
-  fa_rtl_lv_single_port input;
-
-  SC_CTOR(asdf){
-    SC_METHOD(asdf_method);
-    sensitive << input;
-  }
-  void asdf_method(){
-
-      cout << "Triggered ..." << endl;
-
-  }
-};
-
-SC_MODULE (testcontroller)
-{
-public:
-        sc_inout < bool > next_sample_to_reference;
-        sc_in < bool > reference_received;
-        sc_inout <bool > next_sample_to_dut;
-        sc_in < bool > testcase_finished;
-        sc_in < bool > all_sequences_finished;
-
-        SC_CTOR(testcontroller)
-        {
-                SC_THREAD(testcontroller_thread);
-        }
-
-        void testcontroller_thread ()
-        {
-                while ( !all_sequences_finished.read() )
-                {
-                        next_sample_to_reference.write(true);
-
-                        wait(reference_received.posedge_event());
-
-                        next_sample_to_reference.write(false);
-                        next_sample_to_dut.write(true);
-
-                        wait(testcase_finished.posedge_event());
-                        next_sample_to_dut.write(false);
-                }
-        }
-};
-
-SC_MODULE (reference_model)
-{
-public:
-        sc_in < sc_uint<BITWIDTH> > input_A_stimulator;
-        sc_in < sc_uint<BITWIDTH> > input_B_stimulator;
-        sc_in < bool > carry_in_stimulator;
-        sc_in < double > timeout;
-        sc_in < unsigned int > testsequence_id;
-        sc_in < unsigned int > testcase_id;
-
-        sc_inout < sc_uint <BITWIDTH> > output_scoreboard;
-        sc_inout < bool > output_carry_scoreboard;
-        sc_inout < double > timeout_scoreboard;
-        sc_inout < unsigned int > testcase_id_scoreboard;
-        sc_inout < unsigned int > testsequence_id_scoreboard;
-
-        SC_CTOR(reference_model)
-        {
-                SC_METHOD(reference_method);
-                sensitive << input_A_stimulator.value_changed() << input_B_stimulator.value_changed();
-        }
-
-        void reference_method ()
-        {
-                input_A = input_A_stimulator.read();
-                input_B = input_B_stimulator.read();
-                carry_in = carry_in_stimulator.read();
-
-                output = input_A + input_B + (carry_in ? 1 : 0) ;
-                carry_out = ( output < input_A ) || ( output < input_B) ;
-
-                output_scoreboard.write(output);
-                output_carry_scoreboard.write(carry_out);
-                timeout_scoreboard.write(timeout);
-                testsequence_id_scoreboard.write(testsequence_id.read());
-                testcase_id_scoreboard.write(testcase_id.read());
-        }
-
-private:
-        sc_uint <BITWIDTH> input_A;
-        sc_uint <BITWIDTH> input_B;
-        bool carry_in;
-
-        sc_uint <BITWIDTH> output;
-        bool carry_out;
-};
-
-
 int sc_main (int argc, char *argv[])
 {
   scv_startup();
@@ -115,8 +24,17 @@ int sc_main (int argc, char *argv[])
   scv_tr_db db("ESP_DB");
   scv_tr_db::set_default_db(&db); */
 
-  //int i;
-  sc_set_time_resolution(1, SC_NS);
+  int i;
+  //sc_set_time_resolution(1, SC_NS);
+
+  /* create tracefile */
+  sc_trace_file* tracefile_fulladder;
+
+  tracefile_fulladder = sc_create_vcd_trace_file("fulladder_trace");
+
+  if (!tracefile_fulladder){
+      cout << "Error creating tracefile." << endl;
+  }
 
   stimulator_m i_stimulator("i_stimulator");
   testcontroller i_testcontroller("i_testcontroller");
@@ -127,9 +45,6 @@ int sc_main (int argc, char *argv[])
 
   monitor mon_p_i("mon_p_i");
   driver dri_p_i("dri_p_i");
-
-
-  //asdf i_test("i_test");
 
   sc_signal <sc_uint<BITWIDTH> > signal_A_reference;
   sc_signal <sc_uint<BITWIDTH> > signal_B_reference;
@@ -158,8 +73,8 @@ int sc_main (int argc, char *argv[])
   sc_signal <bool> signal_all_testsequences_finished;
 
   sc_signal <sc_logic> cy_in, cy_out;
-  sc_signal <sc_lv <BITWIDTH> > a_in, b_in;
-  sc_signal <sc_lv <BITWIDTH> > a_out;
+  sc_signal <sc_logic> a_in[BITWIDTH], b_in[BITWIDTH];
+  sc_signal <sc_logic> a_out[BITWIDTH];
 
   i_testcontroller.next_sample_to_reference(signal_next_sample_to_reference);
   i_testcontroller.reference_received(signal_reference_received);
@@ -204,29 +119,50 @@ int sc_main (int argc, char *argv[])
 
   dri_p_i.port_in(signal_A_dut);
   dri_p_i.port_in(signal_B_dut);
+
   dri_p_i.cy_in(signal_carry_in_dut);
   dri_p_i.cy_out(cy_in);
-  dri_p_i.port_out_a(a_in);
-  dri_p_i.port_out_b(b_in);
 
-  i_fulladder.port_a(a_in);
-  i_fulladder.port_b(b_in);
-  i_fulladder.cy_out(cy_out);
-  i_fulladder.port_out(a_out);
   i_fulladder.cy_in(cy_in);
 
-  //i_test.input(a_out);
+  for(i=0;i<BITWIDTH;i++){
 
-  mon_p_i.port_in_a(a_out);
-  mon_p_i.port_out(signal_output);
+    mon_p_i.port_in_a(a_out[i]);
+
+    dri_p_i.port_out_a(a_in[i]);
+    dri_p_i.port_out_b(b_in[i]);
+
+    i_fulladder.a_in[i](a_in[i]);
+    i_fulladder.b_in[i](b_in[i]);
+    i_fulladder.sum_out[i](a_out[i]);
+
+  }
+
+  i_fulladder.cy_out(cy_out);
   mon_p_i.cy_in(cy_out);
+
+  mon_p_i.port_out(signal_output);
   mon_p_i.cy_out(signal_carry_out);
+
+  /* transaction recording */
+  sc_trace(tracefile_fulladder, signal_A_dut, "driver_in_a");
+  sc_trace(tracefile_fulladder, signal_B_dut, "driver_in_b");
+  sc_trace(tracefile_fulladder, a_in, "DUT_in_a");
+  sc_trace(tracefile_fulladder, b_in, "DUT_in_b");
+
+  sc_trace(tracefile_fulladder, a_out, "DUT_output");
+  sc_trace(tracefile_fulladder, signal_carry_in_dut, "driver_carry_in");
+
 
   cout << "START OF SIMULATION" << endl;
 
   sc_start();
   if (! sc_end_of_simulation_invoked()) sc_stop();
 
+  sc_close_vcd_trace_file(tracefile_fulladder);
+
   cout << "END OF SIMULATION" << endl;
+
+
   return 0;
 }

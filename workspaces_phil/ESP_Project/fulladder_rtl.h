@@ -32,6 +32,7 @@ SC_MODULE(halfadder) {
 		SC_METHOD(proc_halfadder);
 		sensitive << a_i << b_i;
 	}
+
 };
 
 void halfadder::proc_halfadder() {
@@ -54,6 +55,7 @@ SC_MODULE(orgate) {
 		SC_METHOD(proc_orgate);
 		sensitive << a_i << b_i;
 	}
+
 };
 
 void orgate::proc_orgate() {
@@ -80,8 +82,8 @@ SC_MODULE(fulladder) {
 	sc_signal<sc_logic> s_sum1, s_cy1, s_cy2;
 
 	SC_CTOR(fulladder) :
-        i_halfadder1("i_halfadder1"), i_halfadder2("i_halfadder2"), i_orgate(
-                        "i_orgate") {
+			i_halfadder1("i_halfadder1"), i_halfadder2("i_halfadder2"), i_orgate(
+					"i_orgate") {
 		// hook up half adder one.
 		i_halfadder1.a_i(a_i);
 		i_halfadder1.b_i(b_i);
@@ -109,15 +111,12 @@ SC_MODULE(fulladder) {
 SC_MODULE(fulladder_cascade) {
 	int i;
 
-	fa_rtl_lv_single_port port_a; // declaration style from SystemC 2.0 User's Guide, Page 74 (pdf 82)
-	fa_rtl_lv_single_port port_b;
+	sc_in<sc_logic> a_in[BITWIDTH]; // declaration style from SystemC 2.0 User's Guide, Page 74 (pdf 82)
+	sc_in<sc_logic> b_in[BITWIDTH];
 	sc_in<sc_logic> cy_in;
-	fa_rtl_lv_single_port port_out;
+	sc_out<sc_logic> sum_out[BITWIDTH];
 	sc_out<sc_logic> cy_out;
 
-	sc_signal<sc_logic> a_in[BITWIDTH]; // declaration style from SystemC 2.0 User's Guide, Page 74 (pdf 82)
-	sc_signal<sc_logic> b_in[BITWIDTH];
-	sc_signal<sc_logic> sum_out[BITWIDTH];
 	sc_signal<sc_logic> sig_cy_out[BITWIDTH];
 
 	// declaration style from
@@ -145,58 +144,8 @@ SC_MODULE(fulladder_cascade) {
 
 			i_fulladder[i]->sum_o(sum_out[i]);
 		}
-
-		SC_METHOD(receive_values);
-		  sensitive << port_a.fa_value_changed_event()
-		            << port_b.fa_value_changed_event()
-		            << cy_in.value_changed();
-		  dont_initialize();
-
-		SC_METHOD(send_values);
-                for (i = 0; i < (BITWIDTH); i++) {
-                  sensitive << sum_out[i].value_changed_event();
-                }
-		  dont_initialize();
 	}
-	void receive_values();
-	void send_values();
+
 };
-
-void fulladder_cascade::receive_values(){
-  int i = 0;
-
-  cout << "fulladder reads values" << endl;
-
-  for(i = 0;i < BITWIDTH; i++){
-      a_in[i].write(port_a->read()[i]); //update with next delta
-      b_in[i].write(port_b->read()[i]);
-  }
-
-}
-
-void fulladder_cascade::send_values(){
-  int i = 0;
-  sc_lv<BITWIDTH> temp;
-  static sc_lv<BITWIDTH> st_temp;
-
-/*  for(i = 0;i < BITWIDTH; i++){
-      update += sum_out[i].update_requested();
-  } */
-
-  for(i = 0;i < BITWIDTH; i++){
-      temp[i] = sum_out[i];
-  }
-
-  if(temp == st_temp){
-    port_out->write(temp);
-    cout << "fulladder written!!!\n" << endl;
-  }
-  else{
-      for(i = 0;i < BITWIDTH; i++){
-          st_temp[i] = temp[i];
-      }
-      next_trigger(1, SC_NS);
-  }
-}
 
 #endif /* FULLADDER_RTL_H_ */
