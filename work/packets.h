@@ -24,8 +24,8 @@ struct packet_fulladdr{
   , rtl_cy (0)
   {
     for (unsigned i=0;i<BITWIDTH;i++){
-        rtl_a[i] = 'X';
-        rtl_b[i] = 'X';
+        rtl_a[i] = SC_LOGIC_X;
+        rtl_b[i] = SC_LOGIC_X;
     }
   }
 
@@ -42,6 +42,7 @@ struct packet_fulladdr{
   , sw_cy  (_sw_cy)
   , rtl_cy (_rtl_cy)
   {}
+
 
   packet_fulladdr& operator =
       (const packet_fulladdr& rhs){
@@ -69,6 +70,8 @@ struct packet_fulladdr{
     }
     return(a);
   }
+
+private:
 
 };
 

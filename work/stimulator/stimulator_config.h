@@ -71,7 +71,7 @@ public:
 	{
 		SCV_CONSTRAINT (pInput->sw_a() < 100);
 		SCV_CONSTRAINT (pInput->sw_b() < 100);
-		//SCV_CONSTRAINT ( ( pInput->input_A() + pInput->input_B() ) == 193);
+		SCV_CONSTRAINT ( ( pInput->sw_a() + pInput->sw_b() ) == 150);
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
@@ -207,15 +207,15 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				10));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				100));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				100));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				500));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				50));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/

@@ -23,12 +23,13 @@ public:
 
   sc_out<sc_uint <BITWIDTH> > port_out;
   sc_out<bool> cy_out;
+  sc_port < handshake_generation_if > data_written;
 
   sc_signal<packet_fulladdr> rtl2sw_trans_monitor;
 
   SC_CTOR(monitor)
   {
-    SC_METHOD(monitor_method);
+	SC_METHOD(monitor_method);
       sensitive << port_in_a.fa_value_changed_event();
       dont_initialize();
 

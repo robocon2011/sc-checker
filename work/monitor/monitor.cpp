@@ -39,6 +39,7 @@ void monitor::monitor_method(){
 void monitor::monitor_debouncing_method(){
   packet_fulladdr packet_temp;
   static packet_fulladdr packet_temp_old;
+  static bool first_call = true;
 
   packet_temp = rtl2sw_trans_monitor.read();
 
@@ -46,7 +47,8 @@ void monitor::monitor_debouncing_method(){
       cout << "packet monitor: " << packet_temp << endl;
       port_out->write(packet_temp.sw_a);
       cy_out->write( cy_in.read()==1 ? true:false );
-
+      if (!first_call) data_written->notify(SC_ZERO_TIME);
+      else first_call = false;
   }
   else{
       packet_temp_old = packet_temp;

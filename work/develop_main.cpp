@@ -63,6 +63,9 @@ int sc_main (int argc, char *argv[])
   sc_signal <sc_uint<BITWIDTH> > signal_B_dut;
   sc_signal <bool> signal_carry_in_dut;
 
+  sc_signal <sc_uint<BITWIDTH> > signal_input_a_reference;
+  sc_signal <sc_uint<BITWIDTH> > signal_input_b_reference;
+  sc_signal <bool> signal_input_carry_reference;
   sc_signal <sc_uint<BITWIDTH> > signal_output_reference;
   sc_signal <bool> signal_carry_out_reference;
   sc_signal < double > signal_timeout_scoreboard;
@@ -81,6 +84,8 @@ int sc_main (int argc, char *argv[])
   sc_signal <sc_logic> cy_in, cy_out;
   sc_signal <sc_logic> a_in[BITWIDTH], b_in[BITWIDTH];
   sc_signal <sc_logic> a_out[BITWIDTH];
+
+  handshake monitor_data_written;
 
   i_testcontroller.next_sample_to_reference(signal_next_sample_to_reference);
   i_testcontroller.reference_received(signal_reference_received);
@@ -107,12 +112,18 @@ int sc_main (int argc, char *argv[])
   i_reference_model.timeout(signal_timeout);
   i_reference_model.testcase_id(signal_testcase_id);
   i_reference_model.testsequence_id(signal_testsequence_id);
+  i_reference_model.input_a_scoreboard(signal_input_a_reference);
+  i_reference_model.input_b_scoreboard(signal_input_b_reference);
+  i_reference_model.input_carry_scoreboard(signal_input_carry_reference);
   i_reference_model.output_scoreboard(signal_output_reference);
   i_reference_model.output_carry_scoreboard(signal_carry_out_reference);
   i_reference_model.timeout_scoreboard(signal_timeout_scoreboard);
   i_reference_model.testcase_id_scoreboard(signal_testcase_id_scoreboard);
   i_reference_model.testsequence_id_scoreboard(signal_testsequence_id_scoreboard);
 
+  i_scoreboard.input_a_reference(signal_input_a_reference);
+  i_scoreboard.input_b_reference(signal_input_b_reference);
+  i_scoreboard.input_carry_reference(signal_input_carry_reference);
   i_scoreboard.output_reference(signal_output_reference);
   i_scoreboard.output_carry_reference(signal_carry_out_reference);
   i_scoreboard.timeout_reference(signal_timeout_scoreboard);
@@ -122,6 +133,7 @@ int sc_main (int argc, char *argv[])
   i_scoreboard.output_carry_monitor(signal_carry_out);
   i_scoreboard.reference_received(signal_reference_received);
   i_scoreboard.testcase_finished(signal_testcase_finished);
+  i_scoreboard.data_written(monitor_data_written);
 
   dri_p_i.port_in(signal_A_dut);
   dri_p_i.port_in(signal_B_dut);
@@ -149,6 +161,7 @@ int sc_main (int argc, char *argv[])
 
   mon_p_i.port_out(signal_output);
   mon_p_i.cy_out(signal_carry_out);
+  mon_p_i.data_written(monitor_data_written);
 
   /* transaction recording */
   sc_trace(tracefile_fulladder, signal_A_dut, "driver_in_a");

@@ -9,5 +9,6 @@
 #include <scv.h>
 #include "packets.h"
 #include "sp_ports.h"
+#include "sp_channels.h"
 
 #endif
