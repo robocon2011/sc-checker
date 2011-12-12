@@ -149,39 +149,25 @@ class packet_fulladdr_constraint_t_06
 	: public packet_fulladdr_constraint_base_t
 {
 public:
-	scv_bag < sc_uint<BITWIDTH> > distribution_input_A;
-	scv_bag < sc_uint<BITWIDTH> > distribution_input_B;
-	scv_smart_ptr < sc_uint<BITWIDTH> > helpA;
-	scv_smart_ptr < sc_uint<BITWIDTH> > helpB;
+	typedef pair< sc_uint<BITWIDTH>, sc_uint<BITWIDTH> > data_range;
+	scv_bag < data_range > distribution_input_A;
+	scv_bag < data_range > distribution_input_B;
 
-	//SCV_CONSTRAINT_CTOR(dutInput_constraint_t_06)
-	packet_fulladdr_constraint_t_06(char *arg)
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_06)
 	{
-		distribution_input_A.push(10000, 20);
-		distribution_input_A.push(100000, 20);
-		distribution_input_A.push(1000000, 60);
-		distribution_input_B.push(10000, 20);
-		distribution_input_B.push(100000, 20);
-		distribution_input_B.push(1000000, 60);
+		distribution_input_A.add( data_range (1000, 1000000),		1000);
+		distribution_input_A.add( data_range (2000, 5000),			500);
+		distribution_input_A.add( data_range (30000, 3000000),		500);
+		distribution_input_B.add( data_range (1000, 1000000),		1000);
+		distribution_input_B.add( data_range (5000, 20000),			500);
+		distribution_input_B.add( data_range (3000000, 5000000),	500);
 
-		pInput->sw_a.disable_randomization();	//set_mode(distribution_input_A);
-		pInput->sw_b.disable_randomization();	//set_mode(distribution_input_B);
+		pInput->sw_a.set_mode(distribution_input_A);
+		pInput->sw_b.set_mode(distribution_input_B);
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		helpA->set_mode(distribution_input_A);
-		helpB->set_mode(distribution_input_B);
-
 		timeout = sc_time(10, SC_NS);
-	}
-
-	void next ()
-	{
-		helpA->next();
-		helpB->next();
-
-		pInput->sw_cy.write(*(helpA->get_instance()));
-		pInput->sw_cy.write(*(helpB->get_instance()));
 	}
 };
 
@@ -209,15 +195,15 @@ public:
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
 		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				1000));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}
@@ -238,7 +224,6 @@ SC_MODULE (stimulator_m)
 {
 public:
 	/*	user defined ports for DUT - connected to Driver-module	*/
-	// TODO: selbst definiertes Port für dutInput_t schreiben!
 	fulladr_port port_inputs_reference;
 	sc_inout < bool > carry_in_reference;
 	sc_inout < double > timeout;
@@ -293,7 +278,6 @@ public:
 		s_input_A = p_values->pInput->sw_a;
 		s_input_B = p_values->pInput->sw_b;
 		s_carry_in = p_values->pInput->sw_cy;
-
 
 		port_inputs_reference[0]->write(s_input_A);
 		port_inputs_reference[1]->write(s_input_B);

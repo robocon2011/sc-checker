@@ -110,6 +110,7 @@ void stimulator_m::stimulator_thread()
 
 			/*	call SCV random generator function next() from currently loaded testsequence*/
 			p_help->p_Sequence->p_testvalues->next();
+
 			/*	wait statement for internal SystemC update-process	*/
 			wait(SC_ZERO_TIME);
 			/*	write generated values to ports for reference model indirectly by user-defined callback function*/

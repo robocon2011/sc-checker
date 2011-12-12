@@ -27,7 +27,10 @@ public:
         SC_CTOR(reference_model)
         {
                 SC_METHOD(reference_method);
-                sensitive << input_A_stimulator.value_changed() << input_B_stimulator.value_changed();
+                sensitive	<< input_A_stimulator.value_changed()
+                			<< input_B_stimulator.value_changed()
+                			<< carry_in_stimulator.value_changed()
+                			<< testcase_id.value_changed();
         }
 
         void reference_method ()

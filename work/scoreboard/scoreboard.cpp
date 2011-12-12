@@ -110,8 +110,6 @@ void scoreboard_m::write_to_file()
 	outputFile.open("scoreboard.txt", fstream::ate | fstream::app);
 	if (outputFile.is_open())
 	{
-		cout << "file successfully opened" << endl;
-
 		outputFile << testsequence_id 			<< "; " <<
 				testcase_id 					<< "; "	<<
 				result							<< "; " <<
