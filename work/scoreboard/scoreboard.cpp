@@ -32,7 +32,8 @@ scoreboard_m::scoreboard_m(sc_module_name nm)
 	SC_METHOD (compare_method);
 		sensitive 	<< data_written
 					<< output_monitor.value_changed()
-					<< output_carry_monitor.value_changed();
+					<< output_carry_monitor.value_changed()
+					<< event_timeout;
 	dont_initialize();
 
 	outputFile.open("scoreboard.txt");
@@ -72,11 +73,14 @@ void scoreboard_m::store_reference_method()
 	testcase_finished.write(false);
 	reference_received.write(true);
 
+	event_timeout.notify(timeout_buffer);
 	start_time_buffer = sc_time_stamp();
 }
 
 void scoreboard_m::compare_method()
 {
+	event_timeout.cancel();
+
 	output_monitor_buffer = output_monitor.read();
 	output_carry_monitor_buffer = output_carry_monitor.read();
 	end_time_buffer = sc_time_stamp();
@@ -90,15 +94,20 @@ void scoreboard_m::compare_method()
 		}
 		else
 		{
-			result = eTIMEOUT;
+			result = eTIMEOUT_OK;
 		}
 	}
-	else
+	else if ( (end_time_buffer - start_time_buffer) < timeout_buffer )
 	{
 		result = eMISMATCH;
 	}
+	else result = eTIMEOUT_MISMATCH;
 
 	write_to_file();
+
+	input_a_reference_old = input_a_reference_buffer;
+	input_b_reference_old = input_b_reference_buffer;
+	input_carry_reference_old = input_carry_reference_buffer;
 
 	reference_received.write(false);
 	testcase_finished.write(true);
@@ -110,6 +119,12 @@ void scoreboard_m::write_to_file()
 	outputFile.open("scoreboard.txt", fstream::ate | fstream::app);
 	if (outputFile.is_open())
 	{
+		if (input_a_reference_buffer == input_a_reference_old &&
+				input_b_reference_buffer == input_b_reference_old &&
+				input_carry_reference_buffer == input_carry_reference_old)
+		{
+			outputFile << "---;---;---;no input change;no input change;no input change;---;---;---;---;---;---;---;" << endl;
+		}
 		outputFile << testsequence_id 			<< "; " <<
 				testcase_id 					<< "; "	<<
 				result							<< "; " <<

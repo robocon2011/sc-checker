@@ -29,7 +29,7 @@ using namespace sc_core;
 
 
 class packet_fulladdr_constraint_base_t :
-	public scv_constraint_base
+	virtual public scv_constraint_base
 {
 public:
 	scv_smart_ptr<packet_fulladdr> pInput;

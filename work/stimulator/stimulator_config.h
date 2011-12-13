@@ -37,6 +37,7 @@ void _scv_pop_constraint();	/*	patch	*/
 #include "../global.h"
 #include "stimulator.h"
 
+#define GLOBAL_TIMEOUT (sc_time(33333, SC_FS))
 
 SCV_EXTENSIONS(packet_fulladdr) {
 public:
@@ -75,7 +76,7 @@ public:
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		timeout = sc_time(10, SC_NS);
+		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
@@ -90,7 +91,7 @@ class packet_fulladdr_constraint_t_02
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		timeout = sc_time(10, SC_NS);
+		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
@@ -104,7 +105,7 @@ class packet_fulladdr_constraint_t_03
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		timeout = sc_time(10, SC_NS);
+		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
@@ -120,7 +121,7 @@ class packet_fulladdr_constraint_t_04
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		timeout = sc_time(10, SC_NS);
+		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
@@ -141,7 +142,7 @@ public:
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		timeout = sc_time(10, SC_NS);
+		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
@@ -155,10 +156,10 @@ public:
 
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_06)
 	{
-		distribution_input_A.add( data_range (1000, 1000000),		1000);
-		distribution_input_A.add( data_range (2000, 5000),			500);
+		distribution_input_A.add( data_range (1000, 2000),			500);
+		distribution_input_A.add( data_range (2000, 10000),			500);
 		distribution_input_A.add( data_range (30000, 3000000),		500);
-		distribution_input_B.add( data_range (1000, 1000000),		1000);
+		distribution_input_B.add( data_range (2000, 5000),			500);
 		distribution_input_B.add( data_range (5000, 20000),			500);
 		distribution_input_B.add( data_range (3000000, 5000000),	500);
 
@@ -167,7 +168,35 @@ public:
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
-		timeout = sc_time(10, SC_NS);
+		timeout = GLOBAL_TIMEOUT;
+	}
+};
+
+class packet_fulladdr_constraint_t_07
+	: public packet_fulladdr_constraint_base_t
+{
+public:
+	typedef sc_uint<BITWIDTH> data_single;
+	scv_bag < data_single > distribution_input_A;
+	scv_bag < data_single > distribution_input_B;
+
+	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_07)
+	{
+		distribution_input_A.add( (data_single) 1000, 20);
+		distribution_input_A.add( (data_single) 5000, 40);
+		distribution_input_A.add( (data_single) 5555, 40);
+		distribution_input_A.add( (data_single) 6666, 40);
+		distribution_input_B.add( (data_single) 1000, 20);
+		distribution_input_B.add( (data_single) 4444, 40);
+		distribution_input_B.add( (data_single) 7777, 40);
+		distribution_input_B.add( (data_single) 9999, 40);
+
+		pInput->sw_a.set_mode(distribution_input_A);
+		pInput->sw_b.set_mode(distribution_input_B);
+		pInput->sw_cy.disable_randomization();
+		pInput->sw_cy.write(false);
+
+		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
@@ -195,15 +224,17 @@ public:
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
 		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				200));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				200));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				200));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				200));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				1000));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				100));
+		/*			|															|								|						*/
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_07 > 	(p_testsequences, 				100));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}

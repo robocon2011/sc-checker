@@ -13,15 +13,6 @@
 
 #include "global.h"
 
-//#ifndef PACKETS_
-//  #include "packets/packets.h"
-//#endif
-//#ifndef SP_PORTS_
-//  #include "ports/sp_ports.h"
-//#endif
-
-
-
 int sc_main (int argc, char *argv[])
 {
   scv_startup();
@@ -31,7 +22,7 @@ int sc_main (int argc, char *argv[])
   scv_tr_db::set_default_db(&db); */
 
   int i;
-  //sc_set_time_resolution(1, SC_NS);
+  sc_set_time_resolution(1, SC_FS);
 
   /* create tracefile */
   sc_trace_file* tracefile_fulladder;

@@ -15,7 +15,7 @@
 #include "scoreboard.h"
 #include "../global.h"
 
-enum compareResult { eOK = 0, eMISMATCH, eTIMEOUT};
+enum compareResult { eOK = 0, eMISMATCH, eTIMEOUT_OK, eTIMEOUT_MISMATCH};
 
 
 SC_MODULE (scoreboard_m)
@@ -48,12 +48,13 @@ public:
 	void write_to_file ();
 
 private:
-	sc_uint <BITWIDTH> input_a_reference_buffer;
-	sc_uint <BITWIDTH> input_b_reference_buffer;
-	bool input_carry_reference_buffer;
+	sc_uint <BITWIDTH> input_a_reference_buffer, input_a_reference_old;
+	sc_uint <BITWIDTH> input_b_reference_buffer, input_b_reference_old;
+	bool input_carry_reference_buffer, input_carry_reference_old;
 	sc_uint <BITWIDTH> output_reference_buffer;
 	bool output_carry_reference_buffer;
 	sc_time timeout_buffer;
+	sc_event event_timeout;
 
 	sc_uint <BITWIDTH> output_monitor_buffer;
 	bool output_carry_monitor_buffer;
