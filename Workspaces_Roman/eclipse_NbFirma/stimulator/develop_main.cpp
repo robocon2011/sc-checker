@@ -7,9 +7,7 @@
 
 #include <systemc>
 #include <scv.h>
-#include "config.h"
 #include "stimulator/stimulator_config.h"
-#include "driver/driver.h"
 //#include "dut/fulladder/fulladder_rtl.h"
 
 SC_MODULE (tb_stimulator)
