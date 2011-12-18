@@ -41,7 +41,8 @@ public:
     mon_out_gen("mon_output",output_stream,"O_monitor")
   {
     SC_METHOD(monitor_method);
-      sensitive << port_in_a.fa_value_changed_event();
+      sensitive << port_in_a.fa_value_changed_event()
+                << cy_in;
       dont_initialize();
 
     SC_METHOD(monitor_debouncing_method);
