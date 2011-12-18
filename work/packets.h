@@ -4,9 +4,14 @@
 #include <systemc>
 #include <scv.h>
 #include <string>
+#include <bitset>
 using std::string;
 
 #include "global.h"
+
+#ifndef BITWIDTH
+#define BITWIDTH 32
+#endif
 
 struct packet_fulladdr{
   sc_uint <BITWIDTH> sw_a;
@@ -17,6 +22,8 @@ struct packet_fulladdr{
   sc_logic rtl_b[BITWIDTH];
   sc_logic rtl_cy;
 
+  bitset<BITWIDTH> b_set[1];
+
   packet_fulladdr()
   : sw_a (0)
   , sw_b (0)
@@ -26,6 +33,8 @@ struct packet_fulladdr{
     for (unsigned i=0;i<BITWIDTH;i++){
         rtl_a[i] = SC_LOGIC_X;
         rtl_b[i] = SC_LOGIC_X;
+        b_set[0] = (0);
+        b_set[1] = (0);
     }
   }
 
@@ -33,9 +42,7 @@ struct packet_fulladdr{
       sc_uint<BITWIDTH> _sw_a,
       sc_uint<BITWIDTH> _sw_b,
       bool _sw_cy,
-      sc_logic _rtl_cy,
-      sc_logic _rtl_a[BITWIDTH],
-      sc_logic _rtl_b[BITWIDTH]
+      sc_logic _rtl_cy
       )
   : sw_a   (_sw_a)
   , sw_b   (_sw_b)
@@ -53,6 +60,8 @@ struct packet_fulladdr{
    for(unsigned i=0;i<BITWIDTH;i++){
     rtl_a[i] = rhs.rtl_a[i];
     rtl_b[i] = rhs.rtl_b[i];
+    b_set[0][i] = rhs.b_set[0][i];
+    b_set[1][i] = rhs.b_set[1][i];
     }
     return *this;
   }
@@ -67,6 +76,8 @@ struct packet_fulladdr{
     for(unsigned i=0; i<BITWIDTH;i++){
         a &= (rtl_a[i] == rhs.rtl_a[i]) ? 1 : 0;
         a &= (rtl_b[i] == rhs.rtl_b[i]) ? 1 : 0;
+        a &= (b_set[0][i] == rhs.b_set[0][i]) ? 1 : 0;
+        a &= (b_set[1][i] == rhs.b_set[1][i]) ? 1 : 0;
     }
     return(a);
   }

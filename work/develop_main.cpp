@@ -15,14 +15,13 @@
 
 int sc_main (int argc, char *argv[])
 {
+  int i;
+
   scv_startup();
 
-  /*scv_tr_text_init();
+  scv_tr_text_init();
   scv_tr_db db("ESP_DB");
-  scv_tr_db::set_default_db(&db); */
-
-  int i;
-  sc_set_time_resolution(1, SC_FS);
+  scv_tr_db::set_default_db(&db);
 
   /* create tracefile */
   sc_trace_file* tracefile_fulladder;
@@ -144,7 +143,6 @@ int sc_main (int argc, char *argv[])
     i_fulladder.a_in[i](a_in[i]);
     i_fulladder.b_in[i](b_in[i]);
     i_fulladder.sum_out[i](a_out[i]);
-
   }
 
   i_fulladder.cy_out(cy_out);
@@ -155,13 +153,12 @@ int sc_main (int argc, char *argv[])
   mon_p_i.data_written(monitor_data_written);
 
   /* transaction recording */
-  sc_trace(tracefile_fulladder, signal_A_dut, "driver_in_a");
-  sc_trace(tracefile_fulladder, signal_B_dut, "driver_in_b");
-  sc_trace(tracefile_fulladder, a_in, "DUT_in_a");
-  sc_trace(tracefile_fulladder, b_in, "DUT_in_b");
+  sc_trace(tracefile_fulladder, signal_A_dut, "DUT_A_in");
+  sc_trace(tracefile_fulladder, signal_B_dut, "DUT_B_in");
+  sc_trace(tracefile_fulladder, signal_carry_in_dut, "DUT_CY_in");
 
-  sc_trace(tracefile_fulladder, a_out, "DUT_output");
-  sc_trace(tracefile_fulladder, signal_carry_in_dut, "driver_carry_in");
+  sc_trace(tracefile_fulladder, signal_output, "DUT_output");
+  sc_trace(tracefile_fulladder, signal_carry_out, "DUT_CY_out");
 
 
   cout << "START OF SIMULATION" << endl;
