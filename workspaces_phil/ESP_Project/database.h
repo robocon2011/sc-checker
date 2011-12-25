@@ -11,7 +11,7 @@
 #ifndef DATABASE_H
 #define DATABASE_
 
-#include "config.h"
+//#include "config.h"
 #include <scv.h>
 #include <systemc.h>
 
