@@ -107,17 +107,15 @@ void stimulator_m::stimulator_thread()
 		{
 			/*	block loop until positive transition of boolean control signal	*/
 			wait(next_sample_to_reference.posedge_event());
-			cout << this->name() << ": " << next_sample_to_reference << endl;
 
 			/*	call SCV random generator function next() from currently loaded testsequence*/
 			p_help->p_Sequence->p_testvalues->next();
+
 			/*	wait statement for internal SystemC update-process	*/
 			wait(SC_ZERO_TIME);
 			/*	write generated values to ports for reference model indirectly by user-defined callback function*/
 			write_values_to_reference(p_help->p_Sequence->p_testvalues, cnt_testcases, p_help->p_Sequence->testsequence_id);
-			cout << this->name() << ": " << p_help->p_Sequence->p_testvalues->pInput->input_A << ", "
-										<< p_help->p_Sequence->p_testvalues->pInput->input_B
-										<< endl;
+			cout << this->name() << ": seq: " << p_help->p_Sequence->testsequence_id << ", case: " << cnt_testcases << ", mode: " << p_help->p_Sequence->p_testvalues->pInput->sw_a.get_mode() << endl;
 
 			/*	block process until positive transition of control signal	*/
 			wait(next_sample_to_dut.posedge_event());
@@ -125,9 +123,6 @@ void stimulator_m::stimulator_thread()
 			/*	write generated values to DUT ports indirectly by user-defined callback function*/
 			write_values_to_dut(p_help->p_Sequence->p_testvalues);
 			/*	wait statement for internal SystemC update-process	*/
-			cout << this->name() << ": " << p_help->p_Sequence->p_testvalues->pInput->input_A << ", "
-										<< p_help->p_Sequence->p_testvalues->pInput->input_B
-										<< endl;
 			wait(SC_ZERO_TIME);
 		}
 

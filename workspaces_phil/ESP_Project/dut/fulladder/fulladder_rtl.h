@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 // define for fulladder cascade bitwidth in case of not being defined globally for project
-#include "global.h"
+//#include "../../global.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -23,14 +23,15 @@
 SC_MODULE(halfadder) {
 	sc_in<sc_logic> a_i;
 	sc_in<sc_logic> b_i;
-	sc_out<sc_logic> sum_o;
-	sc_out<sc_logic> cy_o;
+	sc_inout<sc_logic> sum_o;
+	sc_inout<sc_logic> cy_o;
 
 	void proc_halfadder();
 
 	SC_CTOR(halfadder) {
 		SC_METHOD(proc_halfadder);
 		sensitive << a_i << b_i;
+		dont_initialize();
 	}
 
 };
@@ -47,13 +48,14 @@ void halfadder::proc_halfadder() {
 SC_MODULE(orgate) {
 	sc_in<sc_logic> a_i;
 	sc_in<sc_logic> b_i;
-	sc_out<sc_logic> or_o;
+	sc_inout<sc_logic> or_o;
 
 	void proc_orgate();
 
 	SC_CTOR(orgate) {
 		SC_METHOD(proc_orgate);
 		sensitive << a_i << b_i;
+		dont_initialize();
 	}
 
 };
@@ -72,8 +74,8 @@ SC_MODULE(fulladder) {
 	sc_in<sc_logic> a_i;
 	sc_in<sc_logic> b_i;
 	sc_in<sc_logic> cy_i;
-	sc_out<sc_logic> sum_o;
-	sc_out<sc_logic> cy_o;
+	sc_inout<sc_logic> sum_o;
+	sc_inout<sc_logic> cy_o;
 
 	halfadder i_halfadder1;
 	halfadder i_halfadder2;
@@ -82,8 +84,10 @@ SC_MODULE(fulladder) {
 	sc_signal<sc_logic> s_sum1, s_cy1, s_cy2;
 
 	SC_CTOR(fulladder) :
-			i_halfadder1("i_halfadder1"), i_halfadder2("i_halfadder2"), i_orgate(
-					"i_orgate") {
+			i_halfadder1("i_halfadder1"),
+			i_halfadder2("i_halfadder2"),
+			i_orgate("i_orgate")
+	{
 		// hook up half adder one.
 		i_halfadder1.a_i(a_i);
 		i_halfadder1.b_i(b_i);
@@ -114,8 +118,8 @@ SC_MODULE(fulladder_cascade) {
 	sc_in<sc_logic> a_in[BITWIDTH]; // declaration style from SystemC 2.0 User's Guide, Page 74 (pdf 82)
 	sc_in<sc_logic> b_in[BITWIDTH];
 	sc_in<sc_logic> cy_in;
-	sc_out<sc_logic> sum_out[BITWIDTH];
-	sc_out<sc_logic> cy_out;
+	sc_inout<sc_logic> sum_out[BITWIDTH];
+	sc_inout<sc_logic> cy_out;
 
 	sc_signal<sc_logic> sig_cy_out[BITWIDTH];
 

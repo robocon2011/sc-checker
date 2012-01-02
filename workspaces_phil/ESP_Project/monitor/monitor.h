@@ -9,18 +9,17 @@
 /******************************************************************************/
 
 #ifndef MONITOR_H
-#define MONITOR_
+#define MONITOR_H
 
-#ifndef SP_PORTS_
-  #include "sp_ports.h"
+#include "../global.h"
+#include <bitset>
+
+#ifndef BITWIDTH
+#define BITWIDTH 32
 #endif
-#ifndef PACKETS_
-  #include "packets.h"
-#endif
 
-#include "global.h"
 
-SC_MODULE(monitor)
+SC_MODULE (monitor)
 {
 public:
 
@@ -30,13 +29,25 @@ public:
 
   sc_out<sc_uint <BITWIDTH> > port_out;
   sc_out<bool> cy_out;
+  sc_port < handshake_generation_if > data_written;
 
   sc_signal<packet_fulladdr> rtl2sw_trans_monitor;
 
+  /*transaction streams */
+  scv_tr_stream input_stream;
+  scv_tr_stream output_stream;
+  scv_tr_generator<sc_logic, sc_logic> mon_in_gen;
+  scv_tr_generator<sc_uint<BITWIDTH>, bool> mon_out_gen;
+
   SC_CTOR(monitor)
+  : input_stream("input_stream", "monitor"),
+    output_stream("output_stream", "monitor"),
+    mon_in_gen("mon_input", input_stream, "I_monitor"),
+    mon_out_gen("mon_output",output_stream,"O_monitor")
   {
     SC_METHOD(monitor_method);
-      sensitive << port_in_a.fa_value_changed_event();
+      sensitive << port_in_a.fa_value_changed_event()
+                << cy_in;
       dont_initialize();
 
     SC_METHOD(monitor_debouncing_method);

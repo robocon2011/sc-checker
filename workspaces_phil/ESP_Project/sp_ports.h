@@ -1,8 +1,12 @@
 #ifndef SP_PORTS_H
-#define SP_PORTS_
-#ifndef PACKETS_
-  #include "packets.h"
-#endif
+#define SP_PORTS_H
+
+//#ifndef PACKETS_H
+//  #include "../packets/packets.h"
+//#endif
+
+#include <systemc>
+#include <scv.h>
 
 #include "global.h"
 
@@ -54,5 +58,23 @@ public:
           &if_type::value_changed_event);
     }
   };
+
+
+
+/******************************************************************/
+  class uart_data_port
+    : public sc_port<sc_signal_inout_if<sc_logic>
+      ,DATABITS
+      ,SC_ONE_OR_MORE_BOUND
+      > {
+  public:
+      typedef sc_signal_inout_if<sc_logic> if_type;
+
+      sc_event_finder& fa_value_changed_event() const{
+        return *new sc_event_finder_t <if_type> (
+            *this,
+            &if_type::value_changed_event);
+      }
+    };
 
 #endif

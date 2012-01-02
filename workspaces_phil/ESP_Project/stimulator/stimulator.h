@@ -15,6 +15,7 @@
  *  History:	2011/11/13: first executable version implemented
  *  			2011/12/03:	testsequence_id added to class testsequence_general_c
  *  						timeout added to dutInput_constraint_base_t
+ *  			2011/12/10:	global struct packet_fulladdr added, dutInput_t removed
  *
  */
 
@@ -24,29 +25,16 @@
 #include <systemc>
 using namespace sc_core;
 #include "scv.h"
-#include "global.h"
+#include "../global.h"
 
 
-/*
- * 	structname:		dutInput_t
- *	purpose:		forward declaration of user-specific source data
- *					see stimlator_config.h
- */
-struct dutInput_t;
-
-/*
- *	classname:	dutInput_constraint_base_t
- *	purpose:	base constraint class for further constraint class definitions
- *
- */
-class dutInput_constraint_base_t :
-	public scv_constraint_base
+class packet_fulladdr_constraint_base_t :
+	virtual public scv_constraint_base
 {
 public:
-	scv_smart_ptr<dutInput_t> pInput;
+	scv_smart_ptr<packet_fulladdr> pInput;
 	sc_time timeout;
 };
-
 
 /*
  *	classname:	testsequence_general_c
@@ -57,7 +45,7 @@ public:
 class testsequence_general_c
 {
 public:
-	dutInput_constraint_base_t *p_testvalues;
+	packet_fulladdr_constraint_base_t *p_testvalues;
 	unsigned int no_of_testcases;
 	unsigned int testsequence_id;
 

@@ -1,6 +1,6 @@
 /******************************************************************************/
 /*                                                                            */
-/* Filename:   database.cpp                                                   */
+/* Filename:   database.h                                                     */
 /*                                                                            */
 /* Author:     Philipp Maroschek                                              */
 /*                                                                            */
@@ -8,28 +8,30 @@
 /*                                                                            */
 /******************************************************************************/
 
-
-#include "database.h"
+#ifndef DATABASE_H
+#define DATABASE_H
 
 #include <scv.h>
 #include <systemc.h>
 
+#include <iostream>
+#include <string>
 
+#include "../global.h"
+//using namespace std;
 
-SC_HAS_PROCESS(database);
+SC_MODULE(database)
+{
+  // declaration of variables
+  int ID;
 
-database::database(sc_module_name nm)
-  : sc_module(nm){
-  SC_THREAD(database_thread);
-  }
+  database(sc_module_name nm);
 
-void database::database_thread(){
-  const char* name;
+  // process declarations
+  void database_thread();
 
-  const_cast<char*>(name = "DB_" + ((char) ID));
+};
 
-  scv_tr_db db(name);
-  scv_tr_db::set_default_db(&db);
-  cout << "\nSet " << name << "to default database" << endl;
-}
+#endif
+
 

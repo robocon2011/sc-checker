@@ -1,8 +1,8 @@
 
-#include "global.h"
 
 #include <systemc.h>
 #include <scv.h>
+#include "../global.h"
 
 
 SC_MODULE (reference_model)
@@ -15,6 +15,9 @@ public:
         sc_in < unsigned int > testsequence_id;
         sc_in < unsigned int > testcase_id;
 
+        sc_inout < sc_uint <BITWIDTH> > input_a_scoreboard;
+        sc_inout < sc_uint <BITWIDTH> > input_b_scoreboard;
+        sc_inout < bool > input_carry_scoreboard;
         sc_inout < sc_uint <BITWIDTH> > output_scoreboard;
         sc_inout < bool > output_carry_scoreboard;
         sc_inout < double > timeout_scoreboard;
@@ -24,7 +27,10 @@ public:
         SC_CTOR(reference_model)
         {
                 SC_METHOD(reference_method);
-                sensitive << input_A_stimulator.value_changed() << input_B_stimulator.value_changed();
+                sensitive	<< input_A_stimulator.value_changed()
+                			<< input_B_stimulator.value_changed()
+                			<< carry_in_stimulator.value_changed()
+                			<< testcase_id.value_changed();
         }
 
         void reference_method ()
@@ -36,6 +42,9 @@ public:
                 output = input_A + input_B + (carry_in ? 1 : 0) ;
                 carry_out = ( output < input_A ) || ( output < input_B) ;
 
+                input_a_scoreboard.write(input_A);
+                input_b_scoreboard.write(input_B);
+                input_carry_scoreboard.write(carry_in);
                 output_scoreboard.write(output);
                 output_carry_scoreboard.write(carry_out);
                 timeout_scoreboard.write(timeout);
