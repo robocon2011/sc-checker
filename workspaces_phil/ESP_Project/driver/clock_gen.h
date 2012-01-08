@@ -16,19 +16,24 @@
 #include <scv.h>
 
 SC_MODULE(clock_gen){
+
   sc_export<sc_signal_inout_if<bool> > clkout;
-  sc_port<sc_signal_inout_if<bool> >  clkdiv_half;
+  sc_out<sc_logic> clkout_log;
 
   sc_clock clk;
 
   SC_CTOR(clock_gen)
-  : clk("clk", sc_time(10, SC_NS)){
+  : clk("clk", sc_time(100, SC_PS))
+  {
     SC_METHOD(clk_method);
-    sensitive << clk.posedge_event();
+    sensitive << clk.posedge_event()
+              << clk.negedge_event();
     clkout(clk);
   }
   void clk_method(){
-    clkdiv_half->write(!clkdiv_half->read());
+    sc_logic dummy;
+    dummy = ((clkout->read() == true) ? '1' : '0');
+    clkout_log->write(dummy);
   }
 };
 

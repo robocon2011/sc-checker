@@ -10,10 +10,22 @@
 
 #include "uart.h"
 
-void usart::receive_data(){
+void uart::receive_data(){
+
+  cout << "UART: receive_data-process" << endl;
+
+  /* store inputs to local values */
+  sc_logic s_reset, s_rx_in, s_uld_data, s_rx_enable;
+
+    s_reset = '0';
+    //s_reset = reset.read();
+
+  s_rx_in = rx_in.read();
+  s_uld_data = uld_rx_data.read();
+  s_rx_enable = rx_enable.read();
 
   /* asynchronous reset */
-  if(reset == '1'){
+  if(s_reset == '1'){
       rx_d1 = '1';
       rx_d2 = '1';
       rx_is_empty = '1';
@@ -29,10 +41,10 @@ void usart::receive_data(){
   else{
     /* synchr. the asynchr. signal */
     rx_d2 = rx_d1;
-    rx_d1 = rx_in;
+    rx_d1 = s_rx_in;
 
     /* unload the rx data */
-    if(uld_rx_data == '1'){
+    if(s_uld_data == '1'){
         for(unsigned i = 0; i < DATABITS;i++){
             rx_loc_data[i] = '0';
         }
@@ -40,7 +52,7 @@ void usart::receive_data(){
     }
 
     /* receive data when rx is enabled */
-    if(rx_enable == '1'){
+    if((s_rx_enable == '1') && (rxclk.read() == '1')){
 
         /* check if start of frame received */
         if((rx_busy == '0') && (rx_d2 == '0')){
@@ -89,17 +101,26 @@ void usart::receive_data(){
             }
         }
     }
-    if(rx_enable == '0') rx_busy = '0';
-    rx_empty = rx_is_empty;
-    for(unsigned i = 0; i < DATABITS; i++) rx_data[i] = rx_loc_data[i];
+    if(s_rx_enable == '0') rx_busy = '0';
+    rx_empty.write(rx_is_empty);
+    for(unsigned i = 0; i < DATABITS; i++) rx_data[i].write(rx_loc_data[i]);
   }
 
 }
 
-void usart::send_data(){
+void uart::send_data(){
+  /* store inputs to local values */
+  sc_logic s_reset, s_ld_data, s_tx_enable;
+
+  cout << "UART: send_data-process" << endl;
+
+  s_reset = reset.read();
+
+  s_ld_data = ld_tx_data.read();
+  s_tx_enable = tx_enable.read();
 
   /* asynchronous reset */
-  if(reset == '1'){
+  if(s_reset == '1'){
       for(unsigned i = 0; i < DATABITS; i++){
         tx_loc_data[i] = '0';
       }
@@ -111,25 +132,25 @@ void usart::send_data(){
   else{
 
       /* load data */
-      if(ld_tx_data == '1'){
+      if(s_ld_data == '1'){
 
           /* check for overrun */
           if(tx_is_empty == '0'){
               tx_over_run = '0';
           }
           else{
-              for(unsigned i = 0; i < DATABITS; i++) tx_loc_data[i] = tx_data[i];
+              for(unsigned i = 0; i < DATABITS; i++) tx_loc_data[i] = tx_data[i].read();
               tx_is_empty = '0';
           }
       }
 
       /* start transmit frame */
-      if((tx_enable == '1') && (tx_is_empty == '0')){
+      if((s_tx_enable == '1') && (tx_is_empty == '0')){
           if(tx_cnt == 0){
               tx_loc_out = '0';
           }
           else if ((tx_cnt > 0) && (tx_cnt < 9)){
-              tx_out = tx_data[tx_cnt-1];
+              tx_loc_out = tx_loc_data[tx_cnt-1];
           }
           else if (tx_cnt == (DATABITS + 1)){
               tx_loc_out = '1';
@@ -138,10 +159,10 @@ void usart::send_data(){
           }
           tx_cnt++;
       }
-      else if (tx_enable == '0'){
+      else if (s_tx_enable == '0'){
           tx_cnt = 0;
       }
   }
-  tx_empty = tx_is_empty;
-  tx_out = tx_loc_out;
+  tx_empty.write(tx_is_empty);
+  tx_out.write(tx_loc_out);
 }

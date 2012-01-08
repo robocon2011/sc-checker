@@ -85,6 +85,9 @@ void stimulator_m::stimulator_thread()
 {
 	testseq_collectionentry_c *p_help;	/*	helper pointer for switching between sequences	*/
 	unsigned int cnt_testcases;			/*	counter variable	*/
+	bool first_call;
+
+	first_call = true;
 
 	/*	init pointer with front instance of testsequences	*/
 	p_help = testsequences.p_priorEntry;
@@ -106,7 +109,7 @@ void stimulator_m::stimulator_thread()
 		for (cnt_testcases = 0; cnt_testcases < p_help->p_Sequence->no_of_testcases; cnt_testcases++)
 		{
 			/*	block loop until positive transition of boolean control signal	*/
-			wait(next_sample_to_reference.posedge_event());
+			//wait(next_sample_to_reference.posedge_event());
 
 			/*	call SCV random generator function next() from currently loaded testsequence*/
 			p_help->p_Sequence->p_testvalues->next();
@@ -114,16 +117,19 @@ void stimulator_m::stimulator_thread()
 			/*	wait statement for internal SystemC update-process	*/
 			wait(SC_ZERO_TIME);
 			/*	write generated values to ports for reference model indirectly by user-defined callback function*/
-			write_values_to_reference(p_help->p_Sequence->p_testvalues, cnt_testcases, p_help->p_Sequence->testsequence_id);
-			cout << this->name() << ": seq: " << p_help->p_Sequence->testsequence_id << ", case: " << cnt_testcases << ", mode: " << p_help->p_Sequence->p_testvalues->pInput->sw_a.get_mode() << endl;
-
+			//write_values_to_reference(p_help->p_Sequence->p_testvalues, cnt_testcases, p_help->p_Sequence->testsequence_id);
+			cout << this->name() << ": seq: " << p_help->p_Sequence->testsequence_id << ", case: " << cnt_testcases << ", mode: " << p_help->p_Sequence->p_testvalues->pInput_rx->sw_data_rx.get_mode() << endl;
+			//cout << this->name() << ": seq: " << p_help->p_Sequence->testsequence_id << ", case: " << cnt_testcases << ", mode: " << p_help->p_Sequence->p_testvalues->pInput_tx->sw_data_tx.get_mode() << endl;
 			/*	block process until positive transition of control signal	*/
-			wait(next_sample_to_dut.posedge_event());
-
+			if(first_call != true){
+			    wait(10, SC_NS);
+			}
 			/*	write generated values to DUT ports indirectly by user-defined callback function*/
 			write_values_to_dut(p_help->p_Sequence->p_testvalues);
+			cout << "Data written to DUT" << endl;
 			/*	wait statement for internal SystemC update-process	*/
 			wait(SC_ZERO_TIME);
+			first_call = false;
 		}
 
 		/*	load pointer with next testsequence instance	*/

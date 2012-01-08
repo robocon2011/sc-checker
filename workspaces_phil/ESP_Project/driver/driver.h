@@ -67,29 +67,37 @@ public:
   sc_in<bool> reset_in;
   sc_in<bool> tx_enable_in;
   sc_in<bool> rx_enable_in;
-  sc_in<bool> ld_tx_data_in;
-  sc_in<bool> uld_rx_data_in;
 
-  sc_out<sc_logic> txclk;
   sc_out<sc_logic> reset;
   sc_out<sc_logic> ld_tx_data;
   sc_out<sc_logic> tx_enable;
-  sc_out<sc_logic> rxclk;
   sc_out<sc_logic> uld_rx_data;
   sc_out<sc_logic> rx_enable;
   sc_out<sc_logic> rx_in;
-  uart_data_port   rx_data_port;
   uart_data_port   tx_data_port;
+
+  sc_export<sc_signal_inout_if<sc_logic> > rxclk;
+  sc_export<sc_signal_inout_if<sc_logic> > txclk;
+  sc_export<sc_signal_inout_if<bool> > clk_b_exp;
 
   sc_signal<packet_uart_rx_data> packet_uart_rx;
   sc_signal<packet_uart_tx_data> packet_uart_tx;
 
-  sc_signal<bool>  clk;
-  sc_signal<bool>  clk_half;
+  sc_signal<sc_logic> s_clk;
+
+  sc_mutex driver_mutex;
+
+#if (ESP_DL == DRIVER)
+  /* create tracefile */
+  sc_trace_file* tracefile_driver;
+#endif
 
   //sc_out<sc_logic>  tx_out;
   //sc_out<sc_logic>   tx_empty;
   //sc_out<sc_logic>  rx_empty;
+
+  /* submodule instantiation */
+  clock_gen clock_gen_i;
 
   /*transaction streams */
   scv_tr_stream input_stream;
@@ -98,7 +106,8 @@ public:
   scv_tr_generator<sc_logic, sc_logic> output_gen;
 
   SC_CTOR(driver_uart)
-  : input_stream("input_stream", "driver"),
+  : clock_gen_i("clock_gen_i"),
+    input_stream("input_stream", "driver"),
     output_stream("output_stream_a", "driver"),
     input_gen("reading",input_stream,"I_driver","reset"),
     output_gen("writing_a", output_stream, "O_driver_A")
@@ -106,26 +115,33 @@ public:
 
     SC_METHOD(driver_get_data);
       dont_initialize();
-      sensitive << reset.value_changed_event()
-                << rx_data_port.fa_value_changed_event()
-                << tx_data_port.fa_value_changed_event();
+      sensitive << reset_in.value_changed()
+                << rx_data_in.value_changed()
+                << tx_data_in.value_changed();
 
     SC_METHOD(driver_send_rx_data);
       dont_initialize();
       sensitive << packet_uart_rx.value_changed_event();
 
-    SC_METHOD(driver_send_tx_data);
+/*    SC_METHOD(driver_send_tx_data);
       dont_initialize();
-      sensitive << packet_uart_tx.value_changed_event();
+      sensitive << s_clk.posedge_event(); */
 
-    clock_gen clock_gen_i("clock_gen_i");
-    clock_gen_i.clkout(clk);
-    clock_gen_i.clkdiv_half(clk_half);
+    clk_b_exp(clock_gen_i.clkout);
+    clock_gen_i.clkout_log(s_clk);
+    txclk(s_clk);
+    rxclk(s_clk);
+  }
+  ~driver_uart(){
+#if (ESP_DL == DRIVER)
+  sc_close_vcd_trace_file(tracefile_driver);
+  cout << "tracefile closed" << endl;
+#endif
   }
 
   void driver_get_data();
   void driver_send_rx_data();
-  void driver_send_tx_data();
+//  void driver_send_tx_data();
 
 };
 

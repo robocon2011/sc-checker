@@ -32,9 +32,12 @@ class packet_fulladdr_constraint_base_t :
 	virtual public scv_constraint_base
 {
 public:
-	scv_smart_ptr<packet_fulladdr> pInput;
+	scv_smart_ptr<packet_uart_rx_data> pInput_rx;
+  scv_smart_ptr<packet_uart_tx_data> pInput_tx;
 	sc_time timeout;
 };
+
+	//TODO: packet for tx data
 
 /*
  *	classname:	testsequence_general_c

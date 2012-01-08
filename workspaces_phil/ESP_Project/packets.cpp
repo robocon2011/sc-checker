@@ -103,13 +103,13 @@ ostream& operator<<(ostream& os, const packet_uart_rx_data& trans)
       else a+="0";
   }
 
-  os << "{" << endl
-     << "sw-level of abstraction..."
+  os << "\n" << endl
+     << "------ sw-level of abstraction ------\n"
      << "rx-data    : " << trans.sw_data_rx   << ", \n"
      << "reset      : " << trans.sw_reset  << ", \n"
      << "rx enable  : " << trans.sw_rx_enable  << ", \n"
      << "unload rx  : " << trans.sw_uld_rx_data  << ", \n"
-     << "\nregister transfer level...\n"
+     << "------ register transfer level ------\n"
      << "rtl_reset  : " << trans.rtl_reset << ", \n"
      << "uld rx-data: " << trans.rtl_uld_rx_data << ", \n"
      << "rx enable  : " << trans.rtl_rx_enable << ", \n"
@@ -117,7 +117,7 @@ ostream& operator<<(ostream& os, const packet_uart_rx_data& trans)
      << "rx empty   : " << trans.rtl_rx_empty << ", \n"
      << "rx-data    : " << a
      << endl
-     << "}\n";
+     << "\n";
   return os;
 }
 

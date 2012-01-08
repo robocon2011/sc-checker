@@ -37,18 +37,30 @@ void _scv_pop_constraint();	/*	patch	*/
 #include "../global.h"
 #include "stimulator.h"
 
-#define GLOBAL_TIMEOUT (sc_time(33333, SC_FS))
+#define GLOBAL_TIMEOUT (sc_time(20, SC_NS))
 
-SCV_EXTENSIONS(packet_fulladdr) {
+SCV_EXTENSIONS(packet_uart_rx_data) {
 public:
-	scv_extensions < sc_uint<BITWIDTH> > sw_a;
-	scv_extensions < sc_uint<BITWIDTH> > sw_b;
-	scv_extensions < bool > sw_cy;
-	SCV_EXTENSIONS_CTOR(packet_fulladdr) {
-		SCV_FIELD (sw_a);
-		SCV_FIELD (sw_b);
-		SCV_FIELD (sw_cy);
+	scv_extensions < sc_uint<DATABITS> > sw_data_rx;
+	scv_extensions < bool > sw_reset;
+  scv_extensions < bool > sw_rx_enable;
+	SCV_EXTENSIONS_CTOR(packet_uart_rx_data) {
+		SCV_FIELD (sw_data_rx);
+		SCV_FIELD (sw_reset);
+		SCV_FIELD (sw_rx_enable);
 	}
+};
+
+SCV_EXTENSIONS(packet_uart_tx_data) {
+public:
+  scv_extensions < sc_uint<DATABITS> > sw_data_tx;
+  scv_extensions < bool > sw_reset;
+  scv_extensions < bool > sw_tx_enable;
+  SCV_EXTENSIONS_CTOR(packet_uart_tx_data) {
+    SCV_FIELD (sw_data_tx);
+    SCV_FIELD (sw_reset);
+    SCV_FIELD (sw_tx_enable);
+  }
 };
 
 class packet_fulladdr_constraint_base_t;
@@ -70,17 +82,33 @@ class packet_fulladdr_constraint_t_01
 public:
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_01)
 	{
-		SCV_CONSTRAINT (pInput->sw_a() < 100);
-		SCV_CONSTRAINT (pInput->sw_b() < 100);
-		SCV_CONSTRAINT ( ( pInput->sw_a() + pInput->sw_b() ) == 150);
-		pInput->sw_cy.disable_randomization();
-		pInput->sw_cy.write(false);
+		SCV_CONSTRAINT (pInput_rx->sw_data_rx() < 100);
+		pInput_rx->sw_reset.disable_randomization();
+		pInput_rx->sw_reset.write(false);
+		pInput_rx->sw_rx_enable.disable_randomization();
+    pInput_rx->sw_rx_enable.write(true);
 
 		timeout = GLOBAL_TIMEOUT;
 	}
 };
 
+class packet_fulladdr_constraint_t_02
+  : public packet_fulladdr_constraint_base_t
+{
+public:
+  SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_02)
+  {
+    SCV_CONSTRAINT (pInput_tx->sw_data_tx() < 100);
+    pInput_tx->sw_reset.disable_randomization();
+    pInput_tx->sw_reset.write(false);
+    pInput_tx->sw_tx_enable.disable_randomization();
+    pInput_tx->sw_tx_enable.write(true);
 
+    timeout = GLOBAL_TIMEOUT;
+  }
+};
+
+/*
 class packet_fulladdr_constraint_t_02
 	: public packet_fulladdr_constraint_base_t
 {
@@ -198,7 +226,7 @@ public:
 
 		timeout = GLOBAL_TIMEOUT;
 	}
-};
+};*/
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
@@ -222,19 +250,19 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				500));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				5));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				500));
+		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				10));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				500));
+		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				500));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				250));
+		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				250));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				250));
+		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				250));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				100));
+		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				100));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_07 > 	(p_testsequences, 				100));
+		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_07 > 	(p_testsequences, 				100));
 		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}
@@ -255,20 +283,25 @@ SC_MODULE (stimulator_m)
 {
 public:
 	/*	user defined ports for DUT - connected to Driver-module	*/
-	fulladr_port port_inputs_reference;
+	/*uart_data_port port_inputs_reference;
 	sc_inout < bool > carry_in_reference;
 	sc_inout < double > timeout;
 	sc_inout < unsigned int > testsequence_id;
 	sc_inout < unsigned int > testcase_id;
+  */
 
-
-	fulladr_port port_inputs;
-	sc_inout < bool > carry_in;
+  sc_inout <sc_uint <DATABITS> > port_inputs_rx;
+  sc_inout <sc_uint <DATABITS> > port_inputs_tx;
+	sc_inout < bool > rx_enable_in;
+  sc_inout < bool > tx_enable_in;
+  sc_inout < bool > reset_in;
 
 	/*	helper variables for port assignment	*/
-	sc_uint<BITWIDTH> s_input_A;
-	sc_uint<BITWIDTH> s_input_B;
-	bool s_carry_in;
+	sc_uint<DATABITS> s_input_rx;
+	sc_uint<DATABITS> s_input_tx;
+	bool s_reset_in;
+  bool s_tx_enable_in;
+  bool s_rx_enable_in;
 	//scv_smart_ptr <dutInput_t> stim_value;
 
 	/*	-> DO NOT MODIFY <-
@@ -290,13 +323,19 @@ public:
 
 	void write_values_to_dut(packet_fulladdr_constraint_base_t *p_values)
 	{
-		s_input_A = p_values->pInput->sw_a;
-		s_input_B = p_values->pInput->sw_b;
-		s_carry_in = p_values->pInput->sw_cy;
+	  cout << "STIMULATOR: write values to dut" << endl;
 
-		port_inputs[0]->write(s_input_A);
-		port_inputs[1]->write(s_input_B);
-		carry_in.write(s_carry_in);
+	  s_input_rx = p_values->pInput_rx->sw_data_rx;
+	  s_input_tx = p_values->pInput_tx->sw_data_tx;
+	  s_reset_in = p_values->pInput_rx->sw_reset;
+	  s_tx_enable_in = p_values->pInput_tx->sw_tx_enable;
+	  s_rx_enable_in = p_values->pInput_rx->sw_rx_enable;
+
+		port_inputs_rx ->write(s_input_rx);
+		port_inputs_tx ->write(s_input_tx);
+		reset_in.write(s_reset_in);
+    tx_enable_in.write(s_tx_enable_in);
+		rx_enable_in.write(s_rx_enable_in);
 	}
 
 	/*	<ENTER BELOW> --------------------------------------------------
@@ -304,7 +343,7 @@ public:
 	 * 	the module ports of reference model
 	 */
 
-	void write_values_to_reference(packet_fulladdr_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
+/*	void write_values_to_reference(packet_fulladdr_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
 	{
 		s_input_A = p_values->pInput->sw_a;
 		s_input_B = p_values->pInput->sw_b;
@@ -317,7 +356,7 @@ public:
 		testcase_id.write(_cnt_testcases);
 		testsequence_id.write(_testsequence_id);
 	}
-
+*/
 	/*	SystemC module thread for stimulator	*/
 	void stimulator_thread (void);
 

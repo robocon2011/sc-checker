@@ -190,19 +190,19 @@ struct packet_uart_rx_data{
   bitset<DATABITS> b_set;
 
   packet_uart_rx_data()
-  : sw_data_rx (0)
+  : sw_data_rx (255)
   , sw_reset (false)
   , sw_rx_enable (false)
   , sw_uld_rx_data (false)
   , rtl_reset (0)
   , rtl_uld_rx_data (0)
   , rtl_rx_enable (0)
-  , rtl_rx_in (0)
+  , rtl_rx_in (1)
   , rtl_rx_empty (0)
   {
     for (unsigned i=0;i<DATABITS;i++){
-        rtl_rx_data[i] = SC_LOGIC_X;
-        b_set[i] = (0);
+        rtl_rx_data[i] = SC_LOGIC_1;
+        b_set[i] = (1);
     }
   }
 
@@ -276,19 +276,19 @@ struct packet_uart_tx_data{
   bitset<DATABITS> b_set;
 
   packet_uart_tx_data()
-  : sw_data_tx (0)
+  : sw_data_tx (255)
   , sw_reset (false)
   , sw_tx_enable (false)
   , sw_ld_tx_data (false)
   , rtl_reset (0)
   , rtl_ld_tx_data (0)
   , rtl_tx_enable (0)
-  , rtl_tx_out (0)
+  , rtl_tx_out (1)
   , rtl_tx_empty (0)
   {
     for (unsigned i=0;i<DATABITS;i++){
-        rtl_tx_data[i] = SC_LOGIC_X;
-        b_set = (0);
+        rtl_tx_data[i] = SC_LOGIC_1;
+        b_set[i] = (1);
     }
   }
 
