@@ -78,23 +78,16 @@ public:
 
   sc_export<sc_signal_inout_if<sc_logic> > rxclk;
   sc_export<sc_signal_inout_if<sc_logic> > txclk;
-  sc_export<sc_signal_inout_if<bool> > clk_b_exp;
 
   sc_signal<packet_uart_rx_data> packet_uart_rx;
   sc_signal<packet_uart_tx_data> packet_uart_tx;
 
   sc_signal<sc_logic> s_clk;
 
-  sc_mutex driver_mutex;
-
 #if (ESP_DL == DRIVER)
   /* create tracefile */
   sc_trace_file* tracefile_driver;
 #endif
-
-  //sc_out<sc_logic>  tx_out;
-  //sc_out<sc_logic>   tx_empty;
-  //sc_out<sc_logic>  rx_empty;
 
   /* submodule instantiation */
   clock_gen clock_gen_i;
@@ -123,11 +116,10 @@ public:
       dont_initialize();
       sensitive << packet_uart_rx.value_changed_event();
 
-/*    SC_METHOD(driver_send_tx_data);
+    SC_METHOD(driver_send_tx_data);
       dont_initialize();
-      sensitive << s_clk.posedge_event(); */
+      sensitive << packet_uart_tx.value_changed_event();
 
-    clk_b_exp(clock_gen_i.clkout);
     clock_gen_i.clkout_log(s_clk);
     txclk(s_clk);
     rxclk(s_clk);
@@ -135,13 +127,13 @@ public:
   ~driver_uart(){
 #if (ESP_DL == DRIVER)
   sc_close_vcd_trace_file(tracefile_driver);
-  cout << "tracefile closed" << endl;
+  cout << "DRIVER: tracefile closed" << endl;
 #endif
   }
 
   void driver_get_data();
   void driver_send_rx_data();
-//  void driver_send_tx_data();
+  void driver_send_tx_data();
 
 };
 

@@ -9,10 +9,21 @@
 #define DATABITS 8
 #endif
 
+ /* DRIVER MONITOR DUT DETAIL DETAIL DETAIL */
 #ifndef ESP_DL
-#define ESP_DL 0
-#define DRIVER 1
-#define MONITOR 2
+
+#define ESP_DL         0x00
+
+/* standard debug level - will be used for transaction recording and vc-dumps*/
+#define DRIVER         0x01
+#define DUT            0x04
+#define MONITOR        0x10
+
+/* print out some debug informations */
+#define DRIVER_DETAIL  0x02
+#define DUT_DETAIL     0x08
+#define MONITOR_DETAIL 0x20
+
 #endif
 
 #include <systemc.h>

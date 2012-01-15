@@ -122,7 +122,7 @@ void stimulator_m::stimulator_thread()
 			//cout << this->name() << ": seq: " << p_help->p_Sequence->testsequence_id << ", case: " << cnt_testcases << ", mode: " << p_help->p_Sequence->p_testvalues->pInput_tx->sw_data_tx.get_mode() << endl;
 			/*	block process until positive transition of control signal	*/
 			if(first_call != true){
-			    wait(10, SC_NS);
+			    wait(50, SC_NS);
 			}
 			/*	write generated values to DUT ports indirectly by user-defined callback function*/
 			write_values_to_dut(p_help->p_Sequence->p_testvalues);

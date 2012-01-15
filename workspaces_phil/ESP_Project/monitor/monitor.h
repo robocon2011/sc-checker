@@ -12,6 +12,8 @@
 #define MONITOR_H
 
 #include "../global.h"
+#include <systemc.h>
+#include <scv.h>
 #include <bitset>
 
 #ifndef BITWIDTH
@@ -69,16 +71,16 @@ public:
   sc_in<sc_logic> tx_out;
   sc_in<sc_logic> tx_empty;
   sc_in<sc_logic> rx_empty;
+  sc_in<sc_logic> rxclk;
   sc_in<sc_logic> txclk;
   uart_data_port  rx_data_port;
-  //sc_in<sc_logic> rxclk;
 
   sc_out<sc_uint< DATABITS> > rx_data_out;
   sc_out<sc_uint< DATABITS> > tx_data_out;
   sc_out<bool> tx_empty_out;
   sc_out<bool> rx_empty_out;
 
-  //sc_port < handshake_generation_if > data_written;
+  sc_port < handshake_generation_if > data_written;
 
   sc_signal<packet_uart_tx_data> packet_uart_tx;
   sc_signal<packet_uart_rx_data> packet_uart_rx;
@@ -97,18 +99,16 @@ public:
   {
     SC_METHOD(monitor_get_data);
       sensitive << rx_data_port.fa_value_changed_event()
-                << tx_out.value_changed()
-                << tx_empty.value_changed()
-                << rx_empty.value_changed();
+                << tx_empty.value_changed();
       dont_initialize();
 
     SC_METHOD(monitor_calc);
-      sensitive << packet_uart_tx.value_changed_event()
-                << packet_uart_rx.value_changed_event();
+      sensitive << packet_uart_rx.value_changed_event()
+                << packet_uart_tx.value_changed_event();
       dont_initialize();
 
     SC_METHOD(monitor_catch_tx);
-      sensitive << txclk.pos();
+      sensitive << tx_out.neg();
       dont_initialize();
   }
 

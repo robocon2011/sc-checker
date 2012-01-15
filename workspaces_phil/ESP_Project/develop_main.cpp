@@ -39,9 +39,11 @@ int sc_main (int argc, char *argv[])
   //reference_model i_reference_model ("i_reference_model");
   //scoreboard_m i_scoreboard ("i_scoreboard");
   driver_uart driver_i("driver_i");
+  monitor_uart monitor_i("monitor_i");
   dummy dummy_i("dummy_i");
-  //monitor_uart monitor_i("monitor_i");
-  //uart uart_i("uart_i");
+  uart uart_i("uart_i");
+
+
 
   /* signals stimulator to driver */
   sc_signal<sc_uint< DATABITS> > rx_data_in;
@@ -61,18 +63,18 @@ int sc_main (int argc, char *argv[])
   sc_signal<sc_logic> rx_in;
   sc_signal<sc_logic> tx_data_port[DATABITS];
 
-  /* signals dut to monitor
+  /* signals dut to monitor */
   sc_signal<sc_logic> rx_data_port[DATABITS];
   sc_signal<sc_logic> tx_out;
   sc_signal<sc_logic> tx_empty;
-  sc_signal<sc_logic> rx_empty; */
+  sc_signal<sc_logic> rx_empty;
 
-  /* signals monitor to scoreboard
+  /* signals monitor to scoreboard */
   sc_signal<sc_uint< DATABITS> > rx_data_out;
   sc_signal<sc_uint< DATABITS> > tx_data_out;
   sc_signal<bool> tx_empty_out;
-  sc_signal<bool> rx_empty_out;*/
-  //handshake monitor_data_written;
+  sc_signal<bool> rx_empty_out;
+  handshake monitor_data_written;
 
   /* signals testcontroller to stimulator */
   sc_signal <bool> signal_next_sample_to_reference;
@@ -116,46 +118,41 @@ int sc_main (int argc, char *argv[])
     driver_i.tx_data_port(tx_data_port[i]);
   }
 
-  /* assignment of monitor ports
-  for(unsigned i = 0; i < DATABITS; i++){
-    monitor_i.rx_data_port(rx_data_port[i]);
-  }
+  /* assignment of monitor ports */
   monitor_i.tx_out(tx_out);
   monitor_i.tx_empty(tx_empty);
   monitor_i.rx_empty(rx_empty);
-  monitor_i.txclk(txclk);
- // monitor_i.rxclk(rxclk);
+  monitor_i.rxclk(driver_i.rxclk);
+  monitor_i.txclk(driver_i.txclk);
+  for(unsigned i = 0; i < DATABITS; i++){
+    monitor_i.rx_data_port(rx_data_port[i]);
+  }
 
   monitor_i.rx_data_out(rx_data_out);
   monitor_i.tx_data_out(tx_data_out);
   monitor_i.tx_empty_out(tx_empty_out);
-  monitor_i.rx_empty_out(rx_empty_out);*/
+  monitor_i.rx_empty_out(rx_empty_out);
+  monitor_i.data_written(monitor_data_written);
 
   /* assignment for dummy ports*/
-  dummy_i.txclk(driver_i.txclk);
-  dummy_i.reset(reset);
-  dummy_i.ld_tx_data(ld_tx_data);
-  dummy_i.tx_enable(tx_enable);
-  dummy_i.rxclk(driver_i.rxclk);
-  dummy_i.uld_rx_data(uld_rx_data);
-  dummy_i.rx_enable(rx_enable);
-  dummy_i.rx_in(rx_in);
-  for(unsigned i = 0; i < DATABITS;i++){
-      dummy_i.tx_data[i](tx_data_port[i]);
-  }
-  dummy_i.reference_received(signal_reference_received);
-  dummy_i.testcase_finished(signal_testcase_finished);
+  dummy_i.tx_empty_out(tx_empty_out);
+  dummy_i.rx_empty_out(rx_empty_out);
+  dummy_i.rx_data_out(rx_data_out);
+  dummy_i.tx_data_out(tx_data_out);
 
-  dummy_i.clk_dr(driver_i.clk_b_exp);
-  /* assignment for dut-uart ports
+  dummy_i.testcase_finished(signal_testcase_finished);
+  dummy_i.reference_received(signal_reference_received);
+  dummy_i.data_written(monitor_data_written);
+
+  /* assignment for dut-uart ports */
   uart_i.reset(reset);
-  uart_i.txclk(txclk);
+  uart_i.txclk(driver_i.txclk);
   uart_i.ld_tx_data(ld_tx_data);
   for(unsigned i = 0; i < DATABITS;i++){
     uart_i.tx_data[i](tx_data_port[i]);
   }
   uart_i.tx_enable(tx_enable);
-  uart_i.rxclk(rxclk);
+  uart_i.rxclk(driver_i.rxclk);
   uart_i.uld_rx_data(uld_rx_data);
   uart_i.rx_enable(rx_enable);
   uart_i.rx_in(rx_in);
@@ -165,7 +162,7 @@ int sc_main (int argc, char *argv[])
   }
   uart_i.rx_empty(rx_empty);
   uart_i.tx_out(tx_out);
-  uart_i.tx_empty(tx_empty);*/
+  uart_i.tx_empty(tx_empty);
 
   /* transaction recording
   sc_trace(tracefile_fulladder, signal_A_dut, "DUT_A_in");

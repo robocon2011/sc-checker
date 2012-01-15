@@ -82,7 +82,7 @@ class packet_fulladdr_constraint_t_01
 public:
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_01)
 	{
-		SCV_CONSTRAINT (pInput_rx->sw_data_rx() < 100);
+		SCV_CONSTRAINT (pInput_rx->sw_data_rx() < 250);
 		pInput_rx->sw_reset.disable_randomization();
 		pInput_rx->sw_reset.write(false);
 		pInput_rx->sw_rx_enable.disable_randomization();
@@ -98,7 +98,7 @@ class packet_fulladdr_constraint_t_02
 public:
   SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_02)
   {
-    SCV_CONSTRAINT (pInput_tx->sw_data_tx() < 100);
+    SCV_CONSTRAINT (pInput_tx->sw_data_tx() < 50);
     pInput_tx->sw_reset.disable_randomization();
     pInput_tx->sw_reset.write(false);
     pInput_tx->sw_tx_enable.disable_randomization();
@@ -250,9 +250,9 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				20));
 		/*			|															|								|						*/
-		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				10));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				20));
 		/*			|															|								|						*/
 		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				500));
 		/*			|															|								|						*/
@@ -327,7 +327,7 @@ public:
 
 	  s_input_rx = p_values->pInput_rx->sw_data_rx;
 	  s_input_tx = p_values->pInput_tx->sw_data_tx;
-	  s_reset_in = p_values->pInput_rx->sw_reset;
+	  s_reset_in = false;
 	  s_tx_enable_in = p_values->pInput_tx->sw_tx_enable;
 	  s_rx_enable_in = p_values->pInput_rx->sw_rx_enable;
 
@@ -336,6 +336,8 @@ public:
 		reset_in.write(s_reset_in);
     tx_enable_in.write(s_tx_enable_in);
 		rx_enable_in.write(s_rx_enable_in);
+
+		if(s_reset_in == true) cout << "STIMULATOR: RESET SENT" << endl;
 	}
 
 	/*	<ENTER BELOW> --------------------------------------------------

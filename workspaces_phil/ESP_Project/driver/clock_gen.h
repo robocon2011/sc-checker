@@ -17,9 +17,7 @@
 
 SC_MODULE(clock_gen){
 
-  sc_export<sc_signal_inout_if<bool> > clkout;
   sc_out<sc_logic> clkout_log;
-
   sc_clock clk;
 
   SC_CTOR(clock_gen)
@@ -28,11 +26,10 @@ SC_MODULE(clock_gen){
     SC_METHOD(clk_method);
     sensitive << clk.posedge_event()
               << clk.negedge_event();
-    clkout(clk);
   }
   void clk_method(){
     sc_logic dummy;
-    dummy = ((clkout->read() == true) ? '1' : '0');
+    dummy = ((clk.read() == true) ? '1' : '0');
     clkout_log->write(dummy);
   }
 };
