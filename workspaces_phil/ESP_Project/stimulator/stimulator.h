@@ -37,8 +37,6 @@ public:
 	sc_time timeout;
 };
 
-	//TODO: packet for tx data
-
 /*
  *	classname:	testsequence_general_c
  *	purpose:	general class for project testsequences

@@ -82,6 +82,8 @@ public:
   sc_signal<packet_uart_rx_data> packet_uart_rx;
   sc_signal<packet_uart_tx_data> packet_uart_tx;
 
+  sc_port < handshake_event_if > data_written;
+  sc_port < handshake_generation_if > data_written_uart;
   sc_signal<sc_logic> s_clk;
 
 #if (ESP_DL == DRIVER)
@@ -108,17 +110,15 @@ public:
 
     SC_METHOD(driver_get_data);
       dont_initialize();
-      sensitive << reset_in.value_changed()
-                << rx_data_in.value_changed()
-                << tx_data_in.value_changed();
+      sensitive << data_written;
 
     SC_METHOD(driver_send_rx_data);
       dont_initialize();
-      sensitive << packet_uart_rx.value_changed_event();
+      sensitive << packet_uart_rx.default_event();
 
     SC_METHOD(driver_send_tx_data);
       dont_initialize();
-      sensitive << packet_uart_tx.value_changed_event();
+      sensitive << packet_uart_tx.default_event();
 
     clock_gen_i.clkout_log(s_clk);
     txclk(s_clk);

@@ -10,8 +10,8 @@
 #include "scoreboard_config.h"
 
 
-SC_HAS_PROCESS(scoreboard_m);
-scoreboard_m::scoreboard_m(sc_module_name nm)
+SC_HAS_PROCESS(scoreboard_fulladdr);
+scoreboard_fulladdr::scoreboard_fulladdr(sc_module_name nm)
 	: sc_module (nm),
 	  output_reference_buffer(0),
 	  output_carry_reference_buffer(false),
@@ -25,8 +25,8 @@ scoreboard_m::scoreboard_m(sc_module_name nm)
 {
 	SC_METHOD (store_reference_method);
 		sensitive 	<< output_reference.value_changed()
-					<< output_carry_reference.value_changed()
-					<< testcase_id_reference.value_changed();
+					      << output_carry_reference.value_changed()
+					      << testcase_id_reference.value_changed();
 	dont_initialize();
 
 	SC_METHOD (compare_method);
@@ -59,7 +59,7 @@ scoreboard_m::scoreboard_m(sc_module_name nm)
 
 }
 
-void scoreboard_m::store_reference_method()
+void scoreboard_fulladdr::store_reference_method()
 {
 	input_a_reference_buffer = input_a_reference.read();
 	input_b_reference_buffer = input_b_reference.read();
@@ -77,7 +77,7 @@ void scoreboard_m::store_reference_method()
 	start_time_buffer = sc_time_stamp();
 }
 
-void scoreboard_m::compare_method()
+void scoreboard_fulladdr::compare_method()
 {
 	event_timeout.cancel();
 
@@ -113,7 +113,7 @@ void scoreboard_m::compare_method()
 	testcase_finished.write(true);
 }
 
-void scoreboard_m::write_to_file()
+void scoreboard_fulladdr::write_to_file()
 {
 
 	outputFile.open("scoreboard.txt", fstream::ate | fstream::app);
@@ -143,3 +143,4 @@ void scoreboard_m::write_to_file()
 
 	outputFile.close();
 }
+

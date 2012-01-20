@@ -18,7 +18,7 @@
 enum compareResult { eOK = 0, eMISMATCH, eTIMEOUT_OK, eTIMEOUT_MISMATCH};
 
 
-SC_MODULE (scoreboard_m)
+SC_MODULE (scoreboard_fulladdr)
 {
 public:
 	sc_in < sc_uint <BITWIDTH> > input_a_reference;
@@ -40,7 +40,7 @@ public:
 
 	std::ofstream outputFile;
 
-	scoreboard_m (sc_module_name nm);
+	scoreboard_fulladdr (sc_module_name nm);
 
 	void store_reference_method ();
 	void compare_method ();
@@ -66,5 +66,50 @@ private:
 
 	enum compareResult result;
 };
+
+
+SC_MODULE (scoreboard_uart)
+{
+public:
+
+  sc_in < sc_uint <DATABITS> > rx_data_stim;
+  sc_in < sc_uint <DATABITS> > tx_data_stim;
+  sc_in < double > timeout_reference;
+  sc_in < unsigned int > testcase_id_reference;
+  sc_in < unsigned int > testsequence_id_reference;
+
+  sc_in<bool> tx_empty_out;
+  sc_in<bool> rx_empty_out;
+  sc_in<sc_uint< DATABITS> > rx_data_out;
+  sc_in<sc_uint< DATABITS> > tx_data_out;
+
+  sc_port < handshake_event_if > data_written;
+
+  sc_inout < bool > reference_received;
+  sc_inout < bool > testcase_finished;
+
+  std::ofstream outputFile;
+
+  scoreboard_uart (sc_module_name nm);
+
+  void store_reference_uart_method ();
+  void compare_uart_method ();
+  void write_to_file_uart_method ();
+
+private:
+  sc_uint <DATABITS> rx_data_stim_buffer, tx_data_stim_buffer,
+                     rx_data_out_buffer, tx_data_out_buffer,
+                     rx_data_stim_buffer_old, tx_data_stim_buffer_old;
+  sc_time timeout_buffer;
+  sc_event event_timeout;
+
+  unsigned int testsequence_id;
+  unsigned int testcase_id;
+  sc_time start_time_buffer;
+  sc_time end_time_buffer;
+
+  enum compareResult result;
+};
+
 
 #endif /* SCOREBOARD_CONFIG_H_ */

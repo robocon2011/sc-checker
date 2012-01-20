@@ -37,10 +37,9 @@ int sc_main (int argc, char *argv[])
   stimulator_m i_stimulator("i_stimulator");
   testcontroller i_testcontroller("i_testcontroller");
   //reference_model i_reference_model ("i_reference_model");
-  //scoreboard_m i_scoreboard ("i_scoreboard");
+  scoreboard_uart i_scoreboard("i_scoreboard");
   driver_uart driver_i("driver_i");
   monitor_uart monitor_i("monitor_i");
-  dummy dummy_i("dummy_i");
   uart uart_i("uart_i");
 
 
@@ -68,6 +67,9 @@ int sc_main (int argc, char *argv[])
   sc_signal<sc_logic> tx_out;
   sc_signal<sc_logic> tx_empty;
   sc_signal<sc_logic> rx_empty;
+  handshake stimulator_data_written;
+  handshake uart_data_written;
+  handshake driver_data_written;
 
   /* signals monitor to scoreboard */
   sc_signal<sc_uint< DATABITS> > rx_data_out;
@@ -83,13 +85,18 @@ int sc_main (int argc, char *argv[])
   sc_signal <bool> signal_testcase_finished;
   sc_signal <bool> signal_all_testsequences_finished;
 
-  /* signal routing ... */
+  sc_signal <unsigned int> signal_testcase_id;
+  sc_signal <unsigned int> signal_testsequence_id;
+  sc_signal <double> signal_timeout;
+
+  /* assignment of testcontroller ports */
   i_testcontroller.next_sample_to_reference(signal_next_sample_to_reference);
   i_testcontroller.reference_received(signal_reference_received);
   i_testcontroller.next_sample_to_dut(signal_next_sample_to_dut);
   i_testcontroller.testcase_finished(signal_testcase_finished);
   i_testcontroller.all_sequences_finished(signal_all_testsequences_finished);
 
+  /* assignment of stimulator ports */
   i_stimulator.port_inputs_rx(rx_data_in);
   i_stimulator.port_inputs_tx(tx_data_in);
   i_stimulator.rx_enable_in(rx_enable_in);
@@ -99,6 +106,10 @@ int sc_main (int argc, char *argv[])
   i_stimulator.next_sample_to_reference(signal_next_sample_to_reference);
   i_stimulator.next_sample_to_dut(signal_next_sample_to_dut);
   i_stimulator.testsequences_finished(signal_all_testsequences_finished);
+  i_stimulator.testcase_id(signal_testcase_id);
+  i_stimulator.testsequence_id(signal_testsequence_id);
+  i_stimulator.timeout(signal_timeout);
+  i_stimulator.data_written(stimulator_data_written);
 
   /* assignment of driver ports */
   driver_i.rx_data_in(rx_data_in);
@@ -113,6 +124,8 @@ int sc_main (int argc, char *argv[])
   driver_i.uld_rx_data(uld_rx_data);
   driver_i.rx_enable(rx_enable);
   driver_i.rx_in(rx_in);
+  driver_i.data_written(stimulator_data_written);
+  driver_i.data_written_uart(driver_data_written);
 
   for(unsigned i = 0; i < DATABITS;i++){
     driver_i.tx_data_port(tx_data_port[i]);
@@ -133,16 +146,7 @@ int sc_main (int argc, char *argv[])
   monitor_i.tx_empty_out(tx_empty_out);
   monitor_i.rx_empty_out(rx_empty_out);
   monitor_i.data_written(monitor_data_written);
-
-  /* assignment for dummy ports*/
-  dummy_i.tx_empty_out(tx_empty_out);
-  dummy_i.rx_empty_out(rx_empty_out);
-  dummy_i.rx_data_out(rx_data_out);
-  dummy_i.tx_data_out(tx_data_out);
-
-  dummy_i.testcase_finished(signal_testcase_finished);
-  dummy_i.reference_received(signal_reference_received);
-  dummy_i.data_written(monitor_data_written);
+  monitor_i.data_written_rx(uart_data_written);
 
   /* assignment for dut-uart ports */
   uart_i.reset(reset);
@@ -163,6 +167,23 @@ int sc_main (int argc, char *argv[])
   uart_i.rx_empty(rx_empty);
   uart_i.tx_out(tx_out);
   uart_i.tx_empty(tx_empty);
+  uart_i.data_written_rx(uart_data_written);
+  uart_i.data_written_driver(driver_data_written);
+
+  /* assignment of scoreboard ports */
+
+  i_scoreboard.data_written(monitor_data_written);
+  i_scoreboard.testcase_finished(signal_testcase_finished);
+  i_scoreboard.reference_received(signal_reference_received);
+  i_scoreboard.testcase_id_reference(signal_testcase_id);
+  i_scoreboard.testsequence_id_reference(signal_testsequence_id);
+  i_scoreboard.timeout_reference(signal_timeout);
+  i_scoreboard.tx_data_stim(tx_data_in);
+  i_scoreboard.rx_data_stim(rx_data_in);
+  i_scoreboard.tx_data_out(tx_data_out);
+  i_scoreboard.rx_data_out(rx_data_out);
+  i_scoreboard.tx_empty_out(tx_empty_out);
+  i_scoreboard.rx_empty_out(rx_empty_out);
 
   /* transaction recording
   sc_trace(tracefile_fulladder, signal_A_dut, "DUT_A_in");

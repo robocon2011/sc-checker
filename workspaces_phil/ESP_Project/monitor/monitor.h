@@ -81,6 +81,7 @@ public:
   sc_out<bool> rx_empty_out;
 
   sc_port < handshake_generation_if > data_written;
+  sc_port < handshake_event_if > data_written_rx;
 
   sc_signal<packet_uart_tx_data> packet_uart_tx;
   sc_signal<packet_uart_rx_data> packet_uart_rx;
@@ -95,11 +96,13 @@ public:
   : input_stream("input_stream", "monitor"),
     output_stream("output_stream", "monitor"),
     mon_in_gen("mon_input", input_stream, "I_monitor"),
-    mon_out_gen("mon_output",output_stream,"O_monitor")
+    mon_out_gen("mon_output",output_stream,"O_monitor"),
+    s_rx_ok(false),
+    s_tx_ok(false),
+    initialization(true)
   {
     SC_METHOD(monitor_get_data);
-      sensitive << rx_data_port.fa_value_changed_event()
-                << tx_empty.value_changed();
+      sensitive << data_written_rx;
       dont_initialize();
 
     SC_METHOD(monitor_calc);
@@ -115,6 +118,9 @@ public:
   void monitor_get_data();
   void monitor_catch_tx();
   void monitor_calc();
+
+private:
+  bool s_rx_ok, s_tx_ok, initialization;
 };
 
 #endif

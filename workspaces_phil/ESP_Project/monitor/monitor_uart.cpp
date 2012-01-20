@@ -13,6 +13,8 @@
 
 void monitor_uart::monitor_get_data(){
   packet_uart_rx_data packet_temp_rx;
+  static packet_uart_rx_data packet_old_rx;
+  bitset<DATABITS> b_set;
   static bool delay = true;
 
   if(delay == true){
@@ -28,6 +30,20 @@ void monitor_uart::monitor_get_data(){
     packet_temp_rx.rtl_rx_empty = rx_empty->read();
     for(unsigned i=0;i<DATABITS;i++){
       packet_temp_rx.rtl_rx_data[i] = rx_data_port[i]->read();
+
+      /* decode rx-data */
+      if(packet_temp_rx.rtl_rx_data[i] == '1'){
+          b_set.set(i);
+      }
+      else{
+          b_set.reset(i);
+      }
+    }
+    packet_temp_rx.sw_data_rx = b_set.to_ulong();
+
+    if(packet_old_rx.sw_data_rx != packet_temp_rx.sw_data_rx){
+        s_rx_ok = true;
+        packet_old_rx.sw_data_rx = packet_temp_rx.sw_data_rx;
     }
 
     packet_uart_rx.write(packet_temp_rx);
@@ -37,9 +53,6 @@ void monitor_uart::monitor_get_data(){
 void monitor_uart::monitor_calc(){
   packet_uart_tx_data packet_temp_tx;
   packet_uart_rx_data packet_temp_rx;
-  static packet_uart_rx_data packet_old_rx;
-  bitset<BITWIDTH> b_set;
-  static bool s_rx_ok = false, s_tx_ok = false;
   static int data_offset = 0;
 
 #if (ESP_DL & MONITOR_DETAIL)
@@ -49,17 +62,6 @@ void monitor_uart::monitor_calc(){
   packet_temp_rx = packet_uart_rx.read();
   packet_temp_tx = packet_uart_tx.read();
 
-  /* decode rx-data */
-  for(unsigned i = 0; i < DATABITS; i++){
-    if(packet_temp_rx.rtl_rx_data[i] == '1'){
-        b_set.set(i);
-    }
-    else{
-        b_set.reset(i);
-    }
-  }
-  packet_temp_rx.sw_data_rx = b_set.to_ulong();
-
 
   /* check if notifiying bit is correct on received data */
   if(packet_temp_rx.rtl_rx_empty == '1'){
@@ -67,41 +69,52 @@ void monitor_uart::monitor_calc(){
     if(packet_temp_rx.sw_data_rx != 0) cout << "ERROR: rx_empty is false" << endl;
     else rx_empty_out.write(((packet_temp_rx.rtl_rx_empty == '1') ? true : false));
   }
-  /* if data reg is not empty send data to scoreboard*/
+  /* if data reg is not empty send data to scoreboard
   if(packet_old_rx.sw_data_rx != packet_temp_rx.sw_data_rx){
      s_rx_ok = true;
      packet_old_rx.sw_data_rx = packet_temp_rx.sw_data_rx;
 #if (ESP_DL & MONITOR_DETAIL)
       cout << "MONITOR: rx-packet received: " << packet_temp_rx << endl;
 #endif
-  }
-  else s_rx_ok = false;
+ }
+ else{
+     s_rx_ok = false;
+ }
 
 
-  /* check if notifiying bit is correct on transmitted data */
-/*  if(packet_temp_tx.rtl_tx_empty == '1'){
-    if(packet_temp_tx.sw_data_tx != 0) cout << "ERROR: tx_empty is false" << endl;
-    else tx_empty_out.write(((packet_temp_tx.rtl_tx_empty == '1') ? true : false));
-  } */
-  /* if data reg is not empty send data to scoreboard*/
-//  else{
+  if(packet_old_tx.sw_data_tx != packet_temp_tx.sw_data_tx){
+     s_tx_ok = true;
+     packet_old_tx.sw_data_tx = packet_temp_tx.sw_data_tx;
+#if (ESP_DL & MONITOR_DETAIL)
+      cout << "MONITOR: tx-packet received: " << packet_temp_tx << endl;
+#endif
+ }
+ else{
+     s_tx_ok = false;
+ }*/
 
-    //cout << "MONITOR: tx-packet received: " << packet_temp_tx << endl;
-//  }
-    if(packet_temp_tx.rtl_ld_tx_data == '1') s_tx_ok = true;
-    else s_tx_ok = false;
+    if(initialization == true){
+      cout << "~~~ INITIALIZATION ~~~" <<endl;
+      initialization = false;
+      data_offset = 0;
 
-    if((s_rx_ok == true) && (s_tx_ok == true)){
-
-        rx_data_out.write(packet_temp_rx.sw_data_rx);
-        tx_data_out.write(packet_temp_tx.sw_data_tx);
-        data_written->notify(SC_ZERO_TIME);
-
-        s_rx_ok = false;
-        s_tx_ok = false;
-        data_offset = 0;
+      next_trigger(txclk.posedge_event());
     }
-    else if((s_rx_ok == true) && (data_offset >= 10)){
+
+
+    if((s_rx_ok == true) && (s_tx_ok == true) && (data_offset < 1000)){
+
+      rx_data_out.write(packet_temp_rx.sw_data_rx);
+      tx_data_out.write(packet_temp_tx.sw_data_tx);
+      data_written->notify(SC_ZERO_TIME);
+
+      s_rx_ok = false;
+      s_tx_ok = false;
+      data_offset = 0;
+
+      cout << "MONITOR: ok" <<endl;
+    }
+    else if((s_rx_ok == true) && (data_offset >= 1000)){
         rx_data_out.write(packet_temp_rx.sw_data_rx);
         tx_data_out.write(0);
         data_written->notify(SC_ZERO_TIME);
@@ -109,8 +122,10 @@ void monitor_uart::monitor_calc(){
         s_rx_ok = false;
         s_tx_ok = false;
         data_offset = 0;
+
+        cout << "TIMEOUT: rx-ok" <<endl;
     }
-    else if((s_tx_ok == true) && (data_offset >= 10)){
+    else if((s_tx_ok == true) && (data_offset >= 1000)){
         rx_data_out.write(0);
         tx_data_out.write(packet_temp_tx.sw_data_tx);
         data_written->notify(SC_ZERO_TIME);
@@ -118,6 +133,8 @@ void monitor_uart::monitor_calc(){
         s_rx_ok = false;
         s_tx_ok = false;
         data_offset = 0;
+
+        cout << "TIMEOUT: tx-ok" <<endl;
     }
     else{
         data_offset++;
@@ -181,6 +198,9 @@ void monitor_uart::monitor_catch_tx(){
           cout << "MONITOR: monitor received data: " << packet_temp_tx.sw_data_tx << " bin: " << b_set << endl;
 #endif
           tx_finished = '1';
+          s_tx_ok = true;
+
+          cout << "MONITOR: monitor received data: " << packet_temp_tx.sw_data_tx << " bin: " << b_set << endl;
 
           /* transmission finished */
           packet_temp_tx.rtl_ld_tx_data = tx_finished;

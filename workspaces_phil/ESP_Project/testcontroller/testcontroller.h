@@ -20,15 +20,13 @@ public:
 
         void testcontroller_thread ()
         {
-          next_sample_to_dut.write(false);
                 while ( !all_sequences_finished.read() )
                 {
 
-                        //next_sample_to_reference.write(true);
+                        next_sample_to_reference.write(true);
+                        wait(reference_received.posedge_event());
+                        next_sample_to_reference.write(false);
 
-                        //wait(reference_received.posedge_event());
-
-                        //next_sample_to_reference.write(false);
                         next_sample_to_dut.write(true);
                         wait(testcase_finished.posedge_event());
                         next_sample_to_dut.write(false);

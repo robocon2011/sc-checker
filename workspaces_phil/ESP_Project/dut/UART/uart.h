@@ -12,6 +12,9 @@
 #define UART_H
 
 #include "../../global.h"
+#include <systemc.h>
+#include <scv.h>
+
 
 SC_MODULE(uart){
 
@@ -31,25 +34,18 @@ SC_MODULE(uart){
   sc_out<sc_logic>  rx_empty;
   sc_out<sc_logic>  tx_out;
 
+  sc_port < handshake_generation_if > data_written_rx;
+  sc_port < handshake_event_if > data_written_driver;
+
   SC_CTOR(uart){
     SC_METHOD(receive_data);
     dont_initialize();
     sensitive << rx_in.neg()
-              << reset.value_changed(); // TODO: eigene method für reset schreiben...
+              << reset.value_changed();
 
     SC_METHOD(send_data);
     dont_initialize();
-    sensitive << ld_tx_data.value_changed()
-              << tx_data[0].value_changed()
-              << tx_data[1].value_changed()
-              << tx_data[2].value_changed()
-              << tx_data[3].value_changed()
-              << tx_data[4].value_changed()
-              << tx_data[5].value_changed()
-              << tx_data[6].value_changed()
-              << tx_data[7].value_changed()
-              << tx_enable.value_changed()
-              << reset.value_changed();
+    sensitive << data_written_driver;
   }
 
   void receive_data();

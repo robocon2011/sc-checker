@@ -81,6 +81,8 @@ void driver_uart::driver_send_rx_data(){
     if((packet_temp.sw_reset == true) || (initialization == true)){
       packet_temp.rtl_reset = '1';
       initialization = false;
+
+      next_trigger(s_clk.posedge_event());
 #if (ESP_DL & DRIVER_DETAIL)
       cout << "DRIVER: rx catched sw-reset" << endl;
 #endif
@@ -188,6 +190,7 @@ void driver_uart::driver_send_tx_data(){
   if((packet_temp.sw_reset == true) || (initialization == true)){
       packet_temp.rtl_reset = '1';
       initialization = false;
+      next_trigger(s_clk.posedge_event());
 #if (ESP_DL & DRIVER_DETAIL)
       cout << "DRIVER: catched sw-reset" << endl;
 #endif
@@ -210,6 +213,7 @@ void driver_uart::driver_send_tx_data(){
 
       /* send tx data to dut */
       tx_data_port[i]->write(packet_temp.rtl_tx_data[i]);
+
 #if (ESP_DL & DRIVER_DETAIL)
       cout << "DRIVER: sent package to DUT: " << packet_temp.rtl_tx_data[i] << endl;
 #endif
@@ -219,4 +223,5 @@ void driver_uart::driver_send_tx_data(){
   reset->write(packet_temp.rtl_reset);
   tx_enable->write(SC_LOGIC_1);
   ld_tx_data->write(packet_temp.rtl_ld_tx_data); /* load tx buffer, if requested */
+  data_written_uart->notify(SC_ZERO_TIME);
 }

@@ -1,10 +1,12 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+/* Definition of the bitwidth of the fulladder design */
 #ifndef BITWIDTH
 #define BITWIDTH 32
 #endif
 
+/* Definition of the databits of the uart design */
 #ifndef DATABITS
 #define DATABITS 8
 #endif
@@ -12,6 +14,7 @@
  /* DRIVER MONITOR DUT DETAIL DETAIL DETAIL */
 #ifndef ESP_DL
 
+/* set debug level for embedded system project */
 #define ESP_DL         0x00
 
 /* standard debug level - will be used for transaction recording and vc-dumps*/

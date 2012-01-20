@@ -37,7 +37,7 @@ void _scv_pop_constraint();	/*	patch	*/
 #include "../global.h"
 #include "stimulator.h"
 
-#define GLOBAL_TIMEOUT (sc_time(20, SC_NS))
+#define GLOBAL_TIMEOUT (sc_time(50, SC_NS))
 
 SCV_EXTENSIONS(packet_uart_rx_data) {
 public:
@@ -82,11 +82,17 @@ class packet_fulladdr_constraint_t_01
 public:
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_01)
 	{
-		SCV_CONSTRAINT (pInput_rx->sw_data_rx() < 250);
+		SCV_CONSTRAINT (pInput_rx->sw_data_rx() < 255);
 		pInput_rx->sw_reset.disable_randomization();
 		pInput_rx->sw_reset.write(false);
 		pInput_rx->sw_rx_enable.disable_randomization();
     pInput_rx->sw_rx_enable.write(true);
+
+    SCV_CONSTRAINT (pInput_tx->sw_data_tx() < 255);
+    pInput_tx->sw_reset.disable_randomization();
+    pInput_tx->sw_reset.write(false);
+    pInput_tx->sw_tx_enable.disable_randomization();
+    pInput_tx->sw_tx_enable.write(true);
 
 		timeout = GLOBAL_TIMEOUT;
 	}
@@ -98,7 +104,13 @@ class packet_fulladdr_constraint_t_02
 public:
   SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_02)
   {
-    SCV_CONSTRAINT (pInput_tx->sw_data_tx() < 50);
+    SCV_CONSTRAINT (pInput_rx->sw_data_rx() < 50);
+    pInput_rx->sw_reset.disable_randomization();
+    pInput_rx->sw_reset.write(false);
+    pInput_rx->sw_rx_enable.disable_randomization();
+    pInput_rx->sw_rx_enable.write(true);
+
+    SCV_CONSTRAINT (pInput_tx->sw_data_tx() < 100);
     pInput_tx->sw_reset.disable_randomization();
     pInput_tx->sw_reset.write(false);
     pInput_tx->sw_tx_enable.disable_randomization();
@@ -250,9 +262,9 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				20));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				210));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				20));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				100));
 		/*			|															|								|						*/
 		//addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				500));
 		/*			|															|								|						*/
@@ -285,16 +297,20 @@ public:
 	/*	user defined ports for DUT - connected to Driver-module	*/
 	/*uart_data_port port_inputs_reference;
 	sc_inout < bool > carry_in_reference;
+	  */
+
 	sc_inout < double > timeout;
 	sc_inout < unsigned int > testsequence_id;
 	sc_inout < unsigned int > testcase_id;
-  */
+
 
   sc_inout <sc_uint <DATABITS> > port_inputs_rx;
   sc_inout <sc_uint <DATABITS> > port_inputs_tx;
 	sc_inout < bool > rx_enable_in;
   sc_inout < bool > tx_enable_in;
   sc_inout < bool > reset_in;
+
+  sc_port < handshake_generation_if > data_written;
 
 	/*	helper variables for port assignment	*/
 	sc_uint<DATABITS> s_input_rx;
@@ -337,6 +353,8 @@ public:
     tx_enable_in.write(s_tx_enable_in);
 		rx_enable_in.write(s_rx_enable_in);
 
+    data_written->notify(SC_ZERO_TIME);
+
 		if(s_reset_in == true) cout << "STIMULATOR: RESET SENT" << endl;
 	}
 
@@ -345,20 +363,13 @@ public:
 	 * 	the module ports of reference model
 	 */
 
-/*	void write_values_to_reference(packet_fulladdr_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
+	void write_values_to_reference(packet_fulladdr_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
 	{
-		s_input_A = p_values->pInput->sw_a;
-		s_input_B = p_values->pInput->sw_b;
-		s_carry_in = p_values->pInput->sw_cy;
-
-		port_inputs_reference[0]->write(s_input_A);
-		port_inputs_reference[1]->write(s_input_B);
-		carry_in_reference.write(s_carry_in);
 		timeout.write( p_values->timeout.to_seconds() );
 		testcase_id.write(_cnt_testcases);
 		testsequence_id.write(_testsequence_id);
 	}
-*/
+
 	/*	SystemC module thread for stimulator	*/
 	void stimulator_thread (void);
 

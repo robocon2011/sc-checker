@@ -43,7 +43,7 @@ void uart::receive_data(){
         }
         s_rx_cnt = 0;
 
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
         cout << "UART: uart reseted" << endl;
 #endif
 
@@ -57,7 +57,7 @@ void uart::receive_data(){
           }
           s_rx_is_empty = '1';
 
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
           cout << "UART: unloading data...." << endl;
 #endif
 
@@ -74,7 +74,7 @@ void uart::receive_data(){
               s_rx_busy = '1';
               s_rx_cnt = 0;
 
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
               cout<<"UART: SOF detected" << endl;
 #endif
 
@@ -91,7 +91,7 @@ void uart::receive_data(){
                 if(s_rx_cnt < DATABITS){
                     s_rx_loc_data[s_rx_cnt] = s_rx_in;
 
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
                     cout << "UART: received data bit" << s_rx_cnt << ": " << s_rx_in << endl;
 #endif
                     next_trigger(rxclk.posedge_event());
@@ -102,7 +102,7 @@ void uart::receive_data(){
                     /* Check for end of the frame */
                     if(s_rx_in == '0'){
                         s_rx_frame_err = '1';
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
                         cout << "UART: uart-rx frame error" << endl;
 #endif
                     }
@@ -116,16 +116,17 @@ void uart::receive_data(){
                         }
                         else{
                             s_rx_over_run = '1';
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
                             cout << "UART: uart-rx overrun" << endl;
 #endif
                         }
                         for(unsigned i = 0; i < DATABITS; i++) rx_data[i].write(s_rx_loc_data[i]);
-#if (ESP_DL & UART_DETAIL)
+                        data_written_rx->notify(SC_ZERO_TIME);
+#if (ESP_DL & DUT_DETAIL)
                         cout << "UART: rx-data reg written to monitor" << endl;
 #endif
                     }
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
                     cout << "UART: uart-rx transmission finished" << endl;
 #endif
                     next_trigger(rxclk.posedge_event());
@@ -159,7 +160,7 @@ void uart::send_data(){
       s_tx_over_run = '0';
       s_tx_cnt = 0;
       s_tx_sof = '1';
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
       cout << "UART: uart reseted (tx)" << endl;
 #endif
   }
@@ -171,7 +172,7 @@ void uart::send_data(){
           /* check for overrun */
           if((s_tx_is_empty == '0') && (s_tx_cnt > DATABITS)){
               s_tx_over_run = '0';
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
               cout << "UART: uart-tx overrun" << endl;
 #endif
           }
@@ -179,7 +180,7 @@ void uart::send_data(){
               for(unsigned i = 0; i < DATABITS; i++) s_tx_loc_data[i] = tx_data[i]->read();
               s_tx_is_empty = '0';
               s_tx_sof = '1';
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
               cout << "UART: tx-data loaded" << endl;
 #endif
           }
@@ -190,7 +191,7 @@ void uart::send_data(){
           if((s_tx_cnt == 0) && (s_tx_sof == '1')){
               s_tx_loc_out = '0';
               s_tx_sof = '0';
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
               cout << "UART: SOF sent";
 #endif
               next_trigger(txclk.posedge_event());
@@ -198,7 +199,7 @@ void uart::send_data(){
           else if (s_tx_cnt < DATABITS){
               s_tx_loc_out = s_tx_loc_data[s_tx_cnt];
               s_tx_cnt++;
-#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & DUT_DETAIL)
               cout << "UART: sent data bit " << s_tx_cnt << ": " << s_tx_loc_out << endl;
 #endif
               next_trigger(txclk.posedge_event());
@@ -208,16 +209,18 @@ void uart::send_data(){
               s_tx_cnt = 0;
               s_tx_is_empty = '1';
               s_tx_sof = '1';
-#if (ESP_DL & UART_DETAIL)
+
+//#if (ESP_DL & UART_DETAIL)
               cout << "UART: uart-tx transmission finished" << endl;
-#endif
+//#endif
           }
       }
       else if (s_tx_enable == '0'){
           s_tx_cnt = 0;
           s_tx_loc_out = '1';
       }
+
+      tx_empty.write(s_tx_is_empty);
+      tx_out.write(s_tx_loc_out);
   }
-  tx_empty.write(s_tx_is_empty);
-  tx_out.write(s_tx_loc_out);
 }
