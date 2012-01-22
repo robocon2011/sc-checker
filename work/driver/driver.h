@@ -36,6 +36,7 @@ public:
   scv_tr_generator<sc_logic, sc_logic> output_gen_a;
   scv_tr_generator<sc_logic, sc_logic> output_gen_b;
 
+  /* constructor and initialization of streams */
   SC_CTOR(driver)
   : input_stream("input_stream", "driver"),
     output_stream_a("output_stream_a", "driver"),

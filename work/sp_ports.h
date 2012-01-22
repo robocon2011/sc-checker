@@ -1,9 +1,20 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    sp_ports.h                                                    */
+/*                                                                            */
+/* Author:      Philipp Maroschek                                             */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
+
 #ifndef SP_PORTS_H
 #define SP_PORTS_H
-
-//#ifndef PACKETS_H
-//  #include "../packets/packets.h"
-//#endif
 
 #include <systemc>
 #include <scv.h>

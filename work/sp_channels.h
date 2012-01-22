@@ -1,9 +1,17 @@
-/*
- * sp_channels.h
- *
- *  Created on: 11.12.2011
- *      Author: ew08b033
- */
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    sp_channels.h                                                 */
+/*                                                                            */
+/* Author:      Roman Sollböck                                                */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
 
 #ifndef SP_CHANNELS_H_
 #define SP_CHANNELS_H_

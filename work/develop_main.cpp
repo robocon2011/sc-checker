@@ -1,3 +1,17 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    develop_main.cpp                                              */
+/*                                                                            */
+/* Author:      Roman Sollböck, Philipp Maroschek                             */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
 
 #define BITWIDTH 32
 
