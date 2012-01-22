@@ -1,10 +1,15 @@
 /******************************************************************************/
 /*                                                                            */
-/* Filename:   uart.h                                                         */
+/* Filename:    uart.h                                                        */
 /*                                                                            */
-/* Author:     Philipp Maroschek                                              */
+/* Author:      Philipp Maroschek                                             */
 /*                                                                            */
-/* Tools:      Compiles with SystemC 2.2.v0                                   */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   UART                                                          */
+/* Submodules:  ------                                                        */
 /*                                                                            */
 /******************************************************************************/
 

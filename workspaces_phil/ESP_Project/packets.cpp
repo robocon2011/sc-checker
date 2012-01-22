@@ -1,3 +1,19 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    sp_packets.cpp                                                */
+/*                                                                            */
+/* Author:      Philipp Maroschek                                             */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
+
+
 #include <systemc.h>
 #include <iomanip>
 #include <string>

@@ -1,10 +1,15 @@
 /******************************************************************************/
 /*                                                                            */
-/* Filename:   driver.h                                                   */
+/* Filename:    driver.h                                                      */
 /*                                                                            */
-/* Author:     Philipp Maroschek                                              */
+/* Author:      Philipp Maroschek                                             */
 /*                                                                            */
-/* Tools:      Compiles with SystemC 2.2.v0                                   */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   Driver                                                        */
+/* Submodules:  ------                                                        */
 /*                                                                            */
 /******************************************************************************/
 
@@ -17,7 +22,6 @@
 
 #include "clock_gen.h"
 
-/* driver for the fulladder design */
 SC_MODULE(driver_fulladdr)
 {
 public:
@@ -38,6 +42,7 @@ public:
   scv_tr_generator<sc_logic, sc_logic> output_gen_a;
   scv_tr_generator<sc_logic, sc_logic> output_gen_b;
 
+  /* constructor and initialization of streams */
   SC_CTOR(driver_fulladdr)
   : input_stream("input_stream", "driver"),
     output_stream_a("output_stream_a", "driver"),
@@ -55,7 +60,6 @@ public:
   void driver_method();
 };
 
-/* driver method */
 SC_MODULE(driver_uart)
 {
 public:
@@ -100,6 +104,7 @@ public:
   scv_tr_generator<sc_uint<DATABITS>, bool > input_gen;
   scv_tr_generator<sc_logic, sc_logic> output_gen;
 
+  /* constructor and initialization of streams */
   SC_CTOR(driver_uart)
   : clock_gen_i("clock_gen_i"),
     input_stream("input_stream", "driver"),

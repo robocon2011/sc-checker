@@ -1,3 +1,19 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    sp_packets.h                                                  */
+/*                                                                            */
+/* Author:      Philipp Maroschek                                             */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
+
+
 #ifndef PACKETS_H
 #define PACKETS_H
 

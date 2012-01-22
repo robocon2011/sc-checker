@@ -1,3 +1,18 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    develop_main.cpp                                              */
+/*                                                                            */
+/* Author:      Roman Sollböck, Philipp Maroschek                             */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
+
 
 #define BITWIDTH 32
 
@@ -11,7 +26,6 @@
 #include "stimulator/stimulator_config.h"
 #include "testcontroller/testcontroller.h"
 #include "dut/uart/uart.h"
-#include "dummy.h"
 
 #include "global.h"
 
@@ -25,18 +39,18 @@ int sc_main (int argc, char *argv[])
   scv_tr_db::set_default_db(&db);
 
   /* create tracefile */
-  /*sc_trace_file* tracefile_fulladder;
+  sc_trace_file* tracefile_uart;
 
-  tracefile_fulladder = sc_create_vcd_trace_file("fulladder_trace");
+  tracefile_uart = sc_create_vcd_trace_file("uart_trace");
 
-  if (!tracefile_fulladder){
+  if (!tracefile_uart){
       cout << "Error creating tracefile." << endl;
-  }*/
+  }
 
 
   stimulator_m i_stimulator("i_stimulator");
   testcontroller i_testcontroller("i_testcontroller");
-  //reference_model i_reference_model ("i_reference_model");
+  //reference_model i_reference_model ("i_reference_model"); TODO: implement TLM-Reference model
   scoreboard_uart i_scoreboard("i_scoreboard");
   driver_uart driver_i("driver_i");
   monitor_uart monitor_i("monitor_i");
@@ -185,21 +199,24 @@ int sc_main (int argc, char *argv[])
   i_scoreboard.tx_empty_out(tx_empty_out);
   i_scoreboard.rx_empty_out(rx_empty_out);
 
-  /* transaction recording
-  sc_trace(tracefile_fulladder, signal_A_dut, "DUT_A_in");
-  sc_trace(tracefile_fulladder, signal_B_dut, "DUT_B_in");
-  sc_trace(tracefile_fulladder, signal_carry_in_dut, "DUT_CY_in");
+  /* transaction recording - create value change dumps*/
+  sc_trace(tracefile_uart, reset, "reset");
+  sc_trace(tracefile_uart, tx_enable, "tx_enable");
+  sc_trace(tracefile_uart, rx_enable, "rx_enable");
+  sc_trace(tracefile_uart, ld_tx_data, "ld_tx_data");
+  sc_trace(tracefile_uart, uld_rx_data, "uld_rx_data");
+  sc_trace(tracefile_uart, tx_empty, "tx_empty");
+  sc_trace(tracefile_uart, rx_empty, "rx_empty");
+  sc_trace(tracefile_uart, rx_in, "rx_in");
+  sc_trace(tracefile_uart, tx_out, "tx_out");
 
-  sc_trace(tracefile_fulladder, signal_output, "DUT_output");
-  sc_trace(tracefile_fulladder, signal_carry_out, "DUT_CY_out");
 
-*/
   cout << "START OF SIMULATION" << endl;
 
   sc_start();
   if (! sc_end_of_simulation_invoked()) sc_stop();
 
-  // sc_close_vcd_trace_file(tracefile_fulladder);
+  sc_close_vcd_trace_file(tracefile_uart);
 
   cout << "END OF SIMULATION" << endl;
 

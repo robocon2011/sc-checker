@@ -1,10 +1,15 @@
 /******************************************************************************/
 /*                                                                            */
-/* Filename:   driver.cpp                                                     */
+/* Filename:    driver_uart.cpp                                               */
 /*                                                                            */
-/* Author:     Philipp Maroschek                                              */
+/* Author:      Philipp Maroschek                                             */
 /*                                                                            */
-/* Tools:      Compiles with SystemC 2.2.v0                                   */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   Driver                                                        */
+/* Submodules:  ------                                                        */
 /*                                                                            */
 /******************************************************************************/
 
@@ -12,11 +17,12 @@
 #include "driver.h"
 
 void driver_uart::driver_get_data(){
-
   packet_uart_rx_data packet_temp_rx;
   packet_uart_tx_data packet_temp_tx;
 
+  /* begin with transaction recording on ports (esl) */
   scv_tr_handle tr_h = input_gen.begin_transaction(packet_temp_rx.sw_data_rx);
+
 #if (ESP_DL & DRIVER_DETAIL)
   cout << "DRIVER: get_data-process" << endl;
 #endif
@@ -25,21 +31,25 @@ void driver_uart::driver_get_data(){
   packet_temp_rx.sw_data_rx = rx_data_in->read();
   packet_temp_tx.sw_data_tx = tx_data_in->read();
   packet_temp_rx.sw_reset = reset_in->read();
-
   packet_temp_tx.sw_reset = packet_temp_rx.sw_reset;
   packet_temp_rx.sw_rx_enable = rx_enable_in->read();
   packet_temp_tx.sw_tx_enable = tx_enable_in->read();
 
+  /* add attributes to transaction recording*/
   tr_h.record_attribute("I_driver_data_rx", packet_temp_rx.sw_data_rx);
   tr_h.record_attribute("I_driver_data_tx", packet_temp_tx.sw_data_tx);
   tr_h.record_attribute("I_driver_reset", packet_temp_rx.sw_reset);
+  tr_h.record_attribute("I_driver_rx-enable", packet_temp_rx.sw_rx_enable);
+  tr_h.record_attribute("I_driver_tx-enable", packet_temp_tx.sw_tx_enable);
 
+  /* end transaction recording on ports (esl) */
   input_gen.end_transaction(tr_h, packet_temp_rx.sw_reset);
 
   /* workaround for loading and unloading data */
   packet_temp_rx.sw_uld_rx_data = packet_temp_rx.sw_rx_enable;
   packet_temp_tx.sw_ld_tx_data = packet_temp_tx.sw_tx_enable;
 
+  /* write packets to channels */
   packet_uart_tx.write(packet_temp_tx);
   packet_uart_rx.write(packet_temp_rx);
 
@@ -50,7 +60,6 @@ void driver_uart::driver_send_rx_data(){
   static int count = 0;
   static bool eof = false, data_uld = false, initialization = true;
 
-  /* check debug level */
 #if (ESP_DL & DRIVER_DETAIL)
   cout << "DRIVER: rx-process" << endl;
 #endif
@@ -153,7 +162,6 @@ void driver_uart::driver_send_rx_data(){
             cout << "DRIVER: EOF sent" << endl;
             cout << "DRIVER: packet rx sent: " << packet_temp << endl;
 #endif
-            cout << "DRIVER: rx-data sent: " << packet_temp.sw_data_rx << endl;
 
             next_trigger(s_clk.posedge_event());
             eof = true;
@@ -183,6 +191,7 @@ void driver_uart::driver_send_tx_data(){
 
   /* read packet data */
   packet_temp = packet_uart_tx.read();
+
 #if (ESP_DL & DRIVER_DETAIL)
   cout << "DRIVER: got tx-packet: " << packet_temp.sw_data_tx << endl;
 #endif
@@ -191,6 +200,7 @@ void driver_uart::driver_send_tx_data(){
       packet_temp.rtl_reset = '1';
       initialization = false;
       next_trigger(s_clk.posedge_event());
+
 #if (ESP_DL & DRIVER_DETAIL)
       cout << "DRIVER: catched sw-reset" << endl;
 #endif
@@ -219,7 +229,11 @@ void driver_uart::driver_send_tx_data(){
 #endif
     }
   } /* end else */
+
+#if (ESP_DL & DRIVER_DETAIL)
   cout << "DRIVER: tx-data sent: " << packet_temp.sw_data_tx << endl;
+#endif
+
   reset->write(packet_temp.rtl_reset);
   tx_enable->write(SC_LOGIC_1);
   ld_tx_data->write(packet_temp.rtl_ld_tx_data); /* load tx buffer, if requested */

@@ -1,3 +1,18 @@
+/******************************************************************************/
+/*                                                                            */
+/* Filename:    sp_ports.cpp                                                  */
+/*                                                                            */
+/* Author:      Roman Sollböck, Philipp Maroschek                             */
+/*                                                                            */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   ------                                                        */
+/* Submodules:  ------                                                        */
+/*                                                                            */
+/******************************************************************************/
+
 #ifndef GLOBAL_H
 #define GLOBAL_H
 

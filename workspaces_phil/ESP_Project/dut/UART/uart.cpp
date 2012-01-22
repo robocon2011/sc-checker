@@ -1,10 +1,15 @@
 /******************************************************************************/
 /*                                                                            */
-/* Filename:   uart.cpp                                                       */
+/* Filename:    uart.cpp                                                      */
 /*                                                                            */
-/* Author:     Philipp Maroschek                                              */
+/* Author:      Philipp Maroschek                                             */
 /*                                                                            */
-/* Tools:      Compiles with SystemC 2.2.v0                                   */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   UART                                                          */
+/* Submodules:  ------                                                        */
 /*                                                                            */
 /******************************************************************************/
 
@@ -27,6 +32,7 @@ void uart::receive_data(){
   else{
     delay = true;
 
+    /* read inputs from driver */
     s_reset = reset.read();
     s_rx_in = rx_in.read();
     s_uld_data = uld_rx_data.read();
@@ -210,9 +216,9 @@ void uart::send_data(){
               s_tx_is_empty = '1';
               s_tx_sof = '1';
 
-//#if (ESP_DL & UART_DETAIL)
+#if (ESP_DL & UART_DETAIL)
               cout << "UART: uart-tx transmission finished" << endl;
-//#endif
+#endif
           }
       }
       else if (s_tx_enable == '0'){

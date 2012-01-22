@@ -1,10 +1,15 @@
 /******************************************************************************/
 /*                                                                            */
-/* Filename:   driver.cpp                                                     */
+/* Filename:    driver_fulladder.cpp                                          */
 /*                                                                            */
-/* Author:     Philipp Maroschek                                              */
+/* Author:      Philipp Maroschek                                             */
 /*                                                                            */
-/* Tools:      Compiles with SystemC 2.2.v0                                   */
+/* Tools:       Compiles with SystemC 2.2.v0                                  */
+/*                                                                            */
+/* Project:     SystemC Checker                                               */
+/*                                                                            */
+/* Topmodule:   Driver                                                        */
+/* Submodules:  ------                                                        */
 /*                                                                            */
 /******************************************************************************/
 
@@ -17,21 +22,27 @@ void driver_fulladdr::driver_method(){
          b = "";
   packet_fulladdr packet;
 
+  /* begin with transaction recording on ports (esl) */
   scv_tr_handle tr_h = input_gen.begin_transaction(packet.sw_a);
 
-  //cout << "Driver method" << endl;
+#if (ESP_DL & DRIVER_DETAIL)
+  cout << "Driver method" << endl;
+#endif
 
+  /* read ports, write values to packet */
   packet.sw_a = port_in[0]->read();
   packet.sw_b = port_in[1]->read();
   packet.sw_cy = cy_in->read();
 
+  /* add attributes to transaction recording */
   tr_h.record_attribute("I_driver_A", packet.sw_a);
   tr_h.record_attribute("I_driver_B", packet.sw_b);
   tr_h.record_attribute("I_driver_carry", packet.sw_cy);
 
+  /* end transaction recording on ports (esl) */
   input_gen.end_transaction(tr_h, packet.sw_cy);
 
-
+  /* begin with transaction recording on packets (rtl) */
   scv_tr_handle tr_h1 = output_gen_a.begin_transaction(packet.rtl_a[0]);
   scv_tr_handle tr_h2 = output_gen_b.begin_transaction(packet.rtl_b[0]);
 
@@ -62,13 +73,18 @@ void driver_fulladdr::driver_method(){
   cy_out->write(packet.rtl_cy);
   packet.rtl_cy = packet.sw_cy;
 
+  /* add attributes to transaction recording*/
   tr_h1.record_attribute("O_driver_A", a);
   tr_h2.record_attribute("O_driver_B", b);
   tr_h2.record_attribute("O_driver_carry", packet.rtl_cy);
+
+  /* end transaction recording on packets (rtl) */
   output_gen_a.end_transaction(tr_h1, packet.rtl_a[BITWIDTH]);
   output_gen_b.end_transaction(tr_h2, packet.rtl_b[BITWIDTH]);
 
+#if (ESP_DL & DRIVER_DETAIL)
   cout << "packet driver: " << packet << endl;
+#endif
 }
 
 
