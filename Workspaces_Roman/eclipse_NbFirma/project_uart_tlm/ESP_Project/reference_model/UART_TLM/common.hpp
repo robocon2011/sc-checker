@@ -19,17 +19,25 @@ struct uart_data_t
 	bool sw_reset;
 	bool sw_rx_enable;
 	bool sw_uld_rx_data;
-
-	/* control signals */
-	sc_logic rtl_reset;
-
-	sc_logic rtl_uld_rx_data;
-	sc_logic rtl_rx_enable;
-	sc_logic rtl_rx_in;
-	sc_logic rtl_rx_empty;
-
-	/* data */
-	sc_logic rtl_rx_data[DATABITS];
-
-	bitset<DATABITS> b_set;
+	sc_uint <DATABITS> sw_data_tx;
+	bool sw_reset;
+	bool sw_tx_enable;
+	bool sw_ld_tx_data;
+//
+//	/* control signals */
+//	sc_logic rtl_reset;
+//	sc_logic rtl_uld_rx_data;
+//	sc_logic rtl_rx_enable;
+//	sc_logic rtl_rx_in;
+//	sc_logic rtl_rx_empty;
+//	sc_logic rtl_ld_tx_data;
+//	sc_logic rtl_tx_enable;
+//	sc_logic rtl_tx_out;
+//	sc_logic rtl_tx_empty;
+//
+//	/* data */
+//	sc_logic rtl_rx_data[DATABITS];
+//	sc_logic rtl_tx_data[DATABITS];
+//
+//	bitset<DATABITS> b_set;
 };

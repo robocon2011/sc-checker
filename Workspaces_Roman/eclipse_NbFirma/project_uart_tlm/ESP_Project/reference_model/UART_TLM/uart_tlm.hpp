@@ -9,6 +9,7 @@ using namespace std;
 #include <tlm.h>
 /*std convinience sockets, which encapsulate the explicite inheritance of interfaces*/
 #include <tlm_utils/simple_initiator_socket.h>
+#include <tlm_utils/simple_target_socket.h>
 
 #include "common.hpp"
 
@@ -17,9 +18,9 @@ struct uart_tlm:sc_module {
 	
 public:
 	/*instanciate the initiator socket as "init_socket"*/	
-	tlm_utils::simple_initiator_socket<initiator> uart_initiator_socket;
+	tlm_utils::simple_initiator_socket<uart_tlm> uart_initiator_socket;
 	/*instanciate the target socket as "init_socket"*/
-	tlm_utils::simple_target_socket<target> uart_target_socket;
+	tlm_utils::simple_target_socket<uart_tlm> uart_target_socket;
 
 private:	
 	/*implemented in initiator.cpp*/

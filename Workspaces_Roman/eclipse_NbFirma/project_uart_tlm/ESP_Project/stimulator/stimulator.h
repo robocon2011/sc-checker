@@ -28,12 +28,11 @@ using namespace sc_core;
 #include "../global.h"
 
 
-class packet_fulladdr_constraint_base_t :
+class packet_uart_constraint_base_t :
 	virtual public scv_constraint_base
 {
 public:
-	scv_smart_ptr<packet_uart_rx_data> pInput_rx;
-  scv_smart_ptr<packet_uart_tx_data> pInput_tx;
+	scv_smart_ptr<uart_data_t> pInput;
 	sc_time timeout;
 };
 
