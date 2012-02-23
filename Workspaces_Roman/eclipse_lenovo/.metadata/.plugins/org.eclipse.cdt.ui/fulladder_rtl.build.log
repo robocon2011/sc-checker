@@ -1,8 +1,0 @@
-
-**** Clean-only build of configuration Debug for project fulladder_rtl ****
-
-make clean 
-rm -rf  ./stimulator/stimulator.o  ./fulladder_main.o  ./stimulator/stimulator.d  ./fulladder_main.d  fulladder_rtl.exe
- 
-
-**** Build Finished ****

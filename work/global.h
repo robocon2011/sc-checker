@@ -18,7 +18,7 @@
 
 /* Definition of the bitwidth of the fulladder design */
 #ifndef BITWIDTH
-#define BITWIDTH 32
+#define BITWIDTH 10
 #endif
 
 #include <systemc.h>

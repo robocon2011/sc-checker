@@ -26,7 +26,7 @@ using std::string;
 #include "global.h"
 
 #ifndef BITWIDTH
-#define BITWIDTH 32
+#define BITWIDTH 10
 #endif
 
 struct packet_fulladdr{

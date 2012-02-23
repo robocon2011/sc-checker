@@ -13,7 +13,7 @@
 /*                                                                            */
 /******************************************************************************/
 
-#define BITWIDTH 32
+#define BITWIDTH 10
 
 
 #include "database/database.h"

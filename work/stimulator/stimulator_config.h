@@ -70,9 +70,9 @@ class packet_fulladdr_constraint_t_01
 public:
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_01)
 	{
-		SCV_CONSTRAINT (pInput->sw_a() < 100);
-		SCV_CONSTRAINT (pInput->sw_b() < 100);
-		SCV_CONSTRAINT ( ( pInput->sw_a() + pInput->sw_b() ) == 150);
+		//SCV_CONSTRAINT (pInput->sw_a() < 100);
+		//SCV_CONSTRAINT (pInput->sw_b() < 100);
+		//SCV_CONSTRAINT ( ( pInput->sw_a() + pInput->sw_b() ) == 150);
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
@@ -86,8 +86,10 @@ class packet_fulladdr_constraint_t_02
 {
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_02)
 	{
-		SCV_CONSTRAINT (pInput->sw_a() > 100000);
-		SCV_CONSTRAINT (pInput->sw_b() > 100000);
+		SCV_CONSTRAINT (pInput->sw_a() > 100);
+		SCV_CONSTRAINT (pInput->sw_a() < 1000);
+		SCV_CONSTRAINT (pInput->sw_b() > 500);
+		SCV_CONSTRAINT (pInput->sw_b() < 800);
 		pInput->sw_cy.disable_randomization();
 		pInput->sw_cy.write(false);
 
@@ -156,12 +158,12 @@ public:
 
 	SCV_CONSTRAINT_CTOR(packet_fulladdr_constraint_t_06)
 	{
-		distribution_input_A.add( data_range (1000, 2000),			500);
-		distribution_input_A.add( data_range (2000, 10000),			500);
-		distribution_input_A.add( data_range (30000, 3000000),		500);
-		distribution_input_B.add( data_range (2000, 5000),			500);
-		distribution_input_B.add( data_range (5000, 20000),			500);
-		distribution_input_B.add( data_range (3000000, 5000000),	500);
+		distribution_input_A.add( data_range (0, 	1000),	150);
+		distribution_input_A.add( data_range (200, 	800),	150);
+		distribution_input_A.add( data_range (400, 	600),	150);
+		distribution_input_B.add( data_range (0, 	1000),	150);
+		distribution_input_B.add( data_range (200, 	800),	150);
+		distribution_input_B.add( data_range (400, 	600),	150);
 
 		pInput->sw_a.set_mode(distribution_input_A);
 		pInput->sw_b.set_mode(distribution_input_B);
@@ -222,20 +224,20 @@ public:
 	{
 		/*			|	templated classes for testsequence 						|	pointer to collection		|	specific number of
 		 * 			|							< specialized constraint class >|	of testsequences (only one)	|	testcases (randoms)	*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_01 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				5));
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_02 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				5));
+//		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_03 > 	(p_testsequences, 				5));
+//		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				5));
+//		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				5));
+//		/*			|															|								|						*/
+		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				200));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_04 > 	(p_testsequences, 				5));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_05 > 	(p_testsequences, 				5));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_06 > 	(p_testsequences, 				100));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_07 > 	(p_testsequences, 				100));
-		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_fulladdr_constraint_t_07 > 	(p_testsequences, 				100));
+//		/*			|															|								|						*/
 		/*	<ENTER> new testsequences	*/
 	}
 

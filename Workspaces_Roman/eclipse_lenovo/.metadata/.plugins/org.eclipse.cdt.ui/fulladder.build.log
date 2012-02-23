@@ -1,8 +1,0 @@
-
-**** Clean-only build of configuration Debug for project fulladder ****
-
-make clean 
-rm -rf  ./fulladder.o ./main.o ./testbench.o  ./fulladder.d ./main.d ./testbench.d  fulladder.exe
- 
-
-**** Build Finished ****
