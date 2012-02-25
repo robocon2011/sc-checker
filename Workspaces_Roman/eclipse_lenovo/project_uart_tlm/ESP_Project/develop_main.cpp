@@ -24,7 +24,7 @@
 //#include "dut/fulladder/fulladder_rtl.h"
 #include "monitor/monitor.h"
 #include "reference_model/UART_TLM/uart_tlm.hpp"
-#include "scoreboard/scoreboard_config.h"
+#include "scoreboard/scoreboard_config_uart.h"
 #include "stimulator/stimulator_config_uart_tlm.h"
 #include "testcontroller/testcontroller.h"
 #include "dut/uart/uart.h"
@@ -53,9 +53,6 @@ int sc_main (int argc, char *argv[])
   stimulator_m i_stimulator("i_stimulator");
   testcontroller i_testcontroller("i_testcontroller");
   uart_tlm i_reference_uart ("i_reference_uart");
-
-  /*connect them using the TLM interfaces*/
-  i_stimulator.reference_initiator_socket.bind(i_reference_uart.uart_target_socket);
 
   //reference_model i_reference_model ("i_reference_model"); TODO: implement TLM-Reference model
   scoreboard_uart i_scoreboard("i_scoreboard");
@@ -131,6 +128,11 @@ int sc_main (int argc, char *argv[])
   i_stimulator.testsequence_id(signal_testsequence_id);
   i_stimulator.timeout(signal_timeout);
   i_stimulator.data_written(stimulator_data_written);
+
+  /*connect them using the TLM interfaces*/
+  i_stimulator.reference_initiator_socket.bind(i_reference_uart.uart_target_socket);
+
+  i_reference_uart.uart_initiator_socket.bind(i_scoreboard.scoreboard_target_socket);
 
   /* assignment of driver ports */
   driver_i.rx_data_in(rx_data_in);

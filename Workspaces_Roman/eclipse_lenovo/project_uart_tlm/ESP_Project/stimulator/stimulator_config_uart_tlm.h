@@ -374,7 +374,7 @@ public:
 		struct packet_uart_data_to_reference data;
 
 		/*time delay simulated by each transaction*/
-		sc_time delay = sc_time(10, SC_NS);
+		sc_time delay = sc_time(5, SC_PS);
 
 		uint64_t addr;
 

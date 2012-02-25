@@ -20,7 +20,7 @@ struct uart_tlm:sc_module {
 	
 public:
 	/*instanciate the initiator socket as "init_socket"*/	
-	//tlm_utils::simple_initiator_socket<uart_tlm> uart_initiator_socket;
+	tlm_utils::simple_initiator_socket<uart_tlm> uart_initiator_socket;
 	/*instanciate the target socket as "init_socket"*/
 	tlm_utils::simple_target_socket<uart_tlm> uart_target_socket;
 
@@ -28,6 +28,7 @@ private:
 	/*implemented in initiator.cpp*/
 	sc_event receive_event;
 	packet_uart_data_to_reference data;
+	packet_uart_data_to_reference data_to_scbd;
 	uint8_t mem[128];
 	void uart_method(void);
 	void my_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
@@ -39,7 +40,7 @@ SC_HAS_PROCESS(uart_tlm);
 	
 /*A usual SystemC constructor*/
 uart_tlm(sc_module_name name_) :sc_module(name_),
-		/*uart_initiator_socket("uart_initiator_socket"),*/
+		uart_initiator_socket("uart_initiator_socket"),
 		uart_target_socket("uart_target_socket") {
 	/*register module behavorial description*/
 	SC_THREAD(uart_method);
