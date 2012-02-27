@@ -39,7 +39,7 @@ void uart_tlm::uart_method(void) {
 		}
 		else
 		{
-			cout << "error: no valid control configuration" << endl;
+			cout << "error: no valid control configuration: " << ctrl_new << endl;
 		}
 	}
 
@@ -113,21 +113,29 @@ void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc
 	/*4th process command*/
 	switch(cmd) {
 		case tlm::TLM_WRITE_COMMAND:
+			cout << "BEFORE - " << this->name() << ": adr = " << adr << endl;
 			adr = ( adr - UART_BASE_ADDR ) >> 3; // Address in Bytes
+			cout << "AFTER - " << this->name() << ": adr = " << adr << endl;
 			switch(adr)
 			{
 				case UART_BYTE_OFFS_RX_REG:
-					rx_reg_new = *ptr;
+					rx_reg_new = *(sc_uint<DATABITS>*)ptr;
+					cout << this->name() << ": rx_reg_new = " << rx_reg_new << endl;
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					break;
 				case UART_BYTE_OFFS_TX_REG:
-					memcpy((uint32_t *)&mem[(UART_BYTE_OFFS_RX_REG/sizeof(uint32_t))], ptr, len);
+					cout << this->name() << ": tx received = " << *(sc_uint<DATABITS>*)ptr << endl;
+					cout << this->name() << ": len received = " << len << endl;
+
+					memcpy((uint32_t *)&mem[(UART_BYTE_OFFS_TX_REG/sizeof(uint32_t))], (sc_uint<DATABITS>*)ptr, len);
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					break;
 				case UART_BYTE_OFFS_CTRL:
 					ctrl_old = mem[(UART_BYTE_OFFS_CTRL/sizeof(uint32_t))];
 					memcpy((uint32_t *)&mem[(UART_BYTE_OFFS_CTRL/sizeof(uint32_t))], ptr, len);
 					ctrl_new = mem[(UART_BYTE_OFFS_CTRL/sizeof(uint32_t))];
+					cout << this->name() << ": ctrl_old = " << ctrl_old << endl;
+					cout << this->name() << ": ctrl_new = " << ctrl_new << endl;
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					receive_event.notify();
 					break;
@@ -135,6 +143,11 @@ void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc
 					cout << "addr ERROR\n";
 					trans.set_response_status( tlm::TLM_COMMAND_ERROR_RESPONSE);
 					break;
+
+			}
+			for (unsigned int i = 0; i < MEMSIZE_UART; i++)
+			{
+				cout << this->name() << ": mem[" << i << "] = " << mem[i] << endl;
 			}
 			break;
 //			//memcpy((char *)&mem[adr],ptr,len);

@@ -25,6 +25,7 @@
 #include <systemc>
 using namespace sc_core;
 using namespace sc_dt;
+using namespace std;
 #include <scv.h>
 /*	patch for dealing with issue from OSCI forum
  * 	http://www.systemc.org/Discussion_Forums/systemc-forum/archive/msg?list_name=systemc-forum&monthdir=201005&msg=msg00010.html
@@ -378,7 +379,8 @@ public:
 	{
 		/*create a new payload data structure*/
 		tlm::tlm_generic_payload trans;
-		sc_uint<32> data;
+		sc_uint<DATABITS> data;
+		uint32_t data32;
 
 		/*time delay simulated by each transaction*/
 		sc_time delay = SC_ZERO_TIME;
@@ -394,7 +396,8 @@ public:
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_RX_REG << 3);
 		trans.set_address(addr);
-		trans.set_data_length(sizeof(sc_uint<32>));
+		trans.set_data_length(DATABITS / 8);
+		cout << this->name() << ": len = " << trans.get_data_length() << "(" << DATABITS / 8 << ")" << endl;
 		trans.set_data_ptr((unsigned char *)&data);
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 		/*the following responses are available eventually
@@ -406,28 +409,39 @@ public:
 					TLM_BYTE_ENABLE_ERROR_RESPONSE Unable to act on byte enable
 					TLM_GENERIC_ERROR_RESPONSE     Any other error
 		*/
+		cout << this->name() << ": data = " << data << endl;
 		process_tlm_transmission(eREFERENCE, &trans, delay);
 
 		data = p_values->pInput->sw_data_tx;
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_TX_REG << 3);
 		trans.set_address(addr);
-		trans.set_data_length(sizeof(sc_uint<32>));
+		trans.set_data_length(DATABITS / 8);
+		cout << this->name() << ": len = " << trans.get_data_length() << "(" << DATABITS / 8 << ")" << endl;
 		trans.set_data_ptr((unsigned char *)&data);
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+		cout << this->name() << ": data = " << data << endl;
 		process_tlm_transmission(eREFERENCE, &trans, delay);
 
-		data = 	p_values->pInput->sw_reset ? UART_CTRL_RESET : 0x00 |
-				p_values->pInput->sw_rx_enable ? UART_CTRL_RX_ENABLE : 0x00 |
-				p_values->pInput->sw_tx_enable ? UART_CTRL_TX_ENABLE : 0x00 |
-				p_values->pInput->sw_uld_rx_data ? UART_CTRL_ULD_RX_DATA : 0x00 |
-				p_values->pInput->sw_ld_tx_data ? UART_CTRL_LD_TX_DATA : 0x00;
+		cout << this->name() << ": sw_reset = " << p_values->pInput->sw_reset << endl;
+		cout << this->name() << ": sw_rx_enable = " << p_values->pInput->sw_rx_enable << endl;
+		cout << this->name() << ": sw_tx_enable = " << p_values->pInput->sw_tx_enable << endl;
+		cout << this->name() << ": sw_uld_rx_data = " << p_values->pInput->sw_uld_rx_data << endl;
+		cout << this->name() << ": sw_ld_tx_data = " << p_values->pInput->sw_ld_tx_data << endl;
+		data32 = 0;
+		data32 = 	( p_values->pInput->sw_reset ? UART_CTRL_RESET : 0x00 ) |
+				( p_values->pInput->sw_rx_enable ? UART_CTRL_RX_ENABLE : 0x00 ) |
+				( p_values->pInput->sw_tx_enable ? UART_CTRL_TX_ENABLE : 0x00 ) |
+				( p_values->pInput->sw_uld_rx_data ? UART_CTRL_ULD_RX_DATA : 0x00 ) |
+				( p_values->pInput->sw_ld_tx_data ? UART_CTRL_LD_TX_DATA : 0x00 );
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_CTRL << 3);
 		trans.set_address(addr);
-		trans.set_data_length(sizeof(sc_uint<32>));
-		trans.set_data_ptr((unsigned char *)&data);
+		trans.set_data_length(sizeof(uint32_t));
+		cout << this->name() << ": len = " << trans.get_data_length() << "(" << sizeof(uint32_t) << ")" << endl;
+		trans.set_data_ptr((unsigned char *)&data32);
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+		cout << this->name() << ": data32 = " << data32 << endl;
 		process_tlm_transmission(eREFERENCE, &trans, delay);
 
 		delay = sc_time(10, SC_NS);
@@ -436,6 +450,7 @@ public:
 		addr = 0x0000;
 		trans.set_address(addr);
 		trans.set_data_length(sizeof(struct data_to_scoreboard_t));
+		cout << this->name() << ": len = " << trans.get_data_length() << endl;
 		trans.set_data_ptr((unsigned char *)&data_to_scoreboard);
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 		process_tlm_transmission(eSCOREBOARD, &trans, delay);

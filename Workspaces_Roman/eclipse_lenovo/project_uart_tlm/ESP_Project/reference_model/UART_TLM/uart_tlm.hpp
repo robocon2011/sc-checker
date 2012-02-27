@@ -29,7 +29,8 @@ private:
 	sc_event receive_event;
 	packet_uart_data_to_scoreboard data;
 	packet_uart_data_to_scoreboard data_to_scbd;
-	uint32_t rx_reg_new, tx_new, ctrl_old, ctrl_new;
+	sc_uint<DATABITS> rx_reg_new, tx_new;
+	uint32_t ctrl_old, ctrl_new;
 	uint32_t mem[MEMSIZE_UART];
 	void uart_method(void);
 	void uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
@@ -46,6 +47,12 @@ uart_tlm(sc_module_name name_) :sc_module(name_),
 	/*register module behavorial description*/
 	SC_METHOD(uart_method);
 	sensitive << receive_event;
+	dont_initialize();
+
+	for (unsigned int i = 0; i < MEMSIZE_UART; i++)
+	{
+		mem[i] = 0;
+	}
 
 	uart_target_socket.register_b_transport(this, &uart_tlm::uart_tlm_b_transport);
 	/*do the usual initialization stuff here*/
