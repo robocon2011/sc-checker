@@ -351,4 +351,41 @@ private:
 // Stream operator to output the package
 ostream& operator<<(ostream& file, const packet_uart_tx_data& trans);
 
+struct uart_data_t
+{
+	/* sw-level of abstraction */
+	sc_uint <DATABITS> sw_data_rx;
+	bool sw_reset;
+	bool sw_rx_enable;
+	bool sw_uld_rx_data;
+	sc_uint <DATABITS> sw_data_tx;
+	bool sw_tx_enable;
+	bool sw_ld_tx_data;
+//
+//	/* control signals */
+//	sc_logic rtl_reset;
+//	sc_logic rtl_uld_rx_data;
+//	sc_logic rtl_rx_enable;
+//	sc_logic rtl_rx_in;
+//	sc_logic rtl_rx_empty;
+//	sc_logic rtl_ld_tx_data;
+//	sc_logic rtl_tx_enable;
+//	sc_logic rtl_tx_out;
+//	sc_logic rtl_tx_empty;
+//
+//	/* data */
+//	sc_logic rtl_rx_data[DATABITS];
+//	sc_logic rtl_tx_data[DATABITS];
+//
+//	bitset<DATABITS> b_set;
+};
+
+struct packet_uart_data_to_scoreboard
+{
+	struct uart_data_t packet;
+	unsigned int testsequ_id;
+	unsigned int cnt_testcases;
+	double timeout;
+};
+
 #endif

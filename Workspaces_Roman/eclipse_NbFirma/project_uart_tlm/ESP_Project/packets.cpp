@@ -166,3 +166,4 @@ ostream& operator<<(ostream& os, const packet_uart_tx_data& trans)
      << "}\n";
   return os;
 }
+

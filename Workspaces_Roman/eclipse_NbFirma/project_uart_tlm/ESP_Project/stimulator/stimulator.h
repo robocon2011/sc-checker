@@ -27,12 +27,13 @@ using namespace sc_core;
 #include "scv.h"
 #include "../global.h"
 
+typedef enum {eREFERENCE=0, eSCOREBOARD} tlm_direction_t;
 
 class packet_uart_constraint_base_t :
 	virtual public scv_constraint_base
 {
 public:
-	scv_smart_ptr<uart_data_t> pInput;
+	scv_smart_ptr < uart_data_t > pInput;
 	sc_time timeout;
 };
 
@@ -45,7 +46,7 @@ public:
 class testsequence_general_c
 {
 public:
-	packet_fulladdr_constraint_base_t *p_testvalues;
+	packet_uart_constraint_base_t *p_testvalues;
 	unsigned int no_of_testcases;
 	unsigned int testsequence_id;
 
