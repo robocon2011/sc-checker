@@ -25,12 +25,16 @@ using namespace std;
 
 #include "../global.h"
 #include "../reference_model/UART_TLM/common.hpp"
+#include "../stimulator/stimulator_config_uart_tlm.h"
 
 enum compareResult { eOK = 0, eMISMATCH, eTIMEOUT_OK, eTIMEOUT_MISMATCH};
 
 struct scoreboard_uart:sc_module
 {
 public:
+	tlm_utils::simple_target_socket< scoreboard_uart > ReferenceToScoreboard_target_socket;
+	tlm_utils::simple_target_socket< scoreboard_uart > StimulatorToScoreboard_target_socket;
+
 	sc_in < sc_uint <DATABITS> > rx_data_stim;
 	sc_in < sc_uint <DATABITS> > tx_data_stim;
 	sc_in < double > timeout_reference;
@@ -48,7 +52,6 @@ public:
 	sc_inout < bool > testcase_finished;
 
 	std::ofstream outputFile;
-	tlm_utils::simple_target_socket< scoreboard_uart > scoreboard_target_socket;
 
 	void store_reference_uart_method ();
 	void compare_uart_method ();
@@ -68,10 +71,12 @@ private:
 
 
 	enum compareResult result;
-	packet_uart_data_to_reference data_from_ref;
+	uint32_t data_from_ref[MEMSIZE_UART];
+	struct data_to_scoreboard_t data_from_stim;
 	sc_event receive_event;
 
-	void my_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
+	void ReferenceToScoreboard_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
+	void StimulatorToScoreboard_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
 
 public:
 	SC_HAS_PROCESS(scoreboard_uart);
@@ -87,7 +92,8 @@ public:
 	    testcase_id(0),
 	    start_time_buffer(0, SC_NS),
 	    end_time_buffer(0, SC_NS),
-	    scoreboard_target_socket("scoreboard_target_socket")
+	    ReferenceToScoreboard_target_socket("ReferenceToScoreboard_target_socket"),
+	    StimulatorToScoreboard_target_socket("StimulatorToScoreboard_target_socket")
 	{
 	  SC_METHOD (store_reference_uart_method);
 	    sensitive   << receive_event;
@@ -102,7 +108,8 @@ public:
 	                << event_timeout;
 	  dont_initialize();
 
-	  scoreboard_target_socket.register_b_transport(this, &scoreboard_uart::my_b_transport);
+	  ReferenceToScoreboard_target_socket.register_b_transport(this, &scoreboard_uart::ReferenceToScoreboard_b_transport);
+	  StimulatorToScoreboard_target_socket.register_b_transport(this, &scoreboard_uart::StimulatorToScoreboard_b_transport);
 
 	  outputFile.open("scoreboard.txt");
 	  if (outputFile.is_open())

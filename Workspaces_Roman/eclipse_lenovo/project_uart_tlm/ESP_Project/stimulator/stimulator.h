@@ -27,6 +27,7 @@ using namespace sc_core;
 #include "scv.h"
 #include "../global.h"
 
+typedef enum {eREFERENCE=0, eSCOREBOARD} tlm_direction_t;
 
 class packet_uart_constraint_base_t :
 	virtual public scv_constraint_base

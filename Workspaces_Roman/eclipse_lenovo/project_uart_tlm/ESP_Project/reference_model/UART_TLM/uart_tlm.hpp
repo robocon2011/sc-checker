@@ -27,11 +27,12 @@ public:
 private:	
 	/*implemented in initiator.cpp*/
 	sc_event receive_event;
-	packet_uart_data_to_reference data;
-	packet_uart_data_to_reference data_to_scbd;
-	uint8_t mem[128];
+	packet_uart_data_to_scoreboard data;
+	packet_uart_data_to_scoreboard data_to_scbd;
+	uint32_t rx_reg_new, tx_new, ctrl_old, ctrl_new;
+	uint32_t mem[MEMSIZE_UART];
 	void uart_method(void);
-	void my_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
+	void uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t);
 
 
 public:
@@ -43,10 +44,10 @@ uart_tlm(sc_module_name name_) :sc_module(name_),
 		uart_initiator_socket("uart_initiator_socket"),
 		uart_target_socket("uart_target_socket") {
 	/*register module behavorial description*/
-	SC_THREAD(uart_method);
-	//sensitive >> uart_target_socket;
+	SC_METHOD(uart_method);
+	sensitive << receive_event;
 
-	uart_target_socket.register_b_transport(this, &uart_tlm::my_b_transport);
+	uart_target_socket.register_b_transport(this, &uart_tlm::uart_tlm_b_transport);
 	/*do the usual initialization stuff here*/
 	
 }	

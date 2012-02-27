@@ -380,7 +380,7 @@ struct uart_data_t
 //	bitset<DATABITS> b_set;
 };
 
-struct packet_uart_data_to_reference
+struct packet_uart_data_to_scoreboard
 {
 	struct uart_data_t packet;
 	unsigned int testsequ_id;

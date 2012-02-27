@@ -39,7 +39,8 @@
 
 SC_HAS_PROCESS(stimulator_m);
 stimulator_m::stimulator_m(sc_module_name nm)
-	: sc_module (nm), reference_initiator_socket("reference_initiator_socket")
+	: sc_module (nm), reference_initiator_socket("reference_initiator_socket"),
+	  scoreboard_initiator_socket("scoreboard_initiator_socket")
 {
 	create_testsequences ( );
 
@@ -221,6 +222,32 @@ testsequence_specialized_c <T> ::testsequence_specialized_c (testseq_collectione
 	p_testvalues = &testvalues;
 }
 
+
+void stimulator_m::process_tlm_transmission(tlm_direction_t dir, tlm::tlm_generic_payload* trans, sc_time delay)
+{
+	int response = 0;
+
+	switch (dir)
+	{
+		case eREFERENCE:
+			reference_initiator_socket->b_transport(*trans,delay);
+			break;
+		case eSCOREBOARD:
+			scoreboard_initiator_socket->b_transport(*trans, delay);
+			break;
+	}
+
+	/*evaluate call response*/
+	response = trans->get_response_status();
+	switch(response) {
+			case tlm::TLM_OK_RESPONSE:
+				break;
+			default:
+				cout <<"Initiator WRITE: TLM_RESPONSE:"<<dec<<response<<"\n";
+				break;
+
+	};
+}
 /*///////////////////////////////////////////////////////////////////////////////////////
  * stimulator.cpp
  */

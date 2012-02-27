@@ -131,8 +131,8 @@ int sc_main (int argc, char *argv[])
 
   /*connect them using the TLM interfaces*/
   i_stimulator.reference_initiator_socket.bind(i_reference_uart.uart_target_socket);
-
-  i_reference_uart.uart_initiator_socket.bind(i_scoreboard.scoreboard_target_socket);
+  i_stimulator.scoreboard_initiator_socket.bind(i_scoreboard.StimulatorToScoreboard_target_socket);
+  i_reference_uart.uart_initiator_socket.bind(i_scoreboard.ReferenceToScoreboard_target_socket);
 
   /* assignment of driver ports */
   driver_i.rx_data_in(rx_data_in);

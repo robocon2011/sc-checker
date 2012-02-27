@@ -64,7 +64,14 @@ public:
 };
 
 
-class packet_fulladdr_constraint_base_t;
+class packet_uart_constraint_base_t;
+
+struct data_to_scoreboard_t
+{
+	packet_uart_constraint_base_t* p_values;
+	unsigned int cnt_testcases;
+	unsigned int testsequence_id;
+};
 
 /*	<ENTER BELOW>	------------------------------------------------
  *
@@ -300,13 +307,13 @@ public:
 	sc_inout < bool > carry_in_reference;
 	  */
 
-	/*instanciate the initiator socket as "init_socket"*/
+	/*instanciate the initiator and target socket*/
 	tlm_utils::simple_initiator_socket<stimulator_m> reference_initiator_socket;
+	tlm_utils::simple_initiator_socket<stimulator_m> scoreboard_initiator_socket;
 
 	sc_inout < double > timeout;
 	sc_inout < unsigned int > testsequence_id;
 	sc_inout < unsigned int > testcase_id;
-
 
 	sc_inout <sc_uint <DATABITS> > port_inputs_rx;
 	sc_inout <sc_uint <DATABITS> > port_inputs_tx;
@@ -367,44 +374,28 @@ public:
 	 * 	the module ports of reference model
 	 */
 
-	void write_values_to_reference(packet_uart_constraint_base_t *p_values, unsigned int _cnt_testcases, unsigned int _testsequence_id)
+	void write_values_to_reference(packet_uart_constraint_base_t *p_values , unsigned int _cnt_testcases, unsigned int _testsequence_id )
 	{
 		/*create a new payload data structure*/
 		tlm::tlm_generic_payload trans;
-		struct packet_uart_data_to_reference data;
+		sc_uint<32> data;
 
 		/*time delay simulated by each transaction*/
-		sc_time delay = sc_time(5, SC_PS);
+		sc_time delay = SC_ZERO_TIME;
 
 		uint64_t addr;
 
-		int response = 0;
+		struct data_to_scoreboard_t data_to_scoreboard;
+		data_to_scoreboard.p_values = p_values;
+		data_to_scoreboard.cnt_testcases = _cnt_testcases;
+		data_to_scoreboard.testsequence_id = _testsequence_id;
 
-		/*1st, set the command type*/
+		data = p_values->pInput->sw_data_rx;
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
-		/*2nd which device to call?*/
-		addr = BASE_ADDR;
+		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_RX_REG << 3);
 		trans.set_address(addr);
-		/*3rd the data length*/
-		trans.set_data_length(sizeof(struct packet_uart_data_to_reference));
-		/*4th the data itself*/
-		data.packet.sw_data_rx = p_values->pInput->sw_data_rx;
-		data.packet.sw_data_tx = p_values->pInput->sw_data_tx;
-		data.packet.sw_reset = p_values->pInput->sw_data_tx;
-		data.packet.sw_rx_enable = p_values->pInput->sw_rx_enable;
-		data.packet.sw_tx_enable = p_values->pInput->sw_tx_enable;
-		data.packet.sw_ld_tx_data = p_values->pInput->sw_ld_tx_data;
-		data.packet.sw_uld_rx_data = p_values->pInput->sw_uld_rx_data;
-
-		data.cnt_testcases = _cnt_testcases;
-		data.testsequ_id = _testsequence_id;
-		data.timeout = p_values->timeout.to_seconds();
-
-		/*info*/
-		//cout << "Writing data:" << dec << data <<"@address:"<< hex <<addr<<"\n";
-
+		trans.set_data_length(sizeof(sc_uint<32>));
 		trans.set_data_ptr((unsigned char *)&data);
-		/*5th set the response value to incomplete*/
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 		/*the following responses are available eventually
 					TLM_OK_RESPONSE                Successful
@@ -415,32 +406,46 @@ public:
 					TLM_BYTE_ENABLE_ERROR_RESPONSE Unable to act on byte enable
 					TLM_GENERIC_ERROR_RESPONSE     Any other error
 		*/
+		process_tlm_transmission(eREFERENCE, &trans, delay);
 
-		/*6th call blocking transport*/
-		reference_initiator_socket->b_transport(trans, delay);
+		data = p_values->pInput->sw_data_tx;
+		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
+		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_TX_REG << 3);
+		trans.set_address(addr);
+		trans.set_data_length(sizeof(sc_uint<32>));
+		trans.set_data_ptr((unsigned char *)&data);
+		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+		process_tlm_transmission(eREFERENCE, &trans, delay);
 
-		/*evaluate call response*/
-		response = trans.get_response_status();
-		switch(response) {
-				case tlm::TLM_OK_RESPONSE:
-					break;
-				default:
-					cout <<"Initiator WRITE: TLM_RESPONSE:"<<dec<<response<<"\n";
-					break;
+		data = 	p_values->pInput->sw_reset ? UART_CTRL_RESET : 0x00 |
+				p_values->pInput->sw_rx_enable ? UART_CTRL_RX_ENABLE : 0x00 |
+				p_values->pInput->sw_tx_enable ? UART_CTRL_TX_ENABLE : 0x00 |
+				p_values->pInput->sw_uld_rx_data ? UART_CTRL_ULD_RX_DATA : 0x00 |
+				p_values->pInput->sw_ld_tx_data ? UART_CTRL_LD_TX_DATA : 0x00;
+		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
+		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_CTRL << 3);
+		trans.set_address(addr);
+		trans.set_data_length(sizeof(sc_uint<32>));
+		trans.set_data_ptr((unsigned char *)&data);
+		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+		process_tlm_transmission(eREFERENCE, &trans, delay);
 
-		};
+		delay = sc_time(10, SC_NS);
 
-		// for compatibility reasons
-		timeout.write( p_values->timeout.to_seconds() );
-		testcase_id.write(_cnt_testcases);
-		testsequence_id.write(_testsequence_id);
-
-		/*done*/
+		// provide pointer to input values to scoreboard
+		addr = 0x0000;
+		trans.set_address(addr);
+		trans.set_data_length(sizeof(struct data_to_scoreboard_t));
+		trans.set_data_ptr((unsigned char *)&data_to_scoreboard);
+		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+		process_tlm_transmission(eSCOREBOARD, &trans, delay);
 
 	}
 
 	/*	SystemC module thread for stimulator	*/
 	void stimulator_thread (void);
+
+	void process_tlm_transmission(tlm_direction_t dir, tlm::tlm_generic_payload* trans, sc_time delay);
 
 
 private:
