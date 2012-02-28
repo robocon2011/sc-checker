@@ -72,7 +72,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ESP_Project/scoreboard/scoreboard.cpp|ESP_Project/driver/driver_fulladdr.cpp|ESP_Project/monitor/monitor_fulladdr.cpp|ESP_Project/monitor/monitor.cpp|simple_sockets|sockets" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="ESP_Project/dummy.cpp|ESP_Project/scoreboard/scoreboard.cpp|ESP_Project/driver/driver_fulladdr.cpp|ESP_Project/monitor/monitor_fulladdr.cpp|ESP_Project/monitor/monitor.cpp|simple_sockets|sockets" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -120,7 +120,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ESP_Project/scoreboard/scoreboard.cpp|ESP_Project/driver/driver_fulladdr.cpp|ESP_Project/monitor/monitor_fulladdr.cpp|ESP_Project/monitor/monitor.cpp|simple_sockets|sockets" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="ESP_Project/dummy.cpp|ESP_Project/scoreboard/scoreboard.cpp|ESP_Project/driver/driver_fulladdr.cpp|ESP_Project/monitor/monitor_fulladdr.cpp|ESP_Project/monitor/monitor.cpp|simple_sockets|sockets" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

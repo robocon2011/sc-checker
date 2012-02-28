@@ -1,0 +1,35 @@
+
+**** Build of configuration Debug for project SCFGU_Bsp06 ****
+
+make all 
+Building file: ../main.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.cpp"
+cygwin warning:
+  MS-DOS style path detected: C:\FH\SystemC\01_Eclipse_Workspace_SC01\SCFGU_Bsp06\Debug
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/01_Eclipse_Workspace_SC01/SCFGU_Bsp06/Debug
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+In file included from /usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward/iostream.h:31,
+                 from ../turn_of_events.h:17,
+                 from ../main.cpp:2:
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward/backward_warning.h:32:2: warning: #warning This file includes at least one deprecated or antiquated header. Please consider using one of the 32 headers found in section 17.4.1.2 of the C++ standard. Examples include substituting the <X> header for the <X.h> header for C++ includes, or <iostream> instead of the deprecated header <iostream.h>. To disable this warning use -Wno-deprecated.
+Finished building: ../main.cpp
+ 
+Building file: ../turn_of_events.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"turn_of_events.d" -MT"turn_of_events.d" -o "turn_of_events.o" "../turn_of_events.cpp"
+In file included from /usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward/iostream.h:31,
+                 from ../turn_of_events.h:17,
+                 from ../turn_of_events.cpp:5:
+/usr/lib/gcc/i686-pc-cygwin/3.4.4/include/c++/backward/backward_warning.h:32:2: warning: #warning This file includes at least one deprecated or antiquated header. Please consider using one of the 32 headers found in section 17.4.1.2 of the C++ standard. Examples include substituting the <X> header for the <X.h> header for C++ includes, or <iostream> instead of the deprecated header <iostream.h>. To disable this warning use -Wno-deprecated.
+Finished building: ../turn_of_events.cpp
+ 
+Building target: SCFGU_Bsp06.exe
+Invoking: Cygwin C++ Linker
+g++ -L"C:\FH\SystemC\systemc-2.2.0\lib-cygwin" -L"C:\FH\SystemC\scv-1.0p2-sysc2.2\lib-cygwin" -o "SCFGU_Bsp06.exe"  ./main.o ./turn_of_events.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
+Finished building target: SCFGU_Bsp06.exe
+ 
+
+**** Build Finished ****

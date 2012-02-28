@@ -1,0 +1,37 @@
+
+**** Build of configuration Debug for project SCFGU_Bsp13 ****
+
+make all 
+Building file: ../interrupt.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"interrupt.d" -MT"interrupt.d" -o "interrupt.o" "../interrupt.cpp"
+cygwin warning:
+  MS-DOS style path detected: C:\FH\SystemC\rep_sc-checker\book_Ch13\Workspace_Eclipse\SCFGU_Bsp13\Debug
+  Preferred POSIX equivalent is: /cygdrive/c/FH/SystemC/rep_sc-checker/book_Ch13/Workspace_Eclipse/SCFGU_Bsp13/Debug
+  CYGWIN environment variable option "nodosfilewarning" turns off this warning.
+  Consult the user's guide for more details about POSIX paths:
+    http://cygwin.com/cygwin-ug-net/using.html#using-pathnames
+Finished building: ../interrupt.cpp
+ 
+Building file: ../main.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"main.d" -MT"main.d" -o "main.o" "../main.cpp"
+Finished building: ../main.cpp
+ 
+Building file: ../resp.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"resp.d" -MT"resp.d" -o "resp.o" "../resp.cpp"
+Finished building: ../resp.cpp
+ 
+Building file: ../stim.cpp
+Invoking: Cygwin C++ Compiler
+g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"stim.d" -MT"stim.d" -o "stim.o" "../stim.cpp"
+Finished building: ../stim.cpp
+ 
+Building target: SCFGU_Bsp13.exe
+Invoking: Cygwin C++ Linker
+g++ -L"C:\FH\SystemC\systemc-2.2.0\lib-cygwin" -L"C:\FH\SystemC\scv-1.0p2-sysc2.2\lib-cygwin" -o "SCFGU_Bsp13.exe"  ./interrupt.o ./main.o ./resp.o ./stim.o   -lscv -lobj -lcudd -lutil -lmtr -lst -lsystemc
+Finished building target: SCFGU_Bsp13.exe
+ 
+
+**** Build Finished ****

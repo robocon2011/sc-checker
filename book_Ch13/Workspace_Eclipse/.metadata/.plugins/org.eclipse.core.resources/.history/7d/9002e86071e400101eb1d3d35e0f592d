@@ -1,0 +1,33 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CPP_SRCS += \
+../interrupt.cpp \
+../main.cpp \
+../resp.cpp \
+../stim.cpp 
+
+OBJS += \
+./interrupt.o \
+./main.o \
+./resp.o \
+./stim.o 
+
+CPP_DEPS += \
+./interrupt.d \
+./main.d \
+./resp.d \
+./stim.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+%.o: ../%.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: Cygwin C++ Compiler'
+	g++ -I"C:\FH\SystemC\systemc-2.2.0\include" -I"C:\FH\SystemC\scv-1.0p2-sysc2.2\include" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+
