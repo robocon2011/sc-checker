@@ -17,7 +17,8 @@
  *  						wait(zero) statement after write_values added
  *  			2011/12/03: stimulator_thread modified for new control signals
  *  						assignment of testsequence_id added
- *
+ *  			2012/02/28: Function process_tlm_transmission added
+ *  						some debug-printouts removed from stimulator thread
  */
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES

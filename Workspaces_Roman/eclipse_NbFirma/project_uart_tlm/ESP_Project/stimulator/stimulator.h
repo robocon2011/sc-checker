@@ -16,6 +16,7 @@
  *  			2011/12/03:	testsequence_id added to class testsequence_general_c
  *  						timeout added to dutInput_constraint_base_t
  *  			2011/12/10:	global struct packet_fulladdr added, dutInput_t removed
+ *  			2012/02/28: class packet_uart_constraint_base_t added
  *
  */
 
@@ -29,6 +30,7 @@ using namespace sc_core;
 
 typedef enum {eREFERENCE=0, eSCOREBOARD} tlm_direction_t;
 
+/*	Constraint base class for project specific constraint objects */
 class packet_uart_constraint_base_t :
 	virtual public scv_constraint_base
 {

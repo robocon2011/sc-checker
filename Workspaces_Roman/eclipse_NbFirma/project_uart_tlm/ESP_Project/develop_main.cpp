@@ -6,7 +6,7 @@
 /*                                                                            */
 /* Tools:       Compiles with SystemC 2.2.v0                                  */
 /*                                                                            */
-/* Project:     SystemC Checker                                               */
+/* Project:     SystemC Checker for UART module                               */
 /*                                                                            */
 /* Topmodule:   ------                                                        */
 /* Submodules:  ------                                                        */
@@ -109,7 +109,7 @@ int sc_main (int argc, char *argv[])
   i_testcontroller.testcase_finished(signal_testcase_finished);
   i_testcontroller.all_sequences_finished(signal_all_testsequences_finished);
 
-  /* assignment of stimulator ports */
+  /* assignment of stimulator ports to DUT */
   i_stimulator.port_inputs_rx(rx_data_in);
   i_stimulator.port_inputs_tx(tx_data_in);
   i_stimulator.rx_enable_in(rx_enable_in);
@@ -121,6 +121,7 @@ int sc_main (int argc, char *argv[])
   i_stimulator.testsequences_finished(signal_all_testsequences_finished);
   i_stimulator.data_written(stimulator_data_written);
 
+  /* assignment of stimulator TLM-sockets to Reference model and Scoreboard */
   i_stimulator.reference_initiator_socket.bind(i_reference_uart.uart_target_socket);
   i_stimulator.scoreboard_initiator_socket.bind(i_scoreboard.StimulatorToScoreboard_target_socket);
 
@@ -183,7 +184,7 @@ int sc_main (int argc, char *argv[])
   uart_i.data_written_rx(uart_data_written);
   uart_i.data_written_driver(driver_data_written);
 
-  /* assignment of scoreboard ports */
+  /* assignment of scoreboard ports to Monitor */
 
   i_scoreboard.data_written(monitor_data_written);
   i_scoreboard.testcase_finished(signal_testcase_finished);
@@ -193,6 +194,7 @@ int sc_main (int argc, char *argv[])
   i_scoreboard.tx_empty_out(tx_empty_out);
   i_scoreboard.rx_empty_out(rx_empty_out);
 
+  /* assignment of Reference model TLM-sockets to Scoreboard */
   i_reference_uart.uart_initiator_socket.bind(i_scoreboard.ReferenceToScoreboard_target_socket);
 
   /* transaction recording - create value change dumps*/

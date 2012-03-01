@@ -13,14 +13,15 @@
  *  purpose:	user-specific configuration for stimulator module
  *  			config file for UART, interface to TLM model
  *
- *  History:	2012/02/22: first executable version implemented
+ *  History:	2012/02/28: first executable version implemented
+ *  			2012/02/29: comments added
  *
  */
 
 #ifndef STIMULATOR_CONFIG_UART_TLM_H_
 #define STIMULATOR_CONFIG_UART_TLM_H_
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
+#define SC_INCLUDE_DYNAMIC_PROCESSES // define needed for TLM Simulation
 
 #include <systemc>
 using namespace sc_core;
@@ -41,6 +42,7 @@ void _scv_pop_constraint();	/*	patch	*/
 
 #define GLOBAL_TIMEOUT (sc_time(50, SC_NS))
 
+/* SCV extension of project specific data type */
 SCV_EXTENSIONS(uart_data_t) {
 public:
 	scv_extensions < sc_uint<DATABITS> > sw_data_rx;
@@ -62,9 +64,10 @@ public:
 	}
 };
 
-
+/*	forward declaration of base data type of stimulator constraints */
 class packet_uart_constraint_base_t;
 
+/*	struct for simple TLM communication to Scoreboard */
 struct data_to_scoreboard_t
 {
 	packet_uart_constraint_base_t* p_values;
@@ -80,7 +83,7 @@ struct data_to_scoreboard_t
  *				testsequences are templated by these classes
  *
  *	Important:	use SCV_CONSTRAINT_CTOR,
- *				specialize from dutInput_constraint_base_t,
+ *				specialize from packet_uart_constraint_base_t,
  *				redeclaration of scv_smart_ptr not necessary
  */
 class packet_uart_constraint_t_01
@@ -306,9 +309,11 @@ public:
 SC_MODULE (stimulator_m)
 {
 public:
+	/*	TLM sockets for initiating communication to Reference model and Scoreboard */
 	tlm_utils::simple_initiator_socket<stimulator_m> reference_initiator_socket;
 	tlm_utils::simple_initiator_socket<stimulator_m> scoreboard_initiator_socket;
 
+	/*	Ports for Driver communication */
 	sc_inout <sc_uint <DATABITS> > port_inputs_rx;
 	sc_inout <sc_uint <DATABITS> > port_inputs_tx;
 	sc_inout < bool > rx_enable_in;
@@ -343,14 +348,14 @@ public:
 
 	void write_values_to_dut(packet_uart_constraint_base_t *p_values)
 	{
-		cout << "STIMULATOR: write values to dut" << endl;
-
+		/*	obtain values from current constraint object */
 		s_input_rx = p_values->pInput->sw_data_rx;
 		s_input_tx = p_values->pInput->sw_data_tx;
 		s_reset_in = false;
 		s_tx_enable_in = p_values->pInput->sw_tx_enable;
 		s_rx_enable_in = p_values->pInput->sw_rx_enable;
 
+		/*	forward values to Driver ports */
 		port_inputs_rx ->write(s_input_rx);
 		port_inputs_tx ->write(s_input_tx);
 		reset_in.write(s_reset_in);
@@ -369,17 +374,21 @@ public:
 
 	void write_values_to_reference(packet_uart_constraint_base_t *p_values , unsigned int _cnt_testcases, unsigned int _testsequence_id )
 	{
+		/*	payload container for TLM Transport */
 		tlm::tlm_generic_payload trans;
 
 		uint32_t data;
 		sc_time delay = SC_ZERO_TIME;
 		uint64_t addr;
 
+		/*	data packet for Scoreboard */
 		struct data_to_scoreboard_t data_to_scoreboard;
+
 		data_to_scoreboard.p_values = p_values;
 		data_to_scoreboard.cnt_testcases = _cnt_testcases;
 		data_to_scoreboard.testsequence_id = _testsequence_id;
 
+		/*	Prepare payload for sending RX-data to Reference model */
 		data = p_values->pInput->sw_data_rx.to_int();
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_RX_REG << 3);
@@ -396,8 +405,10 @@ public:
 					TLM_BYTE_ENABLE_ERROR_RESPONSE Unable to act on byte enable
 					TLM_GENERIC_ERROR_RESPONSE     Any other error
 		*/
+		/*	internal function for hiding transmission process */
 		process_tlm_transmission(eREFERENCE, &trans, delay);
 
+		/*	Prepare payload for sending TX-data to Reference model */
 		data = p_values->pInput->sw_data_tx.to_int();
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_TX_REG << 3);
@@ -407,6 +418,7 @@ public:
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 		process_tlm_transmission(eREFERENCE, &trans, delay);
 
+		/*	Prepare payload for sending control data to Reference model */
 		data = 	( p_values->pInput->sw_reset ? UART_CTRL_RESET : 0x00 ) |
 				( p_values->pInput->sw_rx_enable ? UART_CTRL_RX_ENABLE : 0x00 ) |
 				( p_values->pInput->sw_tx_enable ? UART_CTRL_TX_ENABLE : 0x00 ) |
@@ -420,9 +432,10 @@ public:
 		trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 		process_tlm_transmission(eREFERENCE, &trans, delay);
 
+		/*	Delay before sending testcase info to Scoreboard */
 		delay = sc_time(10, SC_NS);
 
-		// provide pointer to input values to scoreboard
+		/*	prepare payload for sending testcase data to Scoreboard */
 		addr = SCOREBOARD_BASE_ADDR;
 		trans.set_address(addr);
 		trans.set_data_length(sizeof(struct data_to_scoreboard_t));
@@ -435,6 +448,7 @@ public:
 	/*	SystemC module thread for stimulator	*/
 	void stimulator_thread (void);
 
+	/*	internal function for hiding transmission process */
 	void process_tlm_transmission(tlm_direction_t dir, tlm::tlm_generic_payload* trans, sc_time delay);
 
 
@@ -445,7 +459,7 @@ private:
 	testseq_collectionentry_c testsequences;
 };
 
-#endif /* STIMULATOR_CONFIG_H_ */
+#endif /* STIMULATOR_CONFIG_UART_TLM_H_ */
 
 /*///////////////////////////////////////////////////////////////////////////////////////
  * stimulator_config_uart_tlm.h
