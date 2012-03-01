@@ -1,5 +1,32 @@
+/*
+ * 	Filename:	uart_tlm.cpp
+ *
+ * 	Version:	---
+ *
+ *  Created on:	2012/02/28
+ *
+ *  Author: 	Roman SOLLBOECK
+ *
+ *  Project:	SystemC Checker
+ *  Submodule:	UART_TLM
+ *
+ *  purpose:	TLM Reference Model for UART RTL Design
+ *
+ *  History:	2012/02/28: first executable version implemented
+ */
+
 #include "uart_tlm.hpp"
 
+/*
+ * **************************************************************
+ *
+ * functionname:	uart_tlm (constructor)
+ * purpose:			Constructor for sc_module uart_tlm
+ * parameters:		none
+ * returnvalue:		none
+ *
+ * **************************************************************
+ */
 SC_HAS_PROCESS(uart_tlm);
 uart_tlm::uart_tlm(sc_module_name name_) :sc_module(name_),
 		uart_initiator_socket("uart_initiator_socket"),
@@ -8,15 +35,27 @@ uart_tlm::uart_tlm(sc_module_name name_) :sc_module(name_),
 	SC_METHOD(uart_method);
 	sensitive << receive_event;
 	dont_initialize();
-
+	
+	/*	initialize UART memory */
 	for (unsigned int i = 0; i < MEMSIZE_UART; i++)
 	{
 		mem[i] = 0;
 	}
-
+	
+	/*	register blocking transport method for receiving transactions */
 	uart_target_socket.register_b_transport(this, &uart_tlm::uart_tlm_b_transport);
 }
 
+/*
+ * **************************************************************
+ *
+ * functionname:	uart_method
+ * purpose:			Function for actual behavior of UART model
+ * parameters:		none
+ * returnvalue:		none
+ *
+ * **************************************************************
+ */
 void uart_tlm::uart_method(void) {
 		
 	tlm::tlm_generic_payload trans;
