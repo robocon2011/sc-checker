@@ -13,6 +13,7 @@
  *  purpose:	TLM Reference Model for UART RTL Design
  *
  *  History:	2012/02/28: first executable version implemented
+ *  			2012/03/01: comments added
  */
 
 #include "uart_tlm.hpp"
@@ -57,29 +58,35 @@ uart_tlm::uart_tlm(sc_module_name name_) :sc_module(name_),
  * **************************************************************
  */
 void uart_tlm::uart_method(void) {
-		
+	/*	Generic Payload container for storage of transaction data */
 	tlm::tlm_generic_payload trans;
 
 	sc_time delay = SC_ZERO_TIME;
 	uint64_t addr;
 	int response = 0;
 
+	/*	perform only when CTRL data were changed
+	 * 	TODO: Sollte anders gelöst werden */
 	if (ctrl_old != ctrl_new)
 	{
+		/*	highest priority for reset signal */
 		if (ctrl_new & UART_CTRL_RESET)
 		{
 			mem[(UART_BYTE_OFFS_RX_REG/sizeof(uint32_t))] = 0u;
 			mem[(UART_BYTE_OFFS_TX_REG/sizeof(uint32_t))] = 0u;
 		}
+		/*	Unload of RX-Register */
 		else if (	( ctrl_new & UART_CTRL_ULD_RX_DATA ) &&
 					( ctrl_new & UART_CTRL_RX_ENABLE ) )
 		{
 			mem[(UART_BYTE_OFFS_RX_REG/sizeof(uint32_t))] = 0u;
 		}
+		/*	RX-Enable, store received data to UART RX-register */
 		else if ( ctrl_new & UART_CTRL_RX_ENABLE )
 		{
 			mem[(UART_BYTE_OFFS_RX_REG/sizeof(uint32_t))] = rx_reg_new;
 		}
+		/*	Unload of TX-Register */
 		else if (	( ctrl_new & UART_CTRL_TX_ENABLE ) &&
 					( ctrl_new & UART_CTRL_LD_TX_DATA) )
 		{
@@ -91,10 +98,12 @@ void uart_tlm::uart_method(void) {
 		}
 	}
 
+	/*	prepare payload container for transaction */
 	trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 	addr = SCOREBOARD_BASE_ADDR;
 	trans.set_address(addr);
 	trans.set_data_length(sizeof(uint32_t) * MEMSIZE_UART);
+	/*	provide Memory content of UART to target */
 	trans.set_data_ptr((unsigned char *)&mem[0]);
 	trans.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
 	/*the following responses are available eventually
@@ -108,7 +117,7 @@ void uart_tlm::uart_method(void) {
 	*/
 	uart_initiator_socket->b_transport(trans, delay);
 
-	/*evaluate call response*/
+	/*	evaluate call response */
 	response = trans.get_response_status();
 	switch(response) {
 			case tlm::TLM_OK_RESPONSE:
@@ -120,8 +129,21 @@ void uart_tlm::uart_method(void) {
 }
 
 
+/*
+ * **************************************************************
+ *
+ * functionname:	uart_tlm_b_transport
+ * purpose:			Blocking transport function for TLM target socket connected to Stimulator
+ * 					Implementation required for TLM simple socket
+ * parameters:		pointer to generic payload container
+ * 					value for transport time delay
+ * returnvalue:		none
+ *
+ * **************************************************************
+ */
 void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc_time& t)
 {
+	/*	extract transaction data from payload container */
 	tlm::tlm_command cmd = trans.get_command();
 	sc_dt::uint64    adr = trans.get_address();
 	unsigned char*   ptr = trans.get_data_ptr();
@@ -129,6 +151,7 @@ void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc
 	unsigned char*   byt = trans.get_byte_enable_ptr();
 	unsigned int     wid = trans.get_streaming_width();
 	
+	/*	Failure handling */
 	if (byt != NULL) {                                            
     trans.set_response_status(tlm::TLM_BYTE_ENABLE_ERROR_RESPONSE );
     return;
@@ -142,16 +165,21 @@ void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc
 	switch(cmd) {
 		case tlm::TLM_WRITE_COMMAND:
 			adr = ( adr - UART_BASE_ADDR ) >> 3; // Address in Bytes
+			/*	Transaction points directly to certain UART registers */
 			switch(adr)
 			{
+				/*	Random RX-value received, store in buffer and evaluate RX-enable afterwards */
 				case UART_BYTE_OFFS_RX_REG:
 					rx_reg_new = (uint32_t)*ptr;
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					break;
+				/*	Random TX-value received, store in TX-register */
 				case UART_BYTE_OFFS_TX_REG:
 					memcpy(&mem[(UART_BYTE_OFFS_TX_REG/sizeof(uint32_t))], ptr, len);
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					break;
+				/*	UART control bits received, store in CTRL register
+				 * 	and keep old value in buffer */
 				case UART_BYTE_OFFS_CTRL:
 					ctrl_old = mem[(UART_BYTE_OFFS_CTRL/sizeof(uint32_t))];
 					memcpy((uint32_t *)&mem[(UART_BYTE_OFFS_CTRL/sizeof(uint32_t))], ptr, len);
@@ -177,4 +205,7 @@ void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc
 		break;
 	}
 }
+/*///////////////////////////////////////////////////////////////////////////////////////
+ * uart_tlm.cpp
+ */
 

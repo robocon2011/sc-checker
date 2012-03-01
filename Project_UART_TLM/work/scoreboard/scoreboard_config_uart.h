@@ -1,13 +1,25 @@
 /*
- * scoreboard_config_uart.h
+ * 	Filename:	scoreboard_config_uart.h
  *
- *  Created on: 27.11.2011
- *      Author: ew08b033
+ * 	Version:	---
+ *
+ *  Created on:	2012/02/28
+ *
+ *  Author: 	Roman SOLLBOECK
+ *
+ *  Project:	SystemC Checker
+ *  Submodule:	Scoreboard
+ *
+ *  purpose:	Scoreboard configuration for testing of UART RTL Design
+ *
+ *  History:	2012/02/28: first executable version implemented
+ *  			2012/03/01: comments added
  */
 
 #ifndef SCOREBOARD_CONFIG_UART_H_
 #define SCOREBOARD_CONFIG_UART_H_
 
+/*	define needed for TLM Simulation */
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 
 #include <systemc>
@@ -27,12 +39,22 @@ using namespace std;
 
 enum compareResult { eOK = 0, eMISMATCH, eTIMEOUT_OK, eTIMEOUT_MISMATCH};
 
+/*
+ *	structname:	scoreboard_uart
+ *	purpose:	Scoreboard module incorporating TLM sockets for
+ *				transaction-based communication with UART Reference model and
+ *				Stimulator module
+ *
+ */
 struct scoreboard_uart:sc_module
 {
 public:
+	/*	Target socket for receiving Reference model output */
 	tlm_utils::simple_target_socket< scoreboard_uart > ReferenceToScoreboard_target_socket;
+	/*	Target socket for receiving testcase relevant data from Stimulator */
 	tlm_utils::simple_target_socket< scoreboard_uart > StimulatorToScoreboard_target_socket;
 
+	/*	Ports declaration for communication to Monitor module */
 	sc_in<bool> tx_empty_out;
 	sc_in<bool> rx_empty_out;
 	sc_in<sc_uint< DATABITS> > rx_data_out;
@@ -97,6 +119,7 @@ public:
 	  ReferenceToScoreboard_target_socket.register_b_transport(this, &scoreboard_uart::ReferenceToScoreboard_b_transport);
 	  StimulatorToScoreboard_target_socket.register_b_transport(this, &scoreboard_uart::StimulatorToScoreboard_b_transport);
 
+	  /*	prepare header of output file */
 	  outputFile.open("scoreboard.txt");
 	  if (outputFile.is_open())
 	  {

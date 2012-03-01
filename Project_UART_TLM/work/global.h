@@ -47,6 +47,7 @@
 
 #endif
 
+/*	defines for UART TLM model memory */
 #define BASE_ADDR 0x00000000ff000000
 #define LENGTH 0x80
 #define DATABITS 8
@@ -55,6 +56,7 @@
 
 #define SCOREBOARD_BASE_ADDR	0x00000000
 
+/*	defines for UART TLM model bitmasks */
 #define UART_BASE_ADDR		0x00000000
 #define UART_BYTE_OFFS_RX_REG	0x0000
 #define UART_BYTE_OFFS_TX_REG	0x0004
@@ -84,4 +86,4 @@
 using namespace std;
 
 
-#endif
+#endif /*	GLOBAL_H */
