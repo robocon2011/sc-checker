@@ -96,11 +96,16 @@ public:
 		pInput->sw_reset.disable_randomization();
 		pInput->sw_reset.write(false);
 		pInput->sw_rx_enable.disable_randomization();
-		pInput->sw_rx_enable.write(true);
+		pInput->sw_rx_enable.write(false);
 
 		SCV_CONSTRAINT (pInput->sw_data_tx() < 255);
 		pInput->sw_tx_enable.disable_randomization();
 		pInput->sw_tx_enable.write(true);
+
+		pInput->sw_uld_rx_data.disable_randomization();
+		pInput->sw_uld_rx_data.write(false);
+		pInput->sw_ld_tx_data.disable_randomization();
+		pInput->sw_ld_tx_data.write(true);
 
 		timeout = GLOBAL_TIMEOUT;
 	}
@@ -120,7 +125,12 @@ public:
 
 		SCV_CONSTRAINT (pInput->sw_data_tx() < 100);
 		pInput->sw_tx_enable.disable_randomization();
-		pInput->sw_tx_enable.write(true);
+		pInput->sw_tx_enable.write(false);
+
+		pInput->sw_uld_rx_data.disable_randomization();
+		pInput->sw_uld_rx_data.write(false);
+		pInput->sw_ld_tx_data.disable_randomization();
+		pInput->sw_ld_tx_data.write(true);
 
 		timeout = GLOBAL_TIMEOUT;
 	}
@@ -281,17 +291,17 @@ public:
 		/*			|															|								|						*/
 		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_02 > 	(p_testsequences, 				10));
 		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_03 > 	(p_testsequences, 				10));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_04 > 	(p_testsequences, 				10));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_05 > 	(p_testsequences, 				10));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_06 > 	(p_testsequences, 				10));
-		/*			|															|								|						*/
-		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_07 > 	(p_testsequences, 				10));
-		/*			|															|								|						*/
-		/*	<ENTER> new testsequences	*/
+//		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_03 > 	(p_testsequences, 				10));
+//		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_04 > 	(p_testsequences, 				10));
+//		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_05 > 	(p_testsequences, 				10));
+//		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_06 > 	(p_testsequences, 				10));
+//		/*			|															|								|						*/
+//		addSequence	(new testsequence_specialized_c < packet_uart_constraint_t_07 > 	(p_testsequences, 				10));
+//		/*			|															|								|						*/
+//		/*	<ENTER> new testsequences	*/
 	}
 
 	/*	dummy function for catching return pointer of "new" operator	*/
@@ -390,6 +400,10 @@ public:
 
 		/*	Prepare payload for sending RX-data to Reference model */
 		data = p_values->pInput->sw_data_rx.to_int();
+
+		// DEBUG
+		cout << this->name() << ", TC:" << _cnt_testcases << ", seq" << _testsequence_id << ": data.sw_data_rx = " << data << endl;
+
 		trans.set_command(tlm::TLM_WRITE_COMMAND);/*There exist TLM_WRITE_COMMAND, TLM_READ_COMMAND and TLM_IGNORE_COMMAND which can be used to point to extensions*/
 		addr = UART_BASE_ADDR + ( UART_BYTE_OFFS_RX_REG << 3);
 		trans.set_address(addr);

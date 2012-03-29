@@ -67,7 +67,11 @@ void uart_tlm::uart_method(void) {
 
 	/*	perform only when CTRL data were changed
 	 * 	TODO: Sollte anders gelöst werden */
-	if (ctrl_old != ctrl_new)
+
+	// DEBUG
+	cout << this->name() << ", ctrl_old = " << ctrl_old << ", ctrl_new = " << ctrl_new << endl;
+
+//	if (ctrl_old != ctrl_new)
 	{
 		/*	highest priority for reset signal */
 		if (ctrl_new & UART_CTRL_RESET)
@@ -84,17 +88,21 @@ void uart_tlm::uart_method(void) {
 		/*	RX-Enable, store received data to UART RX-register */
 		else if ( ctrl_new & UART_CTRL_RX_ENABLE )
 		{
+
+			// DEBUG
+			cout << this->name() << ", else if ( ctrl_new & UART_CTRL_RX_ENABLE ) entered" << endl;
+
 			mem[(UART_BYTE_OFFS_RX_REG/sizeof(uint32_t))] = rx_reg_new;
 		}
-		/*	Unload of TX-Register */
+		/*	Load of TX-Register */
 		else if (	( ctrl_new & UART_CTRL_TX_ENABLE ) &&
 					( ctrl_new & UART_CTRL_LD_TX_DATA) )
 		{
-			tx_new = mem[(UART_BYTE_OFFS_TX_REG/sizeof(uint32_t))];
+			mem[(UART_BYTE_OFFS_TX_REG/sizeof(uint32_t))] = tx_new;
 		}
 		else
 		{
-			cout << "error: no valid control configuration: " << ctrl_new << endl;
+			cout << "error: no valid control configuration or NULL: " << ctrl_new << endl;
 		}
 	}
 
@@ -171,11 +179,15 @@ void uart_tlm::uart_tlm_b_transport(tlm::tlm_generic_payload& trans, sc_core::sc
 				/*	Random RX-value received, store in buffer and evaluate RX-enable afterwards */
 				case UART_BYTE_OFFS_RX_REG:
 					rx_reg_new = (uint32_t)*ptr;
+
+					// DEBUG
+					cout << this->name() << ", b_transport: rx_reg_new = " << rx_reg_new << endl;
+
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					break;
 				/*	Random TX-value received, store in TX-register */
 				case UART_BYTE_OFFS_TX_REG:
-					memcpy(&mem[(UART_BYTE_OFFS_TX_REG/sizeof(uint32_t))], ptr, len);
+					tx_new = (uint32_t)*ptr;
 					trans.set_response_status(tlm::TLM_OK_RESPONSE );
 					break;
 				/*	UART control bits received, store in CTRL register
