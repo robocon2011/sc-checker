@@ -120,6 +120,7 @@ void scoreboard_uart::write_to_file_uart_method()
 	if (outputFile.is_open())
 	{
 	/*	indicate, if result data haven't changed */
+	// TODO: compare input data, not result data !
 	if (rx_data_ref_buffer == rx_data_ref_buffer_old &&
 		tx_data_ref_buffer == tx_data_ref_buffer_old )
 	{
